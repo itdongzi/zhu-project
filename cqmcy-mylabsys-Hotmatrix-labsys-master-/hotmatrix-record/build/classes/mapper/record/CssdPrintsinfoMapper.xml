@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.benet.record.mapper.CssdPrintsinfoMapper">
+
+    <resultMap type="CssdPrintsinfo" id="CssdPrintsinfoResult">
+        <result property="id" column="id"/>
+        <result property="printNo" column="print_no"/>
+        <result property="printName" column="print_name"/>
+        <result property="printType" column="print_type"/>
+        <result property="conntAddr" column="connt_addr"/>
+        <result property="conntPort" column="connt_port"/>
+        <result property="printDesc" column="print_desc"/>
+        <result property="orderNo" column="order_no"/>
+        <result property="branchNo" column="branch_no"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="deleteFlag" column="delete_flag"/>
+        <result property="comments" column="comments"/>
+        <result property="appCode" column="app_code"/>
+        <result property="version" column="version"/>
+    </resultMap>
+
+    <sql id="selectCssdPrintsinfoVo">
+        select id, print_no, print_name, print_type, connt_addr, connt_port, print_desc, order_no, branch_no, create_by, create_time, update_by, update_time, delete_flag, comments, app_code, version from cssd_printsinfo
+    </sql>
+
+    <select id="getAllRecords" resultMap="CssdPrintsinfoResult">
+        <include refid="selectCssdPrintsinfoVo"/>
+        where delete_flag='1' and app_code=#{appCode}
+    </select>
+
+    <select id="getRecordsByClassNo" resultMap="CssdPrintsinfoResult">
+        <include refid="selectCssdPrintsinfoVo"/>
+        where delete_flag='1' and app_code=#{appCode} and print_no=#{classNo}
+    </select>
+
+    <select id="getRecordsByPaging" resultMap="CssdPrintsinfoResult">
+        <include refid="selectCssdPrintsinfoVo"/>
+        where delete_flag='1' and app_code=${appCode}
+        <if test="model.condition != null  and model.condition != ''">and ${model.condition}</if>
+        order by ${model.orderField} ${model.orderType} limit ${model.pageIndex},${model.pageSize}
+    </select>
+
+    <select id="getRecordByNo" resultMap="CssdPrintsinfoResult">
+        <include refid="selectCssdPrintsinfoVo"/>
+        where delete_flag='1' and app_code=#{appCode} and print_no = #{no}
+    </select>
+
+    <select id="getRecordNameByNo" resultType="String">
+        select print_name from cssd_printsinfo
+        where delete_flag='1' and app_code=#{appCode} and print_no = #{no}
+    </select>
+
+    <select id="getCountByCondition" resultType="Integer">
+        select count(*) from cssd_printsinfo
+        where delete_flag='1' and app_code=#{appCode}
+        <if test="condition != null  and condition != ''">and ${condition}</if>
+    </select>
+
+    <insert id="AddNewRecord" parameterType="CssdPrintsinfo" useGeneratedKeys="true" keyProperty="id">
+        insert into cssd_printsinfo (
+        <if test="info.printNo != null  and info.printNo != ''">print_no,</if>
+        <if test="info.printName != null  and info.printName != ''">print_name,</if>
+        <if test="info.printType != null  and info.printType != ''">print_type,</if>
+        <if test="info.conntAddr != null  and info.conntAddr != ''">connt_addr,</if>
+        <if test="info.conntPort != null  and info.conntPort != ''">connt_port,</if>
+        <if test="info.printDesc != null  and info.printDesc != ''">print_desc,</if>
+        <if test="info.orderNo != null ">order_no,</if>
+        <if test="info.branchNo != null  and info.branchNo != ''">branch_no,</if>
+        <if test="info.createBy != null  and info.createBy != ''">create_by,</if>
+        <if test="info.createTime != null ">create_time,</if>
+        <if test="info.updateBy != null  and info.updateBy != ''">update_by,</if>
+        <if test="info.updateTime != null ">update_time,</if>
+        <if test="info.deleteFlag != null  and info.deleteFlag != ''">delete_flag,</if>
+        <if test="info.comments != null  and info.comments != ''">comments,</if>
+        <if test="info.appCode != null  and info.appCode != ''">app_code,</if>
+        <if test="info.version != null ">version</if>
+        )values(
+        <if test="info.printNo != null  and info.printNo != ''">#{info.printNo},</if>
+        <if test="info.printName != null  and info.printName != ''">#{info.printName},</if>
+        <if test="info.printType != null  and info.printType != ''">#{info.printType},</if>
+        <if test="info.conntAddr != null  and info.conntAddr != ''">#{info.conntAddr},</if>
+        <if test="info.conntPort != null  and info.conntPort != ''">#{info.conntPort},</if>
+        <if test="info.printDesc != null  and info.printDesc != ''">#{info.printDesc},</if>
+        <if test="info.orderNo != null ">#{info.orderNo},</if>
+        <if test="info.branchNo != null  and info.branchNo != ''">#{info.branchNo},</if>
+        <if test="info.createBy != null  and info.createBy != ''">#{info.createBy},</if>
+        <if test="info.createTime != null ">#{info.createTime},</if>
+        <if test="info.updateBy != null  and info.updateBy != ''">#{info.updateBy},</if>
+        <if test="info.updateTime != null ">#{info.updateTime},</if>
+        <if test="info.deleteFlag != null  and info.deleteFlag != ''">#{info.deleteFlag},</if>
+        <if test="info.comments != null  and info.comments != ''">#{info.comments},</if>
+        <if test="info.appCode != null  and info.appCode != ''">#{info.appCode},</if>
+        <if test="info.version != null ">#{info.version}</if>
+        )
+    </insert>
+
+    <update id="UpdateRecord" parameterType="CssdPrintsinfo">
+        update cssd_printsinfo
+        <set>
+            <if test="info.printNo != null  and info.printNo != ''">print_no = #{info.printNo},</if>
+            <if test="info.printName != null  and info.printName != ''">print_name = #{info.printName},</if>
+            <if test="info.printType != null  and info.printType != ''">print_type = #{info.printType},</if>
+            <if test="info.conntAddr != null  and info.conntAddr != ''">connt_addr = #{info.conntAddr},</if>
+            <if test="info.conntPort != null  and info.conntPort != ''">connt_port = #{info.conntPort},</if>
+            <if test="info.printDesc != null  and info.printDesc != ''">print_desc = #{info.printDesc},</if>
+            <if test="info.orderNo != null ">order_no = #{info.orderNo},</if>
+            <if test="info.branchNo != null  and info.branchNo != ''">branch_no = #{info.branchNo},</if>
+            <if test="info.createBy != null  and info.createBy != ''">create_by = #{info.createBy},</if>
+            <if test="info.createTime != null ">create_time = #{info.createTime},</if>
+            <if test="info.updateBy != null  and info.updateBy != ''">update_by = #{info.updateBy},</if>
+            <if test="info.updateTime != null ">update_time = #{info.updateTime},</if>
+            <if test="info.deleteFlag != null  and info.deleteFlag != ''">delete_flag = #{info.deleteFlag},</if>
+            <if test="info.comments != null  and info.comments != ''">comments = #{info.comments},</if>
+            <if test="info.appCode != null  and info.appCode != ''">app_code = #{info.appCode},</if>
+            <if test="info.version != null ">version = #{info.version}</if>
+        </set>
+        where delete_flag='1' and app_code=#{info.appCode} and version=#{info.version} and print_no =
+        #{info.printNo}
+    </update>
+
+    <delete id="HardDeleteByNo">
+        delete from cssd_printsinfo
+        where delete_flag='1' and app_code=#{appCode} and print_no = #{no}
+    </delete>
+
+    <delete id="HardDeleteByNos">
+        delete from cssd_printsinfo
+        where delete_flag='1' and app_code=#{appCode} and print_no in
+        <foreach item="no" collection="nos" open="(" separator="," close=")">
+            #{no}
+        </foreach>
+    </delete>
+
+    <delete id="HardDeleteByCondition">
+        delete from cssd_printsinfo
+        where delete_flag='1' and app_code=#{appCode}
+        <if test="condition != null  and condition != ''">and ${condition}</if>
+    </delete>
+
+    <delete id="SoftDeleteByNo">
+        update cssd_printsinfo set delete_flag='0'
+        where delete_flag='1' and app_code=#{appCode} and print_no = #{no}
+    </delete>
+
+    <delete id="SoftDeleteByNos">
+        update cssd_printsinfo set delete_flag='0'
+        where delete_flag='1' and app_code=#{appCode} and print_no in
+        <foreach item="no" collection="nos" open="(" separator="," close=")">
+            #{no}
+        </foreach>
+    </delete>
+
+    <delete id="SoftDeleteByCondition">
+        update cssd_printsinfo set delete_flag='0'
+        where delete_flag='1' and app_code=#{appCode}
+        <if test="condition != null  and condition != ''">and ${condition}</if>
+    </delete>
+
+</mapper>

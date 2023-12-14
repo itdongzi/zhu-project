@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.benet.labsys.mapper.LabsSafetytestMapper">
+
+    <resultMap type="LabsSafetytest" id="LabsSafetytestResult">
+        <result property="id" column="id"/>
+        <result property="testNo" column="test_no"/>
+        <result property="userNo" column="user_no"/>
+        <result property="paperNo" column="paper_no"/>
+        <result property="testUrl" column="test_url"/>
+        <result property="testDate" column="test_date"/>
+        <result property="testScore" column="test_score"/>
+        <result property="testDesc" column="test_desc"/>
+        <result property="testState" column="test_state"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="deleteFlag" column="delete_flag"/>
+        <result property="comments" column="comments"/>
+        <result property="appCode" column="app_code"/>
+        <result property="version" column="version"/>
+    </resultMap>
+
+    <sql id="selectLabsSafetytestVo">
+        select id,
+               test_no,
+               user_no,
+               paper_no,
+               test_url,
+               test_date,
+               test_score,
+               test_desc,
+               test_state,
+               create_by,
+               create_time,
+               update_by,
+               update_time,
+               delete_flag,
+               comments,
+               app_code,
+               version
+        from labs_safetytest
+    </sql>
+
+    <select id="getAllRecords" resultMap="LabsSafetytestResult">
+        <include refid="selectLabsSafetytestVo"/>
+        where delete_flag='1' and app_code=#{appCode}
+    </select>
+
+    <select id="getRecordsByClassNo" resultMap="LabsSafetytestResult">
+        <include refid="selectLabsSafetytestVo"/>
+        where delete_flag='1' and app_code=#{appCode} and paper_no=#{classNo}
+    </select>
+
+    <select id="getRecordsByPaging" resultMap="LabsSafetytestResult">
+        <include refid="selectLabsSafetytestVo"/>
+        where delete_flag='1' and app_code=${appCode}
+        <if test="model.condition != null  and model.condition != ''">and ${model.condition}</if>
+        order by ${model.orderField} ${model.orderType} limit ${model.pageIndex},${model.pageSize}
+    </select>
+
+    <select id="getRecordByNo" resultMap="LabsSafetytestResult">
+        <include refid="selectLabsSafetytestVo"/>
+        where delete_flag='1' and app_code=#{appCode} and test_no = #{no}
+    </select>
+
+    <select id="getRecordNameByNo" resultType="String">
+        select test_no
+        from labs_safetytest
+        where delete_flag = '1'
+          and app_code = #{appCode}
+          and test_no = #{no}
+    </select>
+
+    <select id="getCountByCondition" resultType="Integer">
+        select count(*) from labs_safetytest
+        where delete_flag='1' and app_code=#{appCode}
+        <if test="condition != null  and condition != ''">and ${condition}</if>
+    </select>
+
+    <insert id="AddNewRecord" parameterType="LabsSafetytest" useGeneratedKeys="true" keyProperty="id">
+        insert into labs_safetytest (
+        <if test="info.testNo != null  and info.testNo != ''">test_no,</if>
+        <if test="info.userNo != null  and info.userNo != ''">user_no,</if>
+        <if test="info.paperNo != null  and info.paperNo != ''">paper_no,</if>
+        <if test="info.testUrl != null  and info.testUrl != ''">test_url,</if>
+        <if test="info.testDate != null ">test_date,</if>
+        <if test="info.testScore != null ">test_score,</if>
+        <if test="info.testDesc != null  and info.testDesc != ''">test_desc,</if>
+        <if test="info.testState != null  and info.testState != ''">test_state,</if>
+        <if test="info.createBy != null  and info.createBy != ''">create_by,</if>
+        <if test="info.createTime != null ">create_time,</if>
+        <if test="info.updateBy != null  and info.updateBy != ''">update_by,</if>
+        <if test="info.updateTime != null ">update_time,</if>
+        <if test="info.deleteFlag != null  and info.deleteFlag != ''">delete_flag,</if>
+        <if test="info.comments != null  and info.comments != ''">comments,</if>
+        <if test="info.appCode != null  and info.appCode != ''">app_code,</if>
+        <if test="info.version != null ">version</if>
+        )values(
+        <if test="info.testNo != null  and info.testNo != ''">#{info.testNo},</if>
+        <if test="info.userNo != null  and info.userNo != ''">#{info.userNo},</if>
+        <if test="info.paperNo != null  and info.paperNo != ''">#{info.paperNo},</if>
+        <if test="info.testUrl != null  and info.testUrl != ''">#{info.testUrl},</if>
+        <if test="info.testDate != null ">#{info.testDate},</if>
+        <if test="info.testScore != null ">#{info.testScore},</if>
+        <if test="info.testDesc != null  and info.testDesc != ''">#{info.testDesc},</if>
+        <if test="info.testState != null  and info.testState != ''">#{info.testState},</if>
+        <if test="info.createBy != null  and info.createBy != ''">#{info.createBy},</if>
+        <if test="info.createTime != null ">#{info.createTime},</if>
+        <if test="info.updateBy != null  and info.updateBy != ''">#{info.updateBy},</if>
+        <if test="info.updateTime != null ">#{info.updateTime},</if>
+        <if test="info.deleteFlag != null  and info.deleteFlag != ''">#{info.deleteFlag},</if>
+        <if test="info.comments != null  and info.comments != ''">#{info.comments},</if>
+        <if test="info.appCode != null  and info.appCode != ''">#{info.appCode},</if>
+        <if test="info.version != null ">#{info.version}</if>
+        )
+    </insert>
+
+    <update id="UpdateRecord" parameterType="LabsSafetytest">
+        update labs_safetytest
+        <set>
+            <if test="info.testNo != null  and info.testNo != ''">test_no = #{info.testNo},</if>
+            <if test="info.userNo != null  and info.userNo != ''">user_no = #{info.userNo},</if>
+            <if test="info.paperNo != null  and info.paperNo != ''">paper_no = #{info.paperNo},</if>
+            <if test="info.testUrl != null  and info.testUrl != ''">test_url = #{info.testUrl},</if>
+            <if test="info.testDate != null ">test_date = #{info.testDate},</if>
+            <if test="info.testScore != null ">test_score = #{info.testScore},</if>
+            <if test="info.testDesc != null  and info.testDesc != ''">test_desc = #{info.testDesc},</if>
+            <if test="info.testState != null  and info.testState != ''">test_state = #{info.testState},</if>
+            <if test="info.createBy != null  and info.createBy != ''">create_by = #{info.createBy},</if>
+            <if test="info.createTime != null ">create_time = #{info.createTime},</if>
+            <if test="info.updateBy != null  and info.updateBy != ''">update_by = #{info.updateBy},</if>
+            <if test="info.updateTime != null ">update_time = #{info.updateTime},</if>
+            <if test="info.deleteFlag != null  and info.deleteFlag != ''">delete_flag = #{info.deleteFlag},</if>
+            <if test="info.comments != null  and info.comments != ''">comments = #{info.comments},</if>
+            <if test="info.appCode != null  and info.appCode != ''">app_code = #{info.appCode},</if>
+            <if test="info.version != null ">version = #{info.version},</if>
+        </set>
+        where delete_flag='1' and app_code=#{info.appCode} and version=#{info.version} and test_no = #{info.testNo}
+    </update>
+
+    <delete id="HardDeleteByNo">
+        delete
+        from labs_safetytest
+        where delete_flag = '1'
+          and app_code = #{appCode}
+          and test_no = #{no}
+    </delete>
+
+    <delete id="HardDeleteByNos">
+        delete from labs_safetytest
+        where delete_flag='1' and app_code=#{appCode} and test_no in
+        <foreach item="no" collection="nos" open="(" separator="," close=")">
+            #{no}
+        </foreach>
+    </delete>
+
+    <delete id="HardDeleteByCondition">
+        delete from labs_safetytest
+        where delete_flag='1' and app_code=#{appCode}
+        <if test="condition != null  and condition != ''">and ${condition}</if>
+    </delete>
+
+    <delete id="SoftDeleteByNo">
+        update labs_safetytest
+        set delete_flag='0'
+        where delete_flag = '1'
+          and app_code = #{appCode}
+          and test_no = #{no}
+    </delete>
+
+    <delete id="SoftDeleteByNos">
+        update labs_safetytest set delete_flag='0'
+        where delete_flag='1' and app_code=#{appCode} and test_no in
+        <foreach item="no" collection="nos" open="(" separator="," close=")">
+            #{no}
+        </foreach>
+    </delete>
+
+    <delete id="SoftDeleteByCondition">
+        update labs_safetytest set delete_flag='0'
+        where delete_flag='1' and app_code=#{appCode}
+        <if test="condition != null  and condition != ''">and ${condition}</if>
+    </delete>
+
+</mapper>

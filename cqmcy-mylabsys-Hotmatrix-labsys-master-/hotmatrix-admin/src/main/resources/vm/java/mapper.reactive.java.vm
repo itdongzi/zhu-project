@@ -1,0 +1,152 @@
+package ${packageName}.mapper;
+
+import ${packageName}.domain.${ClassName};
+import ${packageName}.mapper.dynamic.${ClassName}DynamicMapper;
+import ${packageName}.mapper.dynamic.${ClassName}DynamicSqlSupport;
+import org.apache.ibatis.annotations.*;
+import org.mybatis.dynamic.sql.SqlBuilder;
+import org.mybatis.dynamic.sql.render.RenderingStrategies;
+import org.mybatis.dynamic.sql.select.render.SelectStatementProvider;
+import org.mybatis.dynamic.sql.update.render.UpdateStatementProvider;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+
+import java.time.LocalDateTime;
+
+import static org.mybatis.dynamic.sql.SqlBuilder.isEqualTo;
+import static org.mybatis.dynamic.sql.SqlBuilder.isIn;
+
+/**
+ * ${functionName}Mapper接口
+ * 
+ * @author ${author}
+ * @date ${datetime}
+ */
+@Mapper
+public interface ${ClassName}Mapper extends ${ClassName}DynamicMapper {
+
+    default Flux<${ClassName}> getAllRecords(String appCode) {
+        return select(dsl -> dsl
+                .where(${ClassName}DynamicSqlSupport.appCode,isEqualTo(appCode))
+                .and(${ClassName}DynamicSqlSupport.deleteFlag,isEqualTo("1"))
+        );
+    }
+
+    default Flux<${ClassName}> getRecordsByClassNo(String appCode,String classNo) {
+        return select(dsl -> dsl
+                .where(${ClassName}DynamicSqlSupport.appCode,isEqualTo(appCode))
+                .and(${ClassName}DynamicSqlSupport.classNo,isEqualTo(classNo))
+                .and(${ClassName}DynamicSqlSupport.deleteFlag,isEqualTo("1"))
+        );
+    }
+
+    @Select({
+            "select *",
+            "from ${ClassName}",
+            "where delete_flag='1' And app_code=#{appCode,jdbcType=VARCHAR} And ${condition}",
+            "order by ${orderField} ${orderType}",
+            "LIMIT ${limit} OFFSET ${offset}"
+    })
+    @ResultMap("${ClassName}Result")
+    Flux<${ClassName}> getRecordsByPaging(@Param("appCode") String appCode, @Param("condition") String condition, @Param("orderField") String orderField, @Param("orderType") String orderType, @Param("limit") int limit, @Param("offset") int offset);
+
+    default Mono<${ClassName}> getRecordByNo(String appCode, String no){
+        return selectOne(dsl -> dsl
+                .where(${ClassName}DynamicSqlSupport.appCode, isEqualTo(appCode))
+                .and(${ClassName}DynamicSqlSupport.userNo,isEqualTo(no))
+                .and(${ClassName}DynamicSqlSupport.deleteFlag,isEqualTo("1"))
+        );
+    }
+
+    default Mono<String> getRecordNameByNo(String appCode, String no){
+        SelectStatementProvider selectStatement = SqlBuilder.select(${ClassName}DynamicSqlSupport.userCnname)
+                .from(${ClassName}DynamicSqlSupport.${className})
+                .where(${ClassName}DynamicSqlSupport.appCode, isEqualTo(appCode))
+                .and(${ClassName}DynamicSqlSupport.userNo, isEqualTo(no))
+                .and(${ClassName}DynamicSqlSupport.deleteFlag,isEqualTo("1"))
+                .build()
+                .render(RenderingStrategies.MYBATIS3);
+
+        return selectOne(selectStatement).map(item->item.getUserCnname());
+    }
+
+    @Select({
+            "select count(*)",
+            "from ${ClassName}",
+            "where delete_flag='1' And app_code=#{appCode,jdbcType=VARCHAR} And ${condition}",
+    })
+    Mono<Long> getCountByCondition(@Param("appCode") String appCode,@Param("condition") String condition);
+
+
+    default Mono<Integer> AddNewRecord(String appCode,${ClassName} info){
+        info.setCreateTime(LocalDateTime.now());
+        info.setUpdateTime(LocalDateTime.now());
+        info.setAppCode(appCode);
+        info.setDeleteFlag("1");
+        info.setVersion(1L);
+        return insert(info);
+    }
+
+    default Mono<Integer> UpdateRecord(String appCode,${ClassName} info){
+        info.setUpdateTime(LocalDateTime.now());
+        info.setAppCode(appCode);
+        info.setVersion(info.getVersion()+1);
+        return updateSelective(info,dsl -> dsl.where(${ClassName}DynamicSqlSupport.appCode,isEqualTo(appCode))
+                .and(${ClassName}DynamicSqlSupport.userNo,isEqualTo(info.getUserNo()))
+                .and(${ClassName}DynamicSqlSupport.deleteFlag,isEqualTo("1"))
+        );
+    }
+
+    default Mono<Integer> HardDeleteByNo(String appCode,String no){
+        return delete(dsl -> dsl
+                .where(${ClassName}DynamicSqlSupport.appCode,isEqualTo(appCode))
+                .and(${ClassName}DynamicSqlSupport.userNo,isEqualTo(no))
+        );
+    }
+
+    default Mono<Integer> HardDeleteByNos(String appCode,String[] nos){
+        return delete(dsl -> dsl
+                .where(${ClassName}DynamicSqlSupport.appCode,isEqualTo(appCode))
+                .and(${ClassName}DynamicSqlSupport.userNo,isIn(nos))
+        );
+    }
+
+    @Delete({
+            "delete from ${ClassName}",
+            "where app_code=#{appCode,jdbcType=VARCHAR} And ${condition}"
+    })
+    Mono<Integer> HardDeleteByCondition(@Param("appCode") String appCode,@Param("condition") String condition);
+
+
+    default Mono<Integer> SoftDeleteByNo(String appCode,String no) {
+        UpdateStatementProvider updateStatement = SqlBuilder.update(${ClassName}DynamicSqlSupport.${className})
+                .set(${ClassName}DynamicSqlSupport.deleteFlag).equalTo("0")
+                .where(${ClassName}DynamicSqlSupport.appCode, isEqualTo(appCode))
+                .and(${ClassName}DynamicSqlSupport.userNo, isEqualTo(no))
+                .and(${ClassName}DynamicSqlSupport.deleteFlag,isEqualTo("1"))
+                .build()
+                .render(RenderingStrategies.MYBATIS3);
+
+        return update(updateStatement);
+    }
+
+    default Mono<Integer> SoftDeleteByNos(String appCode,String[] nos) {
+
+        UpdateStatementProvider updateStatement = SqlBuilder.update(${ClassName}DynamicSqlSupport.${className})
+                .set(${ClassName}DynamicSqlSupport.deleteFlag).equalTo("0")
+                .where(${ClassName}DynamicSqlSupport.appCode, isEqualTo(appCode))
+                .and(${ClassName}DynamicSqlSupport.userNo, isIn(nos))
+                .and(${ClassName}DynamicSqlSupport.deleteFlag,isEqualTo("1"))
+                .build()
+                .render(RenderingStrategies.MYBATIS3);
+        return update(updateStatement);
+    }
+
+    @Update({
+            "update ${ClassName}",
+            "set delete_flag='0'",
+            "where delete_flag='1' And app_code=#{appCode,jdbcType=VARCHAR} And ${condition}"
+    })
+    Mono<Integer> SoftDeleteByCondition(@Param("appCode") String appCode,@Param("condition") String condition);
+	
+}

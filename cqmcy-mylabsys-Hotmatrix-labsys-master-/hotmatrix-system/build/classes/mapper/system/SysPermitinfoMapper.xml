@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.benet.system.mapper.SysPermitinfoMapper">
+
+    <resultMap type="SysPermitinfo" id="SysPermitinfoResult">
+        <result property="id" column="id"/>
+        <result property="permitNo" column="permit_no"/>
+        <result property="permitName" column="permit_name"/>
+        <result property="permitCode" column="permit_code"/>
+        <result property="permitType" column="permit_type"/>
+        <result property="parentNo" column="parent_no"/>
+        <result property="orderNo" column="order_no"/>
+        <result property="linkType" column="link_type"/>
+        <result property="menuIcon" column="menu_icon"/>
+        <result property="pathUrl" column="path_url"/>
+        <result property="component" column="component"/>
+        <result property="redirect" column="redirect"/>
+        <result property="target" column="target"/>
+        <result property="visible" column="visible"/>
+        <result property="checkState" column="check_state"/>
+        <result property="branchNo" column="branch_no"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="deleteFlag" column="delete_flag"/>
+        <result property="comments" column="comments"/>
+        <result property="appCode" column="app_code"/>
+        <result property="version" column="version"/>
+    </resultMap>
+
+    <sql id="selectSysPermitinfoVo">
+        select id, permit_no, permit_name, permit_code, permit_type, parent_no, order_no,link_type,menu_icon,path_url,  component,redirect,target, visible, check_state, branch_no, create_by, create_time, update_by, update_time, delete_flag, comments, app_code, version from sys_permitinfo
+    </sql>
+
+    <select id="getAllRecords" resultMap="SysPermitinfoResult">
+        <include refid="selectSysPermitinfoVo"/>
+        where delete_flag='1' and app_code=#{appCode}
+    </select>
+
+    <select id="getRecordsByClassNo" resultMap="SysPermitinfoResult">
+        <include refid="selectSysPermitinfoVo"/>
+        where delete_flag='1' and app_code=#{appCode} and parent_no=#{classNo} order by order_no asc
+    </select>
+
+    <select id="getRecordsByPaging" resultMap="SysPermitinfoResult">
+        <include refid="selectSysPermitinfoVo"/>
+        where delete_flag='1' and app_code=${appCode}
+        <if test="model.condition != null  and model.condition != ''">and ${model.condition}</if>
+        order by ${model.orderField} ${model.orderType} limit ${model.pageIndex},${model.pageSize}
+    </select>
+
+    <select id="getRecordByNo" resultMap="SysPermitinfoResult">
+        <include refid="selectSysPermitinfoVo"/>
+        where delete_flag='1' and app_code=#{appCode} and permit_no = #{no}
+    </select>
+
+    <select id="getRecordNameByNo" resultType="String">
+        select permit_name from sys_permitinfo
+        where delete_flag='1' and app_code=#{appCode} and permit_no = #{no}
+    </select>
+
+    <select id="getCountByCondition" resultType="Integer">
+        select count(*) from sys_permitinfo
+        where delete_flag='1' and app_code=#{appCode}
+        <if test="condition != null  and condition != ''">and ${condition}</if>
+    </select>
+
+    <insert id="AddNewRecord" parameterType="SysPermitinfo" useGeneratedKeys="true" keyProperty="id">
+        insert into sys_permitinfo (
+        <if test="info.permitNo != null  and info.permitNo != ''">permit_no,</if>
+        <if test="info.permitName != null  and info.permitName != ''">permit_name,</if>
+        <if test="info.permitCode != null  and info.permitCode != ''">permit_code,</if>
+        <if test="info.permitType != null  and info.permitType != ''">permit_type,</if>
+        <if test="info.parentNo != null  and info.parentNo != ''">parent_no,</if>
+        <if test="info.orderNo != null ">order_no,</if>
+        <if test="info.linkType != null  and info.linkType != ''">link_type,</if>
+        <if test="info.menuIcon != null  and info.menuIcon != ''">menu_icon,</if>
+        <if test="info.pathUrl != null  and info.pathUrl != ''">path_url,</if>
+        <if test="info.component != null  and info.component != ''">component,</if>
+        <if test="info.redirect != null  and info.redirect != ''">redirect,</if>
+        <if test="info.target != null  and info.target != ''">target,</if>
+        <if test="info.visible != null  and info.visible != ''">visible,</if>
+        <if test="info.checkState != null  and info.checkState != ''">check_state,</if>
+        <if test="info.branchNo != null  and info.branchNo != ''">branch_no,</if>
+        <if test="info.createBy != null  and info.createBy != ''">create_by,</if>
+        <if test="info.createTime != null ">create_time,</if>
+        <if test="info.updateBy != null  and info.updateBy != ''">update_by,</if>
+        <if test="info.updateTime != null ">update_time,</if>
+        <if test="info.deleteFlag != null  and info.deleteFlag != ''">delete_flag,</if>
+        <if test="info.comments != null  and info.comments != ''">comments,</if>
+        <if test="info.appCode != null  and info.appCode != ''">app_code,</if>
+        <if test="info.version != null ">version</if>
+        )values(
+        <if test="info.permitNo != null  and info.permitNo != ''">#{info.permitNo},</if>
+        <if test="info.permitName != null  and info.permitName != ''">#{info.permitName},</if>
+        <if test="info.permitCode != null  and info.permitCode != ''">#{info.permitCode},</if>
+        <if test="info.permitType != null  and info.permitType != ''">#{info.permitType},</if>
+        <if test="info.parentNo != null  and info.parentNo != ''">#{info.parentNo},</if>
+        <if test="info.orderNo != null ">#{info.orderNo},</if>
+        <if test="info.linkType != null  and info.linkType != ''">#{info.linkType},</if>
+        <if test="info.menuIcon != null  and info.menuIcon != ''">#{info.menuIcon},</if>
+        <if test="info.pathUrl != null  and info.pathUrl != ''">#{info.pathUrl},</if>
+        <if test="info.component != null  and info.component != ''">#{info.component},</if>
+        <if test="info.redirect != null  and info.redirect != ''">#{info.redirect},</if>
+        <if test="info.target != null  and info.target != ''">#{info.target},</if>
+        <if test="info.visible != null  and info.visible != ''">#{info.visible},</if>
+        <if test="info.checkState != null  and info.checkState != ''">#{info.checkState},</if>
+        <if test="info.branchNo != null  and info.branchNo != ''">#{info.branchNo},</if>
+        <if test="info.createBy != null  and info.createBy != ''">#{info.createBy},</if>
+        <if test="info.createTime != null ">#{info.createTime},</if>
+        <if test="info.updateBy != null  and info.updateBy != ''">#{info.updateBy},</if>
+        <if test="info.updateTime != null ">#{info.updateTime},</if>
+        <if test="info.deleteFlag != null  and info.deleteFlag != ''">#{info.deleteFlag},</if>
+        <if test="info.comments != null  and info.comments != ''">#{info.comments},</if>
+        <if test="info.appCode != null  and info.appCode != ''">#{info.appCode},</if>
+        <if test="info.version != null ">#{info.version}</if>
+        )
+    </insert>
+
+    <update id="UpdateRecord" parameterType="SysPermitinfo">
+        update sys_permitinfo
+        <set>
+            <if test="info.permitNo != null  and info.permitNo != ''">permit_no = #{info.permitNo},</if>
+            <if test="info.permitName != null  and info.permitName != ''">permit_name = #{info.permitName},</if>
+            <if test="info.permitCode != null  and info.permitCode != ''">permit_code = #{info.permitCode},</if>
+            <if test="info.permitType != null  and info.permitType != ''">permit_type = #{info.permitType},</if>
+            <if test="info.parentNo != null  and info.parentNo != ''">parent_no = #{info.parentNo},</if>
+            <if test="info.orderNo != null ">order_no = #{info.orderNo},</if>
+            <if test="info.linkType != null  and info.linkType != ''">link_type = #{info.linkType},</if>
+            <if test="info.menuIcon != null  and info.menuIcon != ''">menu_icon = #{info.menuIcon},</if>
+            <if test="info.pathUrl != null  and info.pathUrl != ''">path_url = #{info.pathUrl},</if>
+            <if test="info.component != null  and info.component != ''">component = #{info.component},</if>
+            <if test="info.redirect != null  and info.redirect != ''">redirect = #{info.redirect},</if>
+            <if test="info.target != null  and info.target != ''">target = #{info.target},</if>
+            <if test="info.visible != null  and info.visible != ''">visible = #{info.visible},</if>
+            <if test="info.checkState != null  and info.checkState != ''">check_state = #{info.checkState},</if>
+            <if test="info.branchNo != null  and info.branchNo != ''">branch_no = #{info.branchNo},</if>
+            <if test="info.createBy != null  and info.createBy != ''">create_by = #{info.createBy},</if>
+            <if test="info.createTime != null ">create_time = #{info.createTime},</if>
+            <if test="info.updateBy != null  and info.updateBy != ''">update_by = #{info.updateBy},</if>
+            <if test="info.updateTime != null ">update_time = #{info.updateTime},</if>
+            <if test="info.deleteFlag != null  and info.deleteFlag != ''">delete_flag = #{info.deleteFlag},</if>
+            <if test="info.comments != null  and info.comments != ''">comments = #{info.comments},</if>
+            <if test="info.appCode != null  and info.appCode != ''">app_code = #{info.appCode},</if>
+            <if test="info.version != null ">version = version+1</if>
+        </set>
+        where delete_flag='1' and app_code=#{info.appCode} and version=#{info.version} and permit_no = #{info.permitNo}
+    </update>
+
+    <delete id="HardDeleteByNo">
+        delete from sys_permitinfo
+        where delete_flag='1' and app_code=#{appCode} and permit_no = #{no}
+    </delete>
+
+    <delete id="HardDeleteByNos">
+        delete from sys_permitinfo
+        where delete_flag='1' and app_code=#{appCode} and permit_no in
+        <foreach item="no" collection="nos" open="(" separator="," close=")">
+            #{no}
+        </foreach>
+    </delete>
+
+    <delete id="HardDeleteByCondition">
+        delete from sys_permitinfo
+        where delete_flag='1' and app_code=#{appCode}
+        <if test="condition != null  and condition != ''">and ${condition}</if>
+    </delete>
+
+    <delete id="SoftDeleteByNo">
+        update sys_permitinfo set delete_flag='0'
+        where delete_flag='1' and app_code=#{appCode} and permit_no = #{no}
+    </delete>
+
+    <delete id="SoftDeleteByNos">
+        update sys_permitinfo set delete_flag='0'
+        where delete_flag='1' and app_code=#{appCode} and permit_no in
+        <foreach item="no" collection="nos" open="(" separator="," close=")">
+            #{no}
+        </foreach>
+    </delete>
+
+    <delete id="SoftDeleteByCondition">
+        update sys_permitinfo set delete_flag='0'
+        where delete_flag='1' and app_code=#{appCode}
+        <if test="condition != null  and condition != ''">and ${condition}</if>
+    </delete>
+
+    <select id="getRecordsByRoleNo" resultMap="SysPermitinfoResult">
+        select distinct p.id, p.permit_no, p.permit_name,  p.permit_code,p.permit_type, p.parent_no, p.order_no,p.link_type,p.menu_icon, p.path_url, p.component,p.redirect, p.target, p.visible, p.check_state, p.branch_no, p.create_by, p.create_time, p.update_by, p.update_time, p.delete_flag, p.comments, p.app_code, p.version
+		from sys_permitinfo p
+		left join sys_rolepermit rp on p.permit_no = rp.permit_no
+		where p.delete_flag='1' and p.app_code=#{appCode} and rp.role_no = #{roleNo}
+		order by p.parent_no, p.order_no
+    </select>
+
+    <select id="getRecordsByUserNo" resultMap="SysPermitinfoResult">
+        select distinct p.id, p.permit_no, p.permit_name, p.permit_code,p.permit_type, p.parent_no, p.order_no, p.link_type, p.menu_icon, p.path_url, p.component,p.redirect,  p.target,  p.visible, p.check_state, p.branch_no, p.create_by, p.create_time, p.update_by, p.update_time, p.delete_flag, p.comments, p.app_code, p.version
+		from sys_permitinfo p
+		left join sys_rolepermit rp on p.permit_no = rp.permit_no
+		left join sys_suserrole ur on rp.role_no = ur.role_no
+		where p.delete_flag='1' and p.app_code=#{appCode} and ur.user_no = #{userNo}
+		order by p.parent_no, p.order_no
+    </select>
+
+    <select id="getChildrenByUserNo" resultMap="SysPermitinfoResult">
+        select distinct p.id, p.permit_no, p.permit_name, p.permit_code,p.permit_type, p.parent_no, p.order_no, p.link_type, p.menu_icon, p.path_url, p.component,p.redirect,  p.target,  p.visible, p.check_state, p.branch_no, p.create_by, p.create_time, p.update_by, p.update_time, p.delete_flag, p.comments, p.app_code, p.version
+		from sys_permitinfo p
+		left join sys_rolepermit rp on p.permit_no = rp.permit_no
+		left join sys_suserrole ur on rp.role_no = ur.role_no
+		where p.delete_flag='1' and p.app_code=#{appCode} and p.parent_no = #{parentNo} and ur.user_no = #{userNo}
+		order by p.parent_no, p.order_no
+    </select>
+
+    <select id="getPermitCodesByRoleNo" resultType="String">
+		select distinct p.permit_code
+		from sys_permitinfo p
+		left join sys_rolepermit rp on p.permit_no = rp.permit_no
+		where p.delete_flag='1' and p.app_code=#{appCode} and rp.role_no = #{roleNo}
+		order by p.parent_no, p.order_no
+	</select>
+
+    <select id="getPermitCodesByUserNo" resultType="String">
+		select distinct p.permit_code
+		from sys_permitinfo p
+		left join sys_rolepermit rp on p.permit_no = rp.permit_no
+		left join sys_suserrole ur on rp.role_no = ur.role_no
+		where p.delete_flag='1' and p.app_code=#{appCode} and ur.user_no = #{userNo}
+	</select>
+
+    <select id="checkPermitNameUnique" resultType="Integer">
+        select count(*) from sys_permitinfo
+        where delete_flag='1' and app_code=#{appCode} and parent_no=#{parentNo} and permit_name=#{permitName}
+    </select>
+
+</mapper>

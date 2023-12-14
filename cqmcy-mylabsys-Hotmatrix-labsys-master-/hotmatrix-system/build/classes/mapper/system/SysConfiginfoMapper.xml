@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.benet.system.mapper.SysConfiginfoMapper">
+
+    <resultMap type="SysConfiginfo" id="SysConfiginfoResult">
+        <result property="id" column="id"/>
+        <result property="configNo" column="config_no"/>
+        <result property="configName" column="config_name"/>
+        <result property="configKey" column="config_key"/>
+        <result property="configValue" column="config_value"/>
+        <result property="configType" column="config_type"/>
+        <result property="checkState" column="check_state"/>
+        <result property="branchNo" column="branch_no"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="deleteFlag" column="delete_flag"/>
+        <result property="comments" column="comments"/>
+        <result property="appCode" column="app_code"/>
+        <result property="version" column="version"/>
+    </resultMap>
+
+    <sql id="selectSysConfiginfoVo">
+        select id, config_no, config_name, config_key, config_value, config_type, check_state, branch_no, create_by, create_time, update_by, update_time, delete_flag, comments, app_code, version from sys_configinfo
+    </sql>
+
+    <select id="getAllRecords" resultMap="SysConfiginfoResult">
+        <include refid="selectSysConfiginfoVo"/>
+        where delete_flag='1' and app_code=#{appCode}
+    </select>
+
+    <select id="getRecordsByClassNo" resultMap="SysConfiginfoResult">
+        <include refid="selectSysConfiginfoVo"/>
+        where delete_flag='1' and app_code=#{appCode} and config_type=#{classNo}
+    </select>
+
+    <select id="getRecordsByPaging" resultMap="SysConfiginfoResult">
+        <include refid="selectSysConfiginfoVo"/>
+        where delete_flag='1' and app_code=${appCode}
+        <if test="model.condition != null  and model.condition != ''">and ${model.condition}</if>
+        order by ${model.orderField} ${model.orderType} limit ${model.pageIndex},${model.pageSize}
+    </select>
+
+    <select id="getRecordByNo" resultMap="SysConfiginfoResult">
+        <include refid="selectSysConfiginfoVo"/>
+        where delete_flag='1' and app_code=#{appCode} and config_no = #{no}
+    </select>
+
+
+    <select id="getRecordByConfigKey" resultMap="SysConfiginfoResult">
+        <include refid="selectSysConfiginfoVo"/>
+        where delete_flag='1' and app_code=#{appCode} and config_key = #{configKey}
+    </select>
+
+    <select id="getRecordNameByNo" resultType="String">
+        select config_name from sys_configinfo
+        where delete_flag='1' and app_code=#{appCode} and config_no = #{no}
+    </select>
+
+    <select id="getCountByCondition" resultType="Integer">
+        select count(*) from sys_configinfo
+        where delete_flag='1' and app_code=#{appCode}
+        <if test="condition != null  and condition != ''">and ${condition}</if>
+    </select>
+
+    <insert id="AddNewRecord" parameterType="SysConfiginfo" useGeneratedKeys="true" keyProperty="id">
+        insert into sys_configinfo (
+        <if test="info.configNo != null  and info.configNo != ''">config_no,</if>
+        <if test="info.configName != null  and info.configName != ''">config_name,</if>
+        <if test="info.configKey != null  and info.configKey != ''">config_key,</if>
+        <if test="info.configValue != null  and info.configValue != ''">config_value,</if>
+        <if test="info.configType != null  and info.configType != ''">config_type,</if>
+        <if test="info.checkState != null  and info.checkState != ''">check_state,</if>
+        <if test="info.branchNo != null  and info.branchNo != ''">branch_no,</if>
+        <if test="info.createBy != null  and info.createBy != ''">create_by,</if>
+        <if test="info.createTime != null ">create_time,</if>
+        <if test="info.updateBy != null  and info.updateBy != ''">update_by,</if>
+        <if test="info.updateTime != null ">update_time,</if>
+        <if test="info.deleteFlag != null  and info.deleteFlag != ''">delete_flag,</if>
+        <if test="info.comments != null  and info.comments != ''">comments,</if>
+        <if test="info.appCode != null  and info.appCode != ''">app_code,</if>
+        <if test="info.version != null ">version</if>
+        )values(
+        <if test="info.configNo != null  and info.configNo != ''">#{info.configNo},</if>
+        <if test="info.configName != null  and info.configName != ''">#{info.configName},</if>
+        <if test="info.configKey != null  and info.configKey != ''">#{info.configKey},</if>
+        <if test="info.configValue != null  and info.configValue != ''">#{info.configValue},</if>
+        <if test="info.configType != null  and info.configType != ''">#{info.configType},</if>
+        <if test="info.checkState != null  and info.checkState != ''">#{info.checkState},</if>
+        <if test="info.branchNo != null  and info.branchNo != ''">#{info.branchNo},</if>
+        <if test="info.createBy != null  and info.createBy != ''">#{info.createBy},</if>
+        <if test="info.createTime != null ">#{info.createTime},</if>
+        <if test="info.updateBy != null  and info.updateBy != ''">#{info.updateBy},</if>
+        <if test="info.updateTime != null ">#{info.updateTime},</if>
+        <if test="info.deleteFlag != null  and info.deleteFlag != ''">#{info.deleteFlag},</if>
+        <if test="info.comments != null  and info.comments != ''">#{info.comments},</if>
+        <if test="info.appCode != null  and info.appCode != ''">#{info.appCode},</if>
+        <if test="info.version != null ">#{info.version}</if>
+        )
+    </insert>
+
+    <update id="UpdateRecord" parameterType="SysConfiginfo">
+        update sys_configinfo
+        <set>
+            <if test="info.configNo != null  and info.configNo != ''">config_no = #{info.configNo},</if>
+            <if test="info.configName != null  and info.configName != ''">config_name = #{info.configName},</if>
+            <if test="info.configKey != null  and info.configKey != ''">config_key = #{info.configKey},</if>
+            <if test="info.configValue != null  and info.configValue != ''">config_value = #{info.configValue},</if>
+            <if test="info.configType != null  and info.configType != ''">config_type = #{info.configType},</if>
+            <if test="info.checkState != null  and info.checkState != ''">check_state = #{info.checkState},</if>
+            <if test="info.branchNo != null  and info.branchNo != ''">branch_no = #{info.branchNo},</if>
+            <if test="info.createBy != null  and info.createBy != ''">create_by = #{info.createBy},</if>
+            <if test="info.createTime != null ">create_time = #{info.createTime},</if>
+            <if test="info.updateBy != null  and info.updateBy != ''">update_by = #{info.updateBy},</if>
+            <if test="info.updateTime != null ">update_time = #{info.updateTime},</if>
+            <if test="info.deleteFlag != null  and info.deleteFlag != ''">delete_flag = #{info.deleteFlag},</if>
+            <if test="info.comments != null  and info.comments != ''">comments = #{info.comments},</if>
+            <if test="info.appCode != null  and info.appCode != ''">app_code = #{info.appCode},</if>
+            <if test="info.version != null ">version = version+1</if>
+        </set>
+        where delete_flag='1' and app_code=#{info.appCode} and version=#{info.version} and config_no = #{info.configNo}
+    </update>
+
+    <delete id="HardDeleteByNo">
+        delete from sys_configinfo
+        where delete_flag='1' and app_code=#{appCode} and config_no = #{no}
+    </delete>
+
+    <delete id="HardDeleteByNos">
+        delete from sys_configinfo
+        where delete_flag='1' and app_code=#{appCode} and config_no in
+        <foreach item="no" collection="nos" open="(" separator="," close=")">
+            #{no}
+        </foreach>
+    </delete>
+
+    <delete id="HardDeleteByCondition">
+        delete from sys_configinfo
+        where delete_flag='1' and app_code=#{appCode}
+        <if test="condition != null  and condition != ''">and ${condition}</if>
+    </delete>
+
+    <delete id="SoftDeleteByNo">
+        update sys_configinfo set delete_flag='0'
+        where delete_flag='1' and app_code=#{appCode} and config_no = #{no}
+    </delete>
+
+    <delete id="SoftDeleteByNos">
+        update sys_configinfo set delete_flag='0'
+        where delete_flag='1' and app_code=#{appCode} and config_no in
+        <foreach item="no" collection="nos" open="(" separator="," close=")">
+            #{no}
+        </foreach>
+    </delete>
+
+    <delete id="SoftDeleteByCondition">
+        update sys_configinfo set delete_flag='0'
+        where delete_flag='1' and app_code=#{appCode}
+        <if test="condition != null  and condition != ''">and ${condition}</if>
+    </delete>
+
+    <select id="checkConfigKeyUnique" resultType="Integer">
+        select count(*) from sys_configinfo
+        where delete_flag='1' and app_code=#{appCode} and config_key = #{configKey}
+    </select>
+
+    <select id="getConfigValueByKey" resultType="String">
+        select config_value from sys_configinfo
+        where delete_flag='1' and app_code=#{appCode} and config_key = #{configKey}
+    </select>
+
+</mapper>

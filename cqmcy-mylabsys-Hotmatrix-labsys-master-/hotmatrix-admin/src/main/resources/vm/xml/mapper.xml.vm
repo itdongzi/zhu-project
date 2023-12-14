@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="${packageName}.mapper.${ClassName}Mapper">
+    
+    <resultMap type="${ClassName}" id="${ClassName}Result">
+#foreach ($column in $columns)
+        <result property="${column.javaField}"    column="${column.columnName}"    />
+#end
+    </resultMap>
+
+    <sql id="select${ClassName}Vo">
+        select#foreach($column in $columns) $column.columnName#if($velocityCount != $columns.size()),#end#end from ${tableName}
+    </sql>
+
+    <select id="getAllRecords" resultMap="${ClassName}Result">
+        <include refid="select${ClassName}Vo"/>
+        where delete_flag='1' and app_code=#{appCode}
+    </select>
+
+    <select id="getRecordsByClassNo" resultMap="${ClassName}Result">
+        <include refid="select${ClassName}Vo"/>
+        where delete_flag='1' and app_code=#{appCode} and class_no=#{classNo}
+    </select>
+
+    <select id="getRecordsByPaging" resultMap="${ClassName}Result">
+        <include refid="select${ClassName}Vo"/>
+        where delete_flag='1' and app_code=${appCode}
+        <if test="model.condition != null  and model.condition != ''"> and ${model.condition}</if>
+        order by ${model.orderField} ${model.orderType} limit ${model.pageIndex},${model.pageSize}
+    </select>
+
+    <select id="getRecordByNo" resultMap="${ClassName}Result">
+        <include refid="select${ClassName}Vo"/>
+        where delete_flag='1' and app_code=#{appCode} and xxxxxxxxx_no = #{no}
+    </select>
+
+    <select id="getRecordNameByNo" resultType="String">
+        select app_cnname from ${tableName}
+        where delete_flag='1' and app_code=#{appCode} and xxxxxxxxx_no = #{no}
+    </select>
+
+    <select id="getCountByCondition" resultType="Integer">
+        select count(*) from ${tableName}
+        where delete_flag='1' and app_code=#{appCode}
+        <if test="condition != null  and condition != ''"> and ${condition}</if>
+    </select>
+
+    <insert id="AddNewRecord" parameterType="${ClassName}" #if($pkColumn.increment) useGeneratedKeys="true" keyProperty="$pkColumn.javaField"#end>
+        insert into ${tableName} (
+            #foreach($column in $columns)
+                #if($column.columnName != $pkColumn.columnName || !$pkColumn.increment)
+                    <if test="info.$column.javaField != null #if($column.javaType == 'String' ) and info.$column.javaField != ''#end">$column.columnName,</if>
+                #end
+            #end
+        )values(
+            #foreach($column in $columns)
+                #if($column.columnName != $pkColumn.columnName || !$pkColumn.increment)
+                    <if test="info.$column.javaField != null #if($column.javaType == 'String' ) and info.$column.javaField != ''#end">#{info.$column.javaField},</if>
+                #end
+            #end
+            )
+    </insert>
+
+    <update id="UpdateRecord" parameterType="${ClassName}">
+        update ${tableName}
+        <set>
+            #foreach($column in $columns)
+                #if($column.columnName != $pkColumn.columnName)
+                    <if test="info.$column.javaField != null #if($column.javaType == 'String' ) and info.$column.javaField != ''#end">$column.columnName = #{info.$column.javaField},</if>
+                #end
+            #end
+        </set>
+        where delete_flag='1' and app_code=#{info.appCode} and version=#{info.version} and xxxxxxxxx_no = #{info.xxxxxxxno}
+    </update>
+
+    <delete id="HardDeleteByNo">
+        delete from ${tableName}
+        where delete_flag='1' and app_code=#{appCode} and xxxxxxxxx_no = #{no}
+    </delete>
+
+    <delete id="HardDeleteByNos">
+        delete from ${tableName}
+        where delete_flag='1' and app_code=#{appCode} and xxxxxxxxx_no in
+        <foreach item="no" collection="nos" open="(" separator="," close=")">
+            #{no}
+        </foreach>
+    </delete>
+
+    <delete id="HardDeleteByCondition">
+        delete from ${tableName}
+        where delete_flag='1' and app_code=#{appCode}
+        <if test="condition != null  and condition != ''"> and ${condition}</if>
+    </delete>
+
+    <delete id="SoftDeleteByNo">
+        update ${tableName} set delete_flag='0'
+        where delete_flag='1' and app_code=#{appCode} and xxxxxxxxx_no = #{no}
+    </delete>
+
+    <delete id="SoftDeleteByNos">
+        update ${tableName} set delete_flag='0'
+        where delete_flag='1' and app_code=#{appCode} and xxxxxxxxx_no in
+        <foreach item="no" collection="nos" open="(" separator="," close=")">
+            #{no}
+        </foreach>
+    </delete>
+
+    <delete id="SoftDeleteByCondition">
+        update ${tableName} set delete_flag='0'
+        where delete_flag='1' and app_code=#{appCode}
+        <if test="condition != null  and condition != ''"> and ${condition}</if>
+    </delete>
+    
+</mapper>

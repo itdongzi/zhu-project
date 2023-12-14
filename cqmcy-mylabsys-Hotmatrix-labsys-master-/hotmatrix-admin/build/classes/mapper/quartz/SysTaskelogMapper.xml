@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.benet.task.mapper.SysTaskelogMapper">
+
+    <resultMap type="SysTaskelog" id="SysTaskelogResult">
+        <result property="id" column="id"/>
+        <result property="taskLogno" column="task_logno"/>
+        <result property="taskName" column="task_name"/>
+        <result property="taskGroup" column="task_group"/>
+        <result property="taskMessage" column="task_message"/>
+        <result property="invokeTarget" column="invoke_target"/>
+        <result property="resultStatus" column="result_status"/>
+        <result property="errorsMessage" column="errors_message"/>
+        <result property="startTime" column="start_time"/>
+        <result property="enditTime" column="endit_time"/>
+        <result property="checkState" column="check_state"/>
+        <result property="branchNo" column="branch_no"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="deleteFlag" column="delete_flag"/>
+        <result property="comments" column="comments"/>
+        <result property="appCode" column="app_code"/>
+        <result property="version" column="version"/>
+    </resultMap>
+
+    <sql id="selectSysTaskelogVo">
+        select id, task_logno, task_name, task_group, task_message,invoke_target,  result_status, errors_message,start_time,endit_time, check_state, branch_no, create_by, create_time, update_by, update_time, delete_flag, comments, app_code, version from sys_taskelog
+    </sql>
+
+    <select id="getAllRecords" resultMap="SysTaskelogResult">
+        <include refid="selectSysTaskelogVo"/>
+        where delete_flag='1' and app_code=#{appCode}
+    </select>
+
+    <select id="getRecordsByClassNo" resultMap="SysTaskelogResult">
+        <include refid="selectSysTaskelogVo"/>
+        where delete_flag='1' and app_code=#{appCode} and task_group=#{classNo}
+    </select>
+
+    <select id="getRecordsByPaging" resultMap="SysTaskelogResult">
+        <include refid="selectSysTaskelogVo"/>
+        where delete_flag='1' and app_code=${appCode}
+        <if test="model.condition != null  and model.condition != ''">and ${model.condition}</if>
+        order by ${model.orderField} ${model.orderType} limit ${model.pageIndex},${model.pageSize}
+    </select>
+
+    <select id="getRecordByNo" resultMap="SysTaskelogResult">
+        <include refid="selectSysTaskelogVo"/>
+        where delete_flag='1' and app_code=#{appCode} and task_logno = #{no}
+    </select>
+
+    <select id="getRecordNameByNo" resultType="String">
+        select task_name from sys_taskelog
+        where delete_flag='1'  and app_code=#{appCode}  and task_logno = #{no}
+    </select>
+
+    <select id="getCountByCondition" resultType="Integer">
+        select count(*) from sys_taskelog
+        where delete_flag='1' and app_code=#{appCode}
+        <if test="condition != null  and condition != ''">and ${condition}</if>
+    </select>
+
+    <insert id="AddNewRecord" parameterType="SysTaskelog" useGeneratedKeys="true" keyProperty="id">
+        insert into sys_taskelog (
+        <if test="info.taskLogno != null  and info.taskLogno != ''">task_logno,</if>
+        <if test="info.taskName != null  and info.taskName != ''">task_name,</if>
+        <if test="info.taskGroup != null  and info.taskGroup != ''">task_group,</if>
+        <if test="info.taskMessage != null  and info.taskMessage != ''">task_message,</if>
+        <if test="info.invokeTarget != null  and info.invokeTarget != ''">invoke_target,</if>
+        <if test="info.resultStatus != null  and info.resultStatus != ''">result_status,</if>
+        <if test="info.errorsMessage != null  and info.errorsMessage != ''">errors_message,</if>
+        <if test="info.startTime != null  ">start_time,</if>
+        <if test="info.enditTime != null  ">endit_time,</if>
+        <if test="info.checkState != null  and info.checkState != ''">check_state,</if>
+        <if test="info.branchNo != null  and info.branchNo != ''">branch_no,</if>
+        <if test="info.createBy != null  and info.createBy != ''">create_by,</if>
+        <if test="info.createTime != null ">create_time,</if>
+        <if test="info.updateBy != null  and info.updateBy != ''">update_by,</if>
+        <if test="info.updateTime != null ">update_time,</if>
+        <if test="info.deleteFlag != null  and info.deleteFlag != ''">delete_flag,</if>
+        <if test="info.comments != null  and info.comments != ''">comments,</if>
+        <if test="info.appCode != null  and info.appCode != ''">app_code,</if>
+        <if test="info.version != null ">version</if>
+        )values(
+        <if test="info.taskLogno != null  and info.taskLogno != ''">#{info.taskLogno},</if>
+        <if test="info.taskName != null  and info.taskName != ''">#{info.taskName},</if>
+        <if test="info.taskGroup != null  and info.taskGroup != ''">#{info.taskGroup},</if>
+        <if test="info.taskMessage != null  and info.taskMessage != ''">#{info.taskMessage},</if>
+        <if test="info.invokeTarget != null  and info.invokeTarget != ''">#{info.invokeTarget},</if>
+        <if test="info.resultStatus != null  and info.resultStatus != ''">#{info.resultStatus},</if>
+        <if test="info.errorsMessage != null  and info.errorsMessage != ''">#{info.errorsMessage},</if>
+        <if test="info.startTime != null ">#{info.startTime},</if>
+        <if test="info.enditTime != null ">#{info.enditTime},</if>
+        <if test="info.checkState != null  and info.checkState != ''">#{info.checkState},</if>
+        <if test="info.branchNo != null  and info.branchNo != ''">#{info.branchNo},</if>
+        <if test="info.createBy != null  and info.createBy != ''">#{info.createBy},</if>
+        <if test="info.createTime != null ">#{info.createTime},</if>
+        <if test="info.updateBy != null  and info.updateBy != ''">#{info.updateBy},</if>
+        <if test="info.updateTime != null ">#{info.updateTime},</if>
+        <if test="info.deleteFlag != null  and info.deleteFlag != ''">#{info.deleteFlag},</if>
+        <if test="info.comments != null  and info.comments != ''">#{info.comments},</if>
+        <if test="info.appCode != null  and info.appCode != ''">#{info.appCode},</if>
+        <if test="info.version != null ">#{info.version}</if>
+        )
+    </insert>
+
+    <update id="UpdateRecord" parameterType="SysTaskelog">
+        update sys_taskelog
+        <set>
+            <if test="info.taskLogno != null  and info.taskLogno != ''">task_logno = #{info.taskLogno},</if>
+            <if test="info.taskName != null  and info.taskName != ''">task_name = #{info.taskName},</if>
+            <if test="info.taskGroup != null  and info.taskGroup != ''">task_group = #{info.taskGroup},</if>
+            <if test="info.taskMessage != null  and info.taskMessage != ''">task_message = #{info.taskMessage},</if>
+            <if test="info.invokeTarget != null  and info.invokeTarget != ''">invoke_target = #{info.invokeTarget},</if>
+            <if test="info.resultStatus != null  and info.resultStatus != ''">result_status = #{info.resultStatus},</if>
+            <if test="info.errorsMessage != null  and info.errorsMessage != ''">errors_message =
+                #{info.errorsMessage},
+            </if>
+            <if test="info.startTime != null ">start_time = #{info.startTime},</if>
+            <if test="info.enditTime != null ">endit_time = #{info.enditTime},</if>
+            <if test="info.checkState != null  and info.checkState != ''">check_state = #{info.checkState},</if>
+            <if test="info.branchNo != null  and info.branchNo != ''">branch_no = #{info.branchNo},</if>
+            <if test="info.createBy != null  and info.createBy != ''">create_by = #{info.createBy},</if>
+            <if test="info.createTime != null ">create_time = #{info.createTime},</if>
+            <if test="info.updateBy != null  and info.updateBy != ''">update_by = #{info.updateBy},</if>
+            <if test="info.updateTime != null ">update_time = #{info.updateTime},</if>
+            <if test="info.deleteFlag != null  and info.deleteFlag != ''">delete_flag = #{info.deleteFlag},</if>
+            <if test="info.comments != null  and info.comments != ''">comments = #{info.comments},</if>
+            <if test="info.appCode != null  and info.appCode != ''">app_code = #{info.appCode},</if>
+            <if test="info.version != null ">version = version+1</if>
+        </set>
+        where delete_flag='1'  and app_code=#{appCode}  and version=#{info.version} and task_logno = #{info.taskLogno}
+    </update>
+
+    <delete id="HardDeleteByNo">
+        delete from sys_taskelog
+        where delete_flag='1' and app_code=#{appCode} and task_logno = #{no}
+    </delete>
+
+    <delete id="HardDeleteByNos">
+        delete from sys_taskelog
+        where delete_flag='1' and app_code=#{appCode} and task_logno in
+        <foreach item="no" collection="nos" open="(" separator="," close=")">
+            #{no}
+        </foreach>
+    </delete>
+
+    <delete id="HardDeleteByCondition">
+        delete from sys_taskelog
+        where delete_flag='1' and app_code=#{appCode}
+        <if test="condition != null  and condition != ''">and ${condition}</if>
+    </delete>
+
+    <delete id="SoftDeleteByNo">
+        update sys_taskelog set delete_flag='0'
+        where delete_flag='1'  and app_code=#{appCode} and task_logno = #{no}
+    </delete>
+
+    <delete id="SoftDeleteByNos">
+        update sys_taskelog set delete_flag='0'
+        where delete_flag='1'  and app_code=#{appCode} and task_logno in
+        <foreach item="no" collection="nos" open="(" separator="," close=")">
+            #{no}
+        </foreach>
+    </delete>
+
+    <delete id="SoftDeleteByCondition">
+        update sys_taskelog set delete_flag='0'
+        where delete_flag='1' and app_code=#{appCode}
+        <if test="condition != null  and condition != ''">and ${condition}</if>
+    </delete>
+
+</mapper>

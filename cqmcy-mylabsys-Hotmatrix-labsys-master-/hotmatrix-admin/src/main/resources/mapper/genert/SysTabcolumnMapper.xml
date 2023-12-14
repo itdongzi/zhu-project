@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.benet.genert.mapper.SysTabcolumnMapper">
+
+    <resultMap type="SysTabcolumn" id="SysTabcolumnResult">
+        <result property="id" column="id"/>
+        <result property="columnNo" column="column_no"/>
+        <result property="tableNo" column="table_no"/>
+        <result property="columnName" column="column_name"/>
+        <result property="columnComment" column="column_comment"/>
+        <result property="columnType" column="column_type"/>
+        <result property="javaType" column="java_type"/>
+        <result property="javaField" column="java_field"/>
+        <result property="isPk" column="is_pk"/>
+        <result property="isIncrement" column="is_increment"/>
+        <result property="isRequired" column="is_required"/>
+        <result property="isInsert" column="is_insert"/>
+        <result property="isEdit" column="is_edit"/>
+        <result property="isList" column="is_list"/>
+        <result property="isQuery" column="is_query"/>
+        <result property="queryType" column="query_type"/>
+        <result property="htmlType" column="html_type"/>
+        <result property="dictType" column="dict_type"/>
+        <result property="orderNo" column="order_no"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="deleteFlag" column="delete_flag"/>
+        <result property="comments" column="comments"/>
+        <result property="appCode" column="app_code"/>
+        <result property="version" column="version"/>
+    </resultMap>
+
+    <sql id="selectSysTabcolumnVo">
+        select id, column_no, table_no, column_name, column_comment, column_type, java_type, java_field, is_pk, is_increment, is_required, is_insert, is_edit, is_list, is_query, query_type, html_type, dict_type, order_no,create_by, create_time, update_by, update_time, delete_flag, comments, app_code, version from sys_tabcolumn
+    </sql>
+
+    <select id="getAllRecords" resultMap="SysTabcolumnResult">
+        <include refid="selectSysTabcolumnVo"/>
+        where delete_flag='1' and app_code=#{appCode}
+    </select>
+
+    <select id="getRecordsByClassNo" resultMap="SysTabcolumnResult">
+        <include refid="selectSysTabcolumnVo"/>
+        where delete_flag='1'  and app_code=#{appCode} and table_no=#{classNo}
+    </select>
+
+    <select id="getRecordsByPaging" resultMap="SysTabcolumnResult">
+        <include refid="selectSysTabcolumnVo"/>
+        where delete_flag='1' and app_code=${appCode}
+        <if test="model.condition != null  and model.condition != ''">and ${model.condition}</if>
+        order by ${model.orderField} ${model.orderType} limit ${model.pageIndex},${model.pageSize}
+    </select>
+
+    <select id="getRecordByNo" resultMap="SysTabcolumnResult">
+        <include refid="selectSysTabcolumnVo"/>
+        where delete_flag='1'  and app_code=#{appCode} and column_no = #{no}
+    </select>
+
+    <select id="getRecordNameByNo" resultType="String">
+        select column_name from sys_tabcolumn
+        where delete_flag='1'  and app_code=#{appCode} and column_no = #{no}
+    </select>
+
+    <select id="getCountByCondition" resultType="Integer">
+        select count(*) from sys_tabcolumn
+        where delete_flag='1' and app_code=#{appCode}
+        <if test="condition != null  and condition != ''">and ${condition}</if>
+    </select>
+
+    <insert id="AddNewRecord" parameterType="SysTabcolumn" useGeneratedKeys="true" keyProperty="id">
+        insert into sys_tabcolumn (
+        <if test="info.columnNo != null  and info.columnNo != ''">column_no,</if>
+        <if test="info.tableNo != null  and info.tableNo != ''">table_no,</if>
+        <if test="info.columnName != null  and info.columnName != ''">column_name,</if>
+        <if test="info.columnComment != null  and info.columnComment != ''">column_comment,</if>
+        <if test="info.columnType != null  and info.columnType != ''">column_type,</if>
+        <if test="info.javaType != null  and info.javaType != ''">java_type,</if>
+        <if test="info.javaField != null  and info.javaField != ''">java_field,</if>
+        <if test="info.isPk != null  and info.isPk != ''">is_pk,</if>
+        <if test="info.isIncrement != null  and info.isIncrement != ''">is_increment,</if>
+        <if test="info.isRequired != null  and info.isRequired != ''">is_required,</if>
+        <if test="info.isInsert != null  and info.isInsert != ''">is_insert,</if>
+        <if test="info.isEdit != null  and info.isEdit != ''">is_edit,</if>
+        <if test="info.isList != null  and info.isList != ''">is_list,</if>
+        <if test="info.isQuery != null  and info.isQuery != ''">is_query,</if>
+        <if test="info.queryType != null  and info.queryType != ''">query_type,</if>
+        <if test="info.htmlType != null  and info.htmlType != ''">html_type,</if>
+        <if test="info.dictType != null  and info.dictType != ''">dict_type,</if>
+        <if test="info.orderNo != null  and info.orderNo != ''">order_no,</if>
+        <if test="info.createBy != null  and info.createBy != ''">create_by,</if>
+        <if test="info.createTime != null ">create_time,</if>
+        <if test="info.updateBy != null  and info.updateBy != ''">update_by,</if>
+        <if test="info.updateTime != null ">update_time,</if>
+        <if test="info.deleteFlag != null  and info.deleteFlag != ''">delete_flag,</if>
+        <if test="info.comments != null  and info.comments != ''">comments,</if>
+        <if test="info.appCode != null  and info.appCode != ''">app_code,</if>
+        <if test="info.version != null ">version</if>
+        )values(
+        <if test="info.columnNo != null  and info.columnNo != ''">#{info.columnNo},</if>
+        <if test="info.tableNo != null  and info.tableNo != ''">#{info.tableNo},</if>
+        <if test="info.columnName != null  and info.columnName != ''">#{info.columnName},</if>
+        <if test="info.columnComment != null  and info.columnComment != ''">#{info.columnComment},</if>
+        <if test="info.columnType != null  and info.columnType != ''">#{info.columnType},</if>
+        <if test="info.javaType != null  and info.javaType != ''">#{info.javaType},</if>
+        <if test="info.javaField != null  and info.javaField != ''">#{info.javaField},</if>
+        <if test="info.isPk != null  and info.isPk != ''">#{info.isPk},</if>
+        <if test="info.isIncrement != null  and info.isIncrement != ''">#{info.isIncrement},</if>
+        <if test="info.isRequired != null  and info.isRequired != ''">#{info.isRequired},</if>
+        <if test="info.isInsert != null  and info.isInsert != ''">#{info.isInsert},</if>
+        <if test="info.isEdit != null  and info.isEdit != ''">#{info.isEdit},</if>
+        <if test="info.isList != null  and info.isList != ''">#{info.isList},</if>
+        <if test="info.isQuery != null  and info.isQuery != ''">#{info.isQuery},</if>
+        <if test="info.queryType != null  and info.queryType != ''">#{info.queryType},</if>
+        <if test="info.htmlType != null  and info.htmlType != ''">#{info.htmlType},</if>
+        <if test="info.dictType != null  and info.dictType != ''">#{info.dictType},</if>
+        <if test="info.orderNo != null  and info.orderNo != ''">#{info.orderNo},</if>
+        <if test="info.createBy != null  and info.createBy != ''">#{info.createBy},</if>
+        <if test="info.createTime != null ">#{info.createTime},</if>
+        <if test="info.updateBy != null  and info.updateBy != ''">#{info.updateBy},</if>
+        <if test="info.updateTime != null ">#{info.updateTime},</if>
+        <if test="info.deleteFlag != null  and info.deleteFlag != ''">#{info.deleteFlag},</if>
+        <if test="info.comments != null  and info.comments != ''">#{info.comments},</if>
+        <if test="info.appCode != null  and info.appCode != ''">#{info.appCode},</if>
+        <if test="info.version != null ">#{info.version}</if>
+        )
+    </insert>
+
+    <update id="UpdateRecord" parameterType="SysTabcolumn">
+        update sys_tabcolumn
+        <set>
+            <if test="info.columnNo != null  and info.columnNo != ''">column_no = #{info.columnNo},</if>
+            <if test="info.tableNo != null  and info.tableNo != ''">table_no = #{info.tableNo},</if>
+            <if test="info.columnName != null  and info.columnName != ''">column_name = #{info.columnName},</if>
+            <if test="info.columnComment != null  and info.columnComment != ''">column_comment = #{info.columnComment},</if>
+            <if test="info.columnType != null  and info.columnType != ''">column_type = #{info.columnType},</if>
+            <if test="info.javaType != null  and info.javaType != ''">java_type = #{info.javaType},</if>
+            <if test="info.javaField != null  and info.javaField != ''">java_field = #{info.javaField},</if>
+            <if test="info.isPk != null  and info.isPk != ''">is_pk = #{info.isPk},</if>
+            <if test="info.isIncrement != null  and info.isIncrement != ''">is_increment = #{info.isIncrement},</if>
+            <if test="info.isRequired != null  and info.isRequired != ''">is_required = #{info.isRequired},</if>
+            <if test="info.isInsert != null  and info.isInsert != ''">is_insert = #{info.isInsert},</if>
+            <if test="info.isEdit != null  and info.isEdit != ''">is_edit = #{info.isEdit},</if>
+            <if test="info.isList != null  and info.isList != ''">is_list = #{info.isList},</if>
+            <if test="info.isQuery != null  and info.isQuery != ''">is_query = #{info.isQuery},</if>
+            <if test="info.queryType != null  and info.queryType != ''">query_type = #{info.queryType},</if>
+            <if test="info.htmlType != null  and info.htmlType != ''">html_type = #{info.htmlType},</if>
+            <if test="info.dictType != null  and info.dictType != ''">dict_type = #{info.dictType},</if>
+            <if test="info.orderNo != null  and info.orderNo != ''">order_no = #{info.orderNo},</if>
+            <if test="info.createBy != null  and info.createBy != ''">create_by = #{info.createBy},</if>
+            <if test="info.createTime != null ">create_time = #{info.createTime},</if>
+            <if test="info.updateBy != null  and info.updateBy != ''">update_by = #{info.updateBy},</if>
+            <if test="info.updateTime != null ">update_time = #{info.updateTime},</if>
+            <if test="info.deleteFlag != null  and info.deleteFlag != ''">delete_flag = #{info.deleteFlag},</if>
+            <if test="info.comments != null  and info.comments != ''">comments = #{info.comments},</if>
+            <if test="info.appCode != null  and info.appCode != ''">app_code = #{info.appCode},</if>
+            <if test="info.version != null ">version = version+1</if>
+        </set>
+        where delete_flag='1' and app_code=#{appCode} and version=#{info.version} and column_no = #{info.columnNo}
+    </update>
+
+    <delete id="HardDeleteByNo">
+        delete from sys_tabcolumn
+        where delete_flag='1'  and app_code=#{appCode} and column_no = #{no}
+    </delete>
+
+    <delete id="HardDeleteByNos">
+        delete from sys_tabcolumn
+        where delete_flag='1'  and app_code=#{appCode} and column_no in
+        <foreach item="no" collection="nos" open="(" separator="," close=")">
+            #{no}
+        </foreach>
+    </delete>
+
+    <delete id="HardDeleteByCondition">
+        delete from sys_tabcolumn
+        where delete_flag='1' and app_code=#{appCode}
+        <if test="condition != null  and condition != ''">and ${condition}</if>
+    </delete>
+
+    <delete id="SoftDeleteByNo">
+        update sys_tabcolumn set delete_flag='0'
+        where delete_flag='1'  and app_code=#{appCode} and column_no = #{no}
+    </delete>
+
+    <delete id="SoftDeleteByNos">
+        update sys_tabcolumn set delete_flag='0'
+        where delete_flag='1'  and app_code=#{appCode} and column_no in
+        <foreach item="no" collection="nos" open="(" separator="," close=")">
+            #{no}
+        </foreach>
+    </delete>
+
+    <delete id="SoftDeleteByCondition">
+        update sys_tabcolumn set delete_flag='0'
+        where delete_flag='1' and app_code=#{appCode}
+        <if test="condition != null  and condition != ''">and ${condition}</if>
+    </delete>
+
+    <select id="getDbTableColumnsByName" parameterType="String" resultMap="SysTabcolumnResult">
+		select column_name, (case when (is_nullable = 'no' <![CDATA[ && ]]> column_key != 'PRI') then '1' else null end) as is_required, (case when column_key = 'PRI' then '1' else '0' end) as is_pk, ordinal_position as sort, column_comment, (case when extra = 'auto_increment' then '1' else '0' end) as is_increment, column_type
+		from information_schema.columns where table_schema = (select database()) and table_name = (#{tableName})
+		order by ordinal_position
+	</select>
+
+</mapper>

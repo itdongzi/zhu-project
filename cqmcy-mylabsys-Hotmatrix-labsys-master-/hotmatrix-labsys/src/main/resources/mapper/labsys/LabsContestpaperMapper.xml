@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.benet.labsys.mapper.LabsContestpaperMapper">
+
+    <resultMap type="LabsContestpaper" id="LabsContestpaperResult">
+        <result property="id" column="id"/>
+        <result property="paperNo" column="paper_no"/>
+        <result property="contestNo" column="contest_no"/>
+        <result property="classNo" column="class_no"/>
+        <result property="paperTitle" column="paper_title"/>
+        <result property="paperType" column="paper_type"/>
+        <result property="paperYear" column="paper_year"/>
+        <result property="paperDuration" column="paper_duration"/>
+        <result property="paperUrl" column="paper_url"/>
+        <result property="paperDesc" column="paper_desc"/>
+        <result property="checkState" column="check_state"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="deleteFlag" column="delete_flag"/>
+        <result property="comments" column="comments"/>
+        <result property="appCode" column="app_code"/>
+        <result property="version" column="version"/>
+    </resultMap>
+
+    <sql id="selectLabsContestpaperVo">
+        select id,
+               paper_no,
+               contest_no,
+               class_no,
+               paper_title,
+               paper_type,
+               paper_year,
+               paper_duration,
+               paper_url,
+               paper_desc,
+               check_state,
+               create_by,
+               create_time,
+               update_by,
+               update_time,
+               delete_flag,
+               comments,
+               app_code,
+               version
+        from labs_contestpaper
+    </sql>
+
+    <select id="getAllRecords" resultMap="LabsContestpaperResult">
+        <include refid="selectLabsContestpaperVo"/>
+        where delete_flag='1' and app_code=#{appCode}
+    </select>
+
+    <select id="getRecordsByClassNo" resultMap="LabsContestpaperResult">
+        <include refid="selectLabsContestpaperVo"/>
+        where delete_flag='1' and app_code=#{appCode} and contest_no=#{classNo}
+    </select>
+
+    <select id="getRecordsByPaging" resultMap="LabsContestpaperResult">
+        <include refid="selectLabsContestpaperVo"/>
+        where delete_flag='1' and app_code=${appCode}
+        <if test="model.condition != null  and model.condition != ''">and ${model.condition}</if>
+        order by ${model.orderField} ${model.orderType} limit ${model.pageIndex},${model.pageSize}
+    </select>
+
+    <select id="getRecordByNo" resultMap="LabsContestpaperResult">
+        <include refid="selectLabsContestpaperVo"/>
+        where delete_flag='1' and app_code=#{appCode} and paper_no = #{no}
+    </select>
+
+    <select id="getRecordNameByNo" resultType="String">
+        select paper_no
+        from labs_contestpaper
+        where delete_flag = '1'
+          and app_code = #{appCode}
+          and paper_no = #{no}
+    </select>
+
+    <select id="getCountByCondition" resultType="Integer">
+        select count(*) from labs_contestpaper
+        where delete_flag='1' and app_code=#{appCode}
+        <if test="condition != null  and condition != ''">and ${condition}</if>
+    </select>
+
+    <insert id="AddNewRecord" parameterType="LabsContestpaper" useGeneratedKeys="true" keyProperty="id">
+        insert into labs_contestpaper (
+        <if test="info.paperNo != null  and info.paperNo != ''">paper_no,</if>
+        <if test="info.contestNo != null  and info.contestNo != ''">contest_no,</if>
+        <if test="info.classNo != null  and info.classNo != ''">class_no,</if>
+        <if test="info.paperTitle != null  and info.paperTitle != ''">paper_title,</if>
+        <if test="info.paperType != null  and info.paperType != ''">paper_type,</if>
+        <if test="info.paperYear != null  and info.paperYear != ''">paper_year,</if>
+        <if test="info.paperDuration != null ">paper_duration,</if>
+        <if test="info.paperUrl != null  and info.paperUrl != ''">paper_url,</if>
+        <if test="info.paperDesc != null  and info.paperDesc != ''">paper_desc,</if>
+        <if test="info.checkState != null  and info.checkState != ''">check_state,</if>
+        <if test="info.createBy != null  and info.createBy != ''">create_by,</if>
+        <if test="info.createTime != null ">create_time,</if>
+        <if test="info.updateBy != null  and info.updateBy != ''">update_by,</if>
+        <if test="info.updateTime != null ">update_time,</if>
+        <if test="info.deleteFlag != null  and info.deleteFlag != ''">delete_flag,</if>
+        <if test="info.comments != null  and info.comments != ''">comments,</if>
+        <if test="info.appCode != null  and info.appCode != ''">app_code,</if>
+        <if test="info.version != null ">version</if>
+        )values(
+        <if test="info.paperNo != null  and info.paperNo != ''">#{info.paperNo},</if>
+        <if test="info.contestNo != null  and info.contestNo != ''">#{info.contestNo},</if>
+        <if test="info.classNo != null  and info.classNo != ''">#{info.classNo},</if>
+        <if test="info.paperTitle != null  and info.paperTitle != ''">#{info.paperTitle},</if>
+        <if test="info.paperType != null  and info.paperType != ''">#{info.paperType},</if>
+        <if test="info.paperYear != null  and info.paperYear != ''">#{info.paperYear},</if>
+        <if test="info.paperDuration != null ">#{info.paperDuration},</if>
+        <if test="info.paperUrl != null  and info.paperUrl != ''">#{info.paperUrl},</if>
+        <if test="info.paperDesc != null  and info.paperDesc != ''">#{info.paperDesc},</if>
+        <if test="info.checkState != null  and info.checkState != ''">#{info.checkState},</if>
+        <if test="info.createBy != null  and info.createBy != ''">#{info.createBy},</if>
+        <if test="info.createTime != null ">#{info.createTime},</if>
+        <if test="info.updateBy != null  and info.updateBy != ''">#{info.updateBy},</if>
+        <if test="info.updateTime != null ">#{info.updateTime},</if>
+        <if test="info.deleteFlag != null  and info.deleteFlag != ''">#{info.deleteFlag},</if>
+        <if test="info.comments != null  and info.comments != ''">#{info.comments},</if>
+        <if test="info.appCode != null  and info.appCode != ''">#{info.appCode},</if>
+        <if test="info.version != null ">#{info.version}</if>
+        )
+    </insert>
+
+    <update id="UpdateRecord" parameterType="LabsContestpaper">
+        update labs_contestpaper
+        <set>
+            <if test="info.paperNo != null  and info.paperNo != ''">paper_no = #{info.paperNo},</if>
+            <if test="info.contestNo != null  and info.contestNo != ''">contest_no = #{info.contestNo},</if>
+            <if test="info.classNo != null  and info.classNo != ''">class_no = #{info.classNo},</if>
+            <if test="info.paperTitle != null  and info.paperTitle != ''">paper_title = #{info.paperTitle},</if>
+            <if test="info.paperType != null  and info.paperType != ''">paper_type = #{info.paperType},</if>
+            <if test="info.paperYear != null  and info.paperYear != ''">paper_year = #{info.paperYear},</if>
+            <if test="info.paperDuration != null ">paper_duration = #{info.paperDuration},</if>
+            <if test="info.paperUrl != null  and info.paperUrl != ''">paper_url = #{info.paperUrl},</if>
+            <if test="info.paperDesc != null  and info.paperDesc != ''">paper_desc = #{info.paperDesc},</if>
+            <if test="info.checkState != null  and info.checkState != ''">check_state = #{info.checkState},</if>
+            <if test="info.createBy != null  and info.createBy != ''">create_by = #{info.createBy},</if>
+            <if test="info.createTime != null ">create_time = #{info.createTime},</if>
+            <if test="info.updateBy != null  and info.updateBy != ''">update_by = #{info.updateBy},</if>
+            <if test="info.updateTime != null ">update_time = #{info.updateTime},</if>
+            <if test="info.deleteFlag != null  and info.deleteFlag != ''">delete_flag = #{info.deleteFlag},</if>
+            <if test="info.comments != null  and info.comments != ''">comments = #{info.comments},</if>
+            <if test="info.appCode != null  and info.appCode != ''">app_code = #{info.appCode},</if>
+            <if test="info.version != null ">version = #{info.version},</if>
+        </set>
+        where delete_flag='1' and app_code=#{info.appCode} and version=#{info.version} and paper_no = #{info.paperNo}
+    </update>
+
+    <delete id="HardDeleteByNo">
+        delete
+        from labs_contestpaper
+        where delete_flag = '1'
+          and app_code = #{appCode}
+          and paper_no = #{no}
+    </delete>
+
+    <delete id="HardDeleteByNos">
+        delete from labs_contestpaper
+        where delete_flag='1' and app_code=#{appCode} and paper_no in
+        <foreach item="no" collection="nos" open="(" separator="," close=")">
+            #{no}
+        </foreach>
+    </delete>
+
+    <delete id="HardDeleteByCondition">
+        delete from labs_contestpaper
+        where delete_flag='1' and app_code=#{appCode}
+        <if test="condition != null  and condition != ''">and ${condition}</if>
+    </delete>
+
+    <delete id="SoftDeleteByNo">
+        update labs_contestpaper
+        set delete_flag='0'
+        where delete_flag = '1'
+          and app_code = #{appCode}
+          and paper_no = #{no}
+    </delete>
+
+    <delete id="SoftDeleteByNos">
+        update labs_contestpaper set delete_flag='0'
+        where delete_flag='1' and app_code=#{appCode} and paper_no in
+        <foreach item="no" collection="nos" open="(" separator="," close=")">
+            #{no}
+        </foreach>
+    </delete>
+
+    <delete id="SoftDeleteByCondition">
+        update labs_contestpaper set delete_flag='0'
+        where delete_flag='1' and app_code=#{appCode}
+        <if test="condition != null  and condition != ''">and ${condition}</if>
+    </delete>
+
+</mapper>

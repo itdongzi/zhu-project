@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.benet.labsys.mapper.LabsDevicerepairMapper">
+
+    <resultMap type="LabsDevicerepair" id="LabsDevicerepairResult">
+        <result property="id" column="id"/>
+        <result property="repairNo" column="repair_no"/>
+        <result property="deviceNo" column="device_no"/>
+        <result property="roomNo" column="room_no"/>
+        <result property="userNo" column="user_no"/>
+        <result property="userName" column="user_name"/>
+        <result property="userTel" column="user_tel"/>
+        <result property="repairTitle" column="repair_title"/>
+        <result property="repairType" column="repair_type"/>
+        <result property="repairDesc" column="repair_desc"/>
+        <result property="repairPicture" column="repair_picture"/>
+        <result property="repairVideo" column="repair_video"/>
+        <result property="repairDate" column="repair_date"/>
+        <result property="solveState" column="solve_state"/>
+        <result property="solveUser" column="solve_user"/>
+        <result property="solveDate" column="solve_date"/>
+        <result property="solvePicture" column="solve_picture"/>
+        <result property="solveVideo" column="solve_video"/>
+        <result property="solveResult" column="solve_result"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="deleteFlag" column="delete_flag"/>
+        <result property="comments" column="comments"/>
+        <result property="appCode" column="app_code"/>
+        <result property="version" column="version"/>
+    </resultMap>
+
+    <sql id="selectLabsDevicerepairVo">
+        select id,
+               repair_no,
+               device_no,
+               room_no,
+               user_no,
+               user_name,
+               user_tel,
+               repair_title,
+               repair_type,
+               repair_desc,
+               repair_picture,
+               repair_video,
+               repair_date,
+               solve_state,
+               solve_user,
+               solve_date,
+               solve_picture,
+               solve_video,
+               solve_result,
+               create_by,
+               create_time,
+               update_by,
+               update_time,
+               delete_flag,
+               comments,
+               app_code,
+               version
+        from labs_devicerepair
+    </sql>
+
+    <select id="getAllRecords" resultMap="LabsDevicerepairResult">
+        <include refid="selectLabsDevicerepairVo"/>
+        where delete_flag='1' and app_code=#{appCode}
+    </select>
+
+    <select id="getRecordsByClassNo" resultMap="LabsDevicerepairResult">
+        <include refid="selectLabsDevicerepairVo"/>
+        where delete_flag='1' and app_code=#{appCode} and device_no=#{classNo}
+    </select>
+
+    <select id="getRecordsByPaging" resultMap="LabsDevicerepairResult">
+        <include refid="selectLabsDevicerepairVo"/>
+        where delete_flag='1' and app_code=${appCode}
+        <if test="model.condition != null  and model.condition != ''">and ${model.condition}</if>
+        order by ${model.orderField} ${model.orderType} limit ${model.pageIndex},${model.pageSize}
+    </select>
+
+    <select id="getRecordByNo" resultMap="LabsDevicerepairResult">
+        <include refid="selectLabsDevicerepairVo"/>
+        where delete_flag='1' and app_code=#{appCode} and repair_no = #{no}
+    </select>
+
+    <select id="getRecordNameByNo" resultType="String">
+        select repair_no
+        from labs_devicerepair
+        where delete_flag = '1'
+          and app_code = #{appCode}
+          and repair_no = #{no}
+    </select>
+
+    <select id="getCountByCondition" resultType="Integer">
+        select count(*) from labs_devicerepair
+        where delete_flag='1' and app_code=#{appCode}
+        <if test="condition != null  and condition != ''">and ${condition}</if>
+    </select>
+
+    <insert id="AddNewRecord" parameterType="LabsDevicerepair" useGeneratedKeys="true" keyProperty="id">
+        insert into labs_devicerepair (
+        <if test="info.repairNo != null  and info.repairNo != ''">repair_no,</if>
+        <if test="info.deviceNo != null  and info.deviceNo != ''">device_no,</if>
+        <if test="info.roomNo != null  and info.roomNo != ''">room_no,</if>
+        <if test="info.userNo != null  and info.userNo != ''">user_no,</if>
+        <if test="info.userName != null  and info.userName != ''">user_name,</if>
+        <if test="info.userTel != null  and info.userTel != ''">user_tel,</if>
+        <if test="info.repairTitle != null  and info.repairTitle != ''">repair_title,</if>
+        <if test="info.repairType != null  and info.repairType != ''">repair_type,</if>
+        <if test="info.repairDesc != null  and info.repairDesc != ''">repair_desc,</if>
+        <if test="info.repairPicture != null  and info.repairPicture != ''">repair_picture,</if>
+        <if test="info.repairVideo != null  and info.repairVideo != ''">repair_video,</if>
+        <if test="info.repairDate != null ">repair_date,</if>
+        <if test="info.solveState != null  and info.solveState != ''">solve_state,</if>
+        <if test="info.solveUser != null  and info.solveUser != ''">solve_user,</if>
+        <if test="info.solveDate != null ">solve_date,</if>
+        <if test="info.solvePicture != null  and info.solvePicture != ''">solve_picture,</if>
+        <if test="info.solveVideo != null  and info.solveVideo != ''">solve_video,</if>
+        <if test="info.solveResult != null  and info.solveResult != ''">solve_result,</if>
+        <if test="info.createBy != null  and info.createBy != ''">create_by,</if>
+        <if test="info.createTime != null ">create_time,</if>
+        <if test="info.updateBy != null  and info.updateBy != ''">update_by,</if>
+        <if test="info.updateTime != null ">update_time,</if>
+        <if test="info.deleteFlag != null  and info.deleteFlag != ''">delete_flag,</if>
+        <if test="info.comments != null  and info.comments != ''">comments,</if>
+        <if test="info.appCode != null  and info.appCode != ''">app_code,</if>
+        <if test="info.version != null ">version</if>
+        )values(
+        <if test="info.repairNo != null  and info.repairNo != ''">#{info.repairNo},</if>
+        <if test="info.deviceNo != null  and info.deviceNo != ''">#{info.deviceNo},</if>
+        <if test="info.roomNo != null  and info.roomNo != ''">#{info.roomNo},</if>
+        <if test="info.userNo != null  and info.userNo != ''">#{info.userNo},</if>
+        <if test="info.userName != null  and info.userName != ''">#{info.userName},</if>
+        <if test="info.userTel != null  and info.userTel != ''">#{info.userTel},</if>
+        <if test="info.repairTitle != null  and info.repairTitle != ''">#{info.repairTitle},</if>
+        <if test="info.repairType != null  and info.repairType != ''">#{info.repairType},</if>
+        <if test="info.repairDesc != null  and info.repairDesc != ''">#{info.repairDesc},</if>
+        <if test="info.repairPicture != null  and info.repairPicture != ''">#{info.repairPicture},</if>
+        <if test="info.repairVideo != null  and info.repairVideo != ''">#{info.repairVideo},</if>
+        <if test="info.repairDate != null ">#{info.repairDate},</if>
+        <if test="info.solveState != null  and info.solveState != ''">#{info.solveState},</if>
+        <if test="info.solveUser != null  and info.solveUser != ''">#{info.solveUser},</if>
+        <if test="info.solveDate != null ">#{info.solveDate},</if>
+        <if test="info.solvePicture != null  and info.solvePicture != ''">#{info.solvePicture},</if>
+        <if test="info.solveVideo != null  and info.solveVideo != ''">#{info.solveVideo},</if>
+        <if test="info.solveResult != null  and info.solveResult != ''">#{info.solveResult},</if>
+        <if test="info.createBy != null  and info.createBy != ''">#{info.createBy},</if>
+        <if test="info.createTime != null ">#{info.createTime},</if>
+        <if test="info.updateBy != null  and info.updateBy != ''">#{info.updateBy},</if>
+        <if test="info.updateTime != null ">#{info.updateTime},</if>
+        <if test="info.deleteFlag != null  and info.deleteFlag != ''">#{info.deleteFlag},</if>
+        <if test="info.comments != null  and info.comments != ''">#{info.comments},</if>
+        <if test="info.appCode != null  and info.appCode != ''">#{info.appCode},</if>
+        <if test="info.version != null ">#{info.version}</if>
+        )
+    </insert>
+
+    <update id="UpdateRecord" parameterType="LabsDevicerepair">
+        update labs_devicerepair
+        <set>
+            <if test="info.repairNo != null  and info.repairNo != ''">repair_no = #{info.repairNo},</if>
+            <if test="info.deviceNo != null  and info.deviceNo != ''">device_no = #{info.deviceNo},</if>
+            <if test="info.roomNo != null  and info.roomNo != ''">room_no = #{info.roomNo},</if>
+            <if test="info.userNo != null  and info.userNo != ''">user_no = #{info.userNo},</if>
+            <if test="info.userName != null  and info.userName != ''">user_name = #{info.userName},</if>
+            <if test="info.userTel != null  and info.userTel != ''">user_tel = #{info.userTel},</if>
+            <if test="info.repairTitle != null  and info.repairTitle != ''">repair_title = #{info.repairTitle},</if>
+            <if test="info.repairType != null  and info.repairType != ''">repair_type = #{info.repairType},</if>
+            <if test="info.repairDesc != null  and info.repairDesc != ''">repair_desc = #{info.repairDesc},</if>
+            <if test="info.repairPicture != null  and info.repairPicture != ''">repair_picture =
+                #{info.repairPicture},
+            </if>
+            <if test="info.repairVideo != null  and info.repairVideo != ''">repair_video = #{info.repairVideo},</if>
+            <if test="info.repairDate != null ">repair_date = #{info.repairDate},</if>
+            <if test="info.solveState != null  and info.solveState != ''">solve_state = #{info.solveState},</if>
+            <if test="info.solveUser != null  and info.solveUser != ''">solve_user = #{info.solveUser},</if>
+            <if test="info.solveDate != null ">solve_date = #{info.solveDate},</if>
+            <if test="info.solvePicture != null  and info.solvePicture != ''">solve_picture = #{info.solvePicture},</if>
+            <if test="info.solveVideo != null  and info.solveVideo != ''">solve_video = #{info.solveVideo},</if>
+            <if test="info.solveResult != null  and info.solveResult != ''">solve_result = #{info.solveResult},</if>
+            <if test="info.createBy != null  and info.createBy != ''">create_by = #{info.createBy},</if>
+            <if test="info.createTime != null ">create_time = #{info.createTime},</if>
+            <if test="info.updateBy != null  and info.updateBy != ''">update_by = #{info.updateBy},</if>
+            <if test="info.updateTime != null ">update_time = #{info.updateTime},</if>
+            <if test="info.deleteFlag != null  and info.deleteFlag != ''">delete_flag = #{info.deleteFlag},</if>
+            <if test="info.comments != null  and info.comments != ''">comments = #{info.comments},</if>
+            <if test="info.appCode != null  and info.appCode != ''">app_code = #{info.appCode},</if>
+            <if test="info.version != null ">version = #{info.version},</if>
+        </set>
+        where delete_flag='1' and app_code=#{info.appCode} and version=#{info.version} and repair_no = #{info.repairNo}
+    </update>
+
+    <delete id="HardDeleteByNo">
+        delete
+        from labs_devicerepair
+        where delete_flag = '1'
+          and app_code = #{appCode}
+          and repair_no = #{no}
+    </delete>
+
+    <delete id="HardDeleteByNos">
+        delete from labs_devicerepair
+        where delete_flag='1' and app_code=#{appCode} and repair_no in
+        <foreach item="no" collection="nos" open="(" separator="," close=")">
+            #{no}
+        </foreach>
+    </delete>
+
+    <delete id="HardDeleteByCondition">
+        delete from labs_devicerepair
+        where delete_flag='1' and app_code=#{appCode}
+        <if test="condition != null  and condition != ''">and ${condition}</if>
+    </delete>
+
+    <delete id="SoftDeleteByNo">
+        update labs_devicerepair
+        set delete_flag='0'
+        where delete_flag = '1'
+          and app_code = #{appCode}
+          and repair_no = #{no}
+    </delete>
+
+    <delete id="SoftDeleteByNos">
+        update labs_devicerepair set delete_flag='0'
+        where delete_flag='1' and app_code=#{appCode} and repair_no in
+        <foreach item="no" collection="nos" open="(" separator="," close=")">
+            #{no}
+        </foreach>
+    </delete>
+
+    <delete id="SoftDeleteByCondition">
+        update labs_devicerepair set delete_flag='0'
+        where delete_flag='1' and app_code=#{appCode}
+        <if test="condition != null  and condition != ''">and ${condition}</if>
+    </delete>
+
+</mapper>

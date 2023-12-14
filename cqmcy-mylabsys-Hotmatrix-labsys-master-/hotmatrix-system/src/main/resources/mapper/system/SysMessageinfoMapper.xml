@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.benet.system.mapper.SysMessageinfoMapper">
+
+    <resultMap type="SysMessageinfo" id="SysMessageinfoResult">
+        <result property="id" column="id"/>
+        <result property="mssgNo" column="mssg_no"/>
+        <result property="mssgType" column="mssg_type"/>
+        <result property="mreceiver" column="mreceiver"/>
+        <result property="msender" column="msender"/>
+        <result property="mtitle" column="mtitle"/>
+        <result property="mcontent" column="mcontent"/>
+        <result property="attachfile" column="attachfile"/>
+        <result property="readState" column="read_state"/>
+        <result property="receiveTime" column="receive_time"/>
+        <result property="sendTime" column="send_time"/>
+        <result property="checkState" column="check_state"/>
+        <result property="branchNo" column="branch_no"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="deleteFlag" column="delete_flag"/>
+        <result property="comments" column="comments"/>
+        <result property="appCode" column="app_code"/>
+        <result property="version" column="version"/>
+    </resultMap>
+
+    <sql id="selectSysMessageinfoVo">
+        select id, mssg_no, mssg_type, mreceiver, msender, mtitle, mcontent, attachfile, read_state, receive_time, send_time, check_state, branch_no, create_by, create_time, update_by, update_time, delete_flag, comments, app_code, version from sys_messageinfo
+    </sql>
+
+    <select id="getAllRecords" resultMap="SysMessageinfoResult">
+        <include refid="selectSysMessageinfoVo"/>
+        where delete_flag='1' and app_code=#{appCode}
+    </select>
+
+    <select id="getRecordsByClassNo" resultMap="SysMessageinfoResult">
+        <include refid="selectSysMessageinfoVo"/>
+        where delete_flag='1' and app_code=#{appCode} and mssg_type=#{classNo}
+    </select>
+
+    <select id="getRecordsByPaging" resultMap="SysMessageinfoResult">
+        <include refid="selectSysMessageinfoVo"/>
+        where delete_flag='1' and app_code=${appCode}
+        <if test="model.condition != null  and model.condition != ''">and ${model.condition}</if>
+        order by ${model.orderField} ${model.orderType} limit ${model.pageIndex},${model.pageSize}
+    </select>
+
+    <select id="getRecordByNo" resultMap="SysMessageinfoResult">
+        <include refid="selectSysMessageinfoVo"/>
+        where delete_flag='1' and app_code=#{appCode} and mssg_no = #{no}
+    </select>
+
+    <select id="getRecordNameByNo" resultType="String">
+        select mtitle from sys_messageinfo
+        where delete_flag='1' and app_code=#{appCode} and mssg_no = #{no}
+    </select>
+
+    <select id="getCountByCondition" resultType="Integer">
+        select count(*) from sys_messageinfo
+        where delete_flag='1' and app_code=#{appCode}
+        <if test="condition != null  and condition != ''">and ${condition}</if>
+    </select>
+
+    <insert id="AddNewRecord" parameterType="SysMessageinfo" useGeneratedKeys="true" keyProperty="id">
+        insert into sys_messageinfo (
+        <if test="info.mssgNo != null  and info.mssgNo != ''">mssg_no,</if>
+        <if test="info.mssgType != null  and info.mssgType != ''">mssg_type,</if>
+        <if test="info.mreceiver != null  and info.mreceiver != ''">mreceiver,</if>
+        <if test="info.msender != null  and info.msender != ''">msender,</if>
+        <if test="info.mtitle != null  and info.mtitle != ''">mtitle,</if>
+        <if test="info.mcontent != null  and info.mcontent != ''">mcontent,</if>
+        <if test="info.attachfile != null  and info.attachfile != ''">attachfile,</if>
+        <if test="info.readState != null  and info.readState != ''">read_state,</if>
+        <if test="info.receiveTime != null ">receive_time,</if>
+        <if test="info.sendTime != null ">send_time,</if>
+        <if test="info.checkState != null  and info.checkState != ''">check_state,</if>
+        <if test="info.branchNo != null  and info.branchNo != ''">branch_no,</if>
+        <if test="info.createBy != null  and info.createBy != ''">create_by,</if>
+        <if test="info.createTime != null ">create_time,</if>
+        <if test="info.updateBy != null  and info.updateBy != ''">update_by,</if>
+        <if test="info.updateTime != null ">update_time,</if>
+        <if test="info.deleteFlag != null  and info.deleteFlag != ''">delete_flag,</if>
+        <if test="info.comments != null  and info.comments != ''">comments,</if>
+        <if test="info.appCode != null  and info.appCode != ''">app_code,</if>
+        <if test="info.version != null ">version</if>
+        )values(
+        <if test="info.mssgNo != null  and info.mssgNo != ''">#{info.mssgNo},</if>
+        <if test="info.mssgType != null  and info.mssgType != ''">#{info.mssgType},</if>
+        <if test="info.mreceiver != null  and info.mreceiver != ''">#{info.mreceiver},</if>
+        <if test="info.msender != null  and info.msender != ''">#{info.msender},</if>
+        <if test="info.mtitle != null  and info.mtitle != ''">#{info.mtitle},</if>
+        <if test="info.mcontent != null  and info.mcontent != ''">#{info.mcontent},</if>
+        <if test="info.attachfile != null  and info.attachfile != ''">#{info.attachfile},</if>
+        <if test="info.readState != null  and info.readState != ''">#{info.readState},</if>
+        <if test="info.receiveTime != null ">#{info.receiveTime},</if>
+        <if test="info.sendTime != null ">#{info.sendTime},</if>
+        <if test="info.checkState != null  and info.checkState != ''">#{info.checkState},</if>
+        <if test="info.branchNo != null  and info.branchNo != ''">#{info.branchNo},</if>
+        <if test="info.createBy != null  and info.createBy != ''">#{info.createBy},</if>
+        <if test="info.createTime != null ">#{info.createTime},</if>
+        <if test="info.updateBy != null  and info.updateBy != ''">#{info.updateBy},</if>
+        <if test="info.updateTime != null ">#{info.updateTime},</if>
+        <if test="info.deleteFlag != null  and info.deleteFlag != ''">#{info.deleteFlag},</if>
+        <if test="info.comments != null  and info.comments != ''">#{info.comments},</if>
+        <if test="info.appCode != null  and info.appCode != ''">#{info.appCode},</if>
+        <if test="info.version != null ">#{info.version}</if>
+        )
+    </insert>
+
+    <update id="UpdateRecord" parameterType="SysMessageinfo">
+        update sys_messageinfo
+        <set>
+            <if test="info.mssgNo != null  and info.mssgNo != ''">mssg_no = #{info.mssgNo},</if>
+            <if test="info.mssgType != null  and info.mssgType != ''">mssg_type = #{info.mssgType},</if>
+            <if test="info.mreceiver != null  and info.mreceiver != ''">mreceiver = #{info.mreceiver},</if>
+            <if test="info.msender != null  and info.msender != ''">msender = #{info.msender},</if>
+            <if test="info.mtitle != null  and info.mtitle != ''">mtitle = #{info.mtitle},</if>
+            <if test="info.mcontent != null  and info.mcontent != ''">mcontent = #{info.mcontent},</if>
+            <if test="info.attachfile != null  and info.attachfile != ''">attachfile = #{info.attachfile},</if>
+            <if test="info.readState != null  and info.readState != ''">read_state = #{info.readState},</if>
+            <if test="info.receiveTime != null ">receive_time = #{info.receiveTime},</if>
+            <if test="info.sendTime != null ">send_time = #{info.sendTime},</if>
+            <if test="info.checkState != null  and info.checkState != ''">check_state = #{info.checkState},</if>
+            <if test="info.branchNo != null  and info.branchNo != ''">branch_no = #{info.branchNo},</if>
+            <if test="info.createBy != null  and info.createBy != ''">create_by = #{info.createBy},</if>
+            <if test="info.createTime != null ">create_time = #{info.createTime},</if>
+            <if test="info.updateBy != null  and info.updateBy != ''">update_by = #{info.updateBy},</if>
+            <if test="info.updateTime != null ">update_time = #{info.updateTime},</if>
+            <if test="info.deleteFlag != null  and info.deleteFlag != ''">delete_flag = #{info.deleteFlag},</if>
+            <if test="info.comments != null  and info.comments != ''">comments = #{info.comments},</if>
+            <if test="info.appCode != null  and info.appCode != ''">app_code = #{info.appCode},</if>
+            <if test="info.version != null ">version = version+1</if>
+        </set>
+        where delete_flag='1' and app_code=#{info.appCode} and version=#{info.version} and mssg_no = #{info.mssgNo}
+    </update>
+
+    <delete id="HardDeleteByNo">
+        delete from sys_messageinfo
+        where delete_flag='1' and app_code=#{appCode} and mssg_no = #{no}
+    </delete>
+
+    <delete id="HardDeleteByNos">
+        delete from sys_messageinfo
+        where delete_flag='1' and app_code=#{appCode} and mssg_no in
+        <foreach item="no" collection="nos" open="(" separator="," close=")">
+            #{no}
+        </foreach>
+    </delete>
+
+    <delete id="HardDeleteByCondition">
+        delete from sys_messageinfo
+        where delete_flag='1' and app_code=#{appCode}
+        <if test="condition != null  and condition != ''">and ${condition}</if>
+    </delete>
+
+    <delete id="SoftDeleteByNo">
+        update sys_messageinfo set delete_flag='0'
+        where delete_flag='1' and app_code=#{appCode} and mssg_no = #{no}
+    </delete>
+
+    <delete id="SoftDeleteByNos">
+        update sys_messageinfo set delete_flag='0'
+        where delete_flag='1' and app_code=#{appCode} and mssg_no in
+        <foreach item="no" collection="nos" open="(" separator="," close=")">
+            #{no}
+        </foreach>
+    </delete>
+
+    <delete id="SoftDeleteByCondition">
+        update sys_messageinfo set delete_flag='0'
+        where delete_flag='1' and app_code=#{appCode}
+        <if test="condition != null  and condition != ''">and ${condition}</if>
+    </delete>
+
+</mapper>

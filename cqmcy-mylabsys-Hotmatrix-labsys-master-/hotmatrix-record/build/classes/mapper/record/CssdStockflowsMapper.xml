@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.benet.record.mapper.CssdStockflowsMapper">
+
+    <resultMap type="CssdStockflows" id="CssdStockflowsResult">
+        <result property="id" column="id"/>
+        <result property="sflowNo" column="sflow_no"/>
+        <result property="sflowType" column="sflow_type"/>
+        <result property="sfsubType" column="sfsub_type"/>
+        <result property="storeNo" column="store_no"/>
+        <result property="suppeNo" column="suppe_no"/>
+        <result property="defaultNumber" column="default_number"/>
+        <result property="sflowNumber" column="sflow_number"/>
+        <result property="opertTime" column="opert_time"/>
+        <result property="opertUser" column="opert_user"/>
+        <result property="changeAmount" column="change_amount"/>
+        <result property="totalPrice" column="total_price"/>
+        <result property="payType" column="pay_type"/>
+        <result property="billType" column="bill_type"/>
+        <result property="salesUser" column="sales_user"/>
+        <result property="discount" column="discount"/>
+        <result property="discountMoney" column="discount_money"/>
+        <result property="discountLastMoney" column="discount_last_money"/>
+        <result property="accountDay" column="account_day"/>
+        <result property="linkNumber" column="link_number"/>
+        <result property="branchNo" column="branch_no"/>
+        <result property="checkState" column="check_state"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="deleteFlag" column="delete_flag"/>
+        <result property="comments" column="comments"/>
+        <result property="appCode" column="app_code"/>
+        <result property="version" column="version"/>
+    </resultMap>
+
+    <sql id="selectCssdStockflowsVo">
+        select id, sflow_no, sflow_type, sfsub_type, store_no, suppe_no, default_number, sflow_number, opert_time, opert_user, change_amount, total_price, pay_type, bill_type, sales_user, discount, discount_money, discount_last_money, account_day, link_number, branch_no, check_state, create_by, create_time, update_by, update_time, delete_flag, comments, app_code, version from cssd_stockflows
+    </sql>
+
+    <select id="getAllRecords" resultMap="CssdStockflowsResult">
+        <include refid="selectCssdStockflowsVo"/>
+        where delete_flag='1' and app_code=#{appCode}
+    </select>
+
+    <select id="getRecordsByClassNo" resultMap="CssdStockflowsResult">
+        <include refid="selectCssdStockflowsVo"/>
+        where delete_flag='1' and app_code=#{appCode} and sflow_type=#{classNo}
+    </select>
+
+    <select id="getRecordsByPaging" resultMap="CssdStockflowsResult">
+        <include refid="selectCssdStockflowsVo"/>
+        where delete_flag='1' and app_code=${appCode}
+        <if test="model.condition != null  and model.condition != ''">and ${model.condition}</if>
+        order by ${model.orderField} ${model.orderType} limit ${model.pageIndex},${model.pageSize}
+    </select>
+
+    <select id="getRecordByNo" resultMap="CssdStockflowsResult">
+        <include refid="selectCssdStockflowsVo"/>
+        where delete_flag='1' and app_code=#{appCode} and sflow_no = #{no}
+    </select>
+
+    <select id="getRecordNameByNo" resultType="String">
+        select app_cnname from cssd_stockflows
+        where delete_flag='1' and app_code=#{appCode} and sflow_no = #{no}
+    </select>
+
+    <select id="getCountByCondition" resultType="Integer">
+        select count(*) from cssd_stockflows
+        where delete_flag='1' and app_code=#{appCode}
+        <if test="condition != null  and condition != ''">and ${condition}</if>
+    </select>
+
+    <insert id="AddNewRecord" parameterType="CssdStockflows" useGeneratedKeys="true" keyProperty="id">
+        insert into cssd_stockflows (
+        <if test="info.sflowNo != null  and info.sflowNo != ''">sflow_no,</if>
+        <if test="info.sflowType != null  and info.sflowType != ''">sflow_type,</if>
+        <if test="info.sfsubType != null  and info.sfsubType != ''">sfsub_type,</if>
+        <if test="info.storeNo != null  and info.storeNo != ''">store_no,</if>
+        <if test="info.suppeNo != null  and info.suppeNo != ''">suppe_no,</if>
+        <if test="info.defaultNumber != null  and info.defaultNumber != ''">default_number,</if>
+        <if test="info.sflowNumber != null  and info.sflowNumber != ''">sflow_number,</if>
+        <if test="info.opertTime != null ">opert_time,</if>
+        <if test="info.opertUser != null ">opert_user,</if>
+        <if test="info.changeAmount != null ">change_amount,</if>
+        <if test="info.totalPrice != null ">total_price,</if>
+        <if test="info.payType != null  and info.payType != ''">pay_type,</if>
+        <if test="info.billType != null  and info.billType != ''">bill_type,</if>
+        <if test="info.salesUser != null  and info.salesUser != ''">sales_user,</if>
+        <if test="info.discount != null ">discount,</if>
+        <if test="info.discountMoney != null ">discount_money,</if>
+        <if test="info.discountLastMoney != null ">discount_last_money,</if>
+        <if test="info.accountDay != null ">account_day,</if>
+        <if test="info.linkNumber != null  and info.linkNumber != ''">link_number,</if>
+        <if test="info.branchNo != null  and info.branchNo != ''">branch_no,</if>
+        <if test="info.checkState != null  and info.checkState != ''">check_state,</if>
+        <if test="info.createBy != null  and info.createBy != ''">create_by,</if>
+        <if test="info.createTime != null ">create_time,</if>
+        <if test="info.updateBy != null  and info.updateBy != ''">update_by,</if>
+        <if test="info.updateTime != null ">update_time,</if>
+        <if test="info.deleteFlag != null  and info.deleteFlag != ''">delete_flag,</if>
+        <if test="info.comments != null  and info.comments != ''">comments,</if>
+        <if test="info.appCode != null  and info.appCode != ''">app_code,</if>
+        <if test="info.version != null ">version</if>
+        )values(
+        <if test="info.sflowNo != null  and info.sflowNo != ''">#{info.sflowNo},</if>
+        <if test="info.sflowType != null  and info.sflowType != ''">#{info.sflowType},</if>
+        <if test="info.sfsubType != null  and info.sfsubType != ''">#{info.sfsubType},</if>
+        <if test="info.storeNo != null  and info.storeNo != ''">#{info.storeNo},</if>
+        <if test="info.suppeNo != null  and info.suppeNo != ''">#{info.suppeNo},</if>
+        <if test="info.defaultNumber != null  and info.defaultNumber != ''">#{info.defaultNumber},</if>
+        <if test="info.sflowNumber != null  and info.sflowNumber != ''">#{info.sflowNumber},</if>
+        <if test="info.opertTime != null ">#{info.opertTime},</if>
+        <if test="info.opertUser != null ">#{info.opertUser},</if>
+        <if test="info.changeAmount != null ">#{info.changeAmount},</if>
+        <if test="info.totalPrice != null ">#{info.totalPrice},</if>
+        <if test="info.payType != null  and info.payType != ''">#{info.payType},</if>
+        <if test="info.billType != null  and info.billType != ''">#{info.billType},</if>
+        <if test="info.salesUser != null  and info.salesUser != ''">#{info.salesUser},</if>
+        <if test="info.discount != null ">#{info.discount},</if>
+        <if test="info.discountMoney != null ">#{info.discountMoney},</if>
+        <if test="info.discountLastMoney != null ">#{info.discountLastMoney},</if>
+        <if test="info.accountDay != null ">#{info.accountDay},</if>
+        <if test="info.linkNumber != null  and info.linkNumber != ''">#{info.linkNumber},</if>
+        <if test="info.branchNo != null  and info.branchNo != ''">#{info.branchNo},</if>
+        <if test="info.checkState != null  and info.checkState != ''">#{info.checkState},</if>
+        <if test="info.createBy != null  and info.createBy != ''">#{info.createBy},</if>
+        <if test="info.createTime != null ">#{info.createTime},</if>
+        <if test="info.updateBy != null  and info.updateBy != ''">#{info.updateBy},</if>
+        <if test="info.updateTime != null ">#{info.updateTime},</if>
+        <if test="info.deleteFlag != null  and info.deleteFlag != ''">#{info.deleteFlag},</if>
+        <if test="info.comments != null  and info.comments != ''">#{info.comments},</if>
+        <if test="info.appCode != null  and info.appCode != ''">#{info.appCode},</if>
+        <if test="info.version != null ">#{info.version}</if>
+        )
+    </insert>
+
+    <update id="UpdateRecord" parameterType="CssdStockflows">
+        update cssd_stockflows
+        <set>
+            <if test="info.sflowNo != null  and info.sflowNo != ''">sflow_no = #{info.sflowNo},</if>
+            <if test="info.sflowType != null  and info.sflowType != ''">sflow_type = #{info.sflowType},</if>
+            <if test="info.sfsubType != null  and info.sfsubType != ''">sfsub_type = #{info.sfsubType},</if>
+            <if test="info.storeNo != null  and info.storeNo != ''">store_no = #{info.storeNo},</if>
+            <if test="info.suppeNo != null  and info.suppeNo != ''">suppe_no = #{info.suppeNo},</if>
+            <if test="info.defaultNumber != null  and info.defaultNumber != ''">default_number =
+                #{info.defaultNumber},
+            </if>
+            <if test="info.sflowNumber != null  and info.sflowNumber != ''">sflow_number = #{info.sflowNumber},</if>
+            <if test="info.opertTime != null ">opert_time = #{info.opertTime},</if>
+            <if test="info.opertUser != null ">opert_user = #{info.opertUser},</if>
+            <if test="info.changeAmount != null ">change_amount = #{info.changeAmount},</if>
+            <if test="info.totalPrice != null ">total_price = #{info.totalPrice},</if>
+            <if test="info.payType != null  and info.payType != ''">pay_type = #{info.payType},</if>
+            <if test="info.billType != null  and info.billType != ''">bill_type = #{info.billType},</if>
+            <if test="info.salesUser != null  and info.salesUser != ''">sales_user = #{info.salesUser},</if>
+            <if test="info.discount != null ">discount = #{info.discount},</if>
+            <if test="info.discountMoney != null ">discount_money = #{info.discountMoney},</if>
+            <if test="info.discountLastMoney != null ">discount_last_money = #{info.discountLastMoney},</if>
+            <if test="info.accountDay != null ">account_day = #{info.accountDay},</if>
+            <if test="info.linkNumber != null  and info.linkNumber != ''">link_number = #{info.linkNumber},</if>
+            <if test="info.branchNo != null  and info.branchNo != ''">branch_no = #{info.branchNo},</if>
+            <if test="info.checkState != null  and info.checkState != ''">check_state = #{info.checkState},</if>
+            <if test="info.createBy != null  and info.createBy != ''">create_by = #{info.createBy},</if>
+            <if test="info.createTime != null ">create_time = #{info.createTime},</if>
+            <if test="info.updateBy != null  and info.updateBy != ''">update_by = #{info.updateBy},</if>
+            <if test="info.updateTime != null ">update_time = #{info.updateTime},</if>
+            <if test="info.deleteFlag != null  and info.deleteFlag != ''">delete_flag = #{info.deleteFlag},</if>
+            <if test="info.comments != null  and info.comments != ''">comments = #{info.comments},</if>
+            <if test="info.appCode != null  and info.appCode != ''">app_code = #{info.appCode},</if>
+            <if test="info.version != null ">version = #{info.version}</if>
+        </set>
+        where delete_flag='1' and app_code=#{info.appCode} and version=#{info.version} and sflow_no =
+        #{info.sflowNo}
+    </update>
+
+    <delete id="HardDeleteByNo">
+        delete from cssd_stockflows
+        where delete_flag='1' and app_code=#{appCode} and sflow_no = #{no}
+    </delete>
+
+    <delete id="HardDeleteByNos">
+        delete from cssd_stockflows
+        where delete_flag='1' and app_code=#{appCode} and sflow_no in
+        <foreach item="no" collection="nos" open="(" separator="," close=")">
+            #{no}
+        </foreach>
+    </delete>
+
+    <delete id="HardDeleteByCondition">
+        delete from cssd_stockflows
+        where delete_flag='1' and app_code=#{appCode}
+        <if test="condition != null  and condition != ''">and ${condition}</if>
+    </delete>
+
+    <delete id="SoftDeleteByNo">
+        update cssd_stockflows set delete_flag='0'
+        where delete_flag='1' and app_code=#{appCode} and sflow_no = #{no}
+    </delete>
+
+    <delete id="SoftDeleteByNos">
+        update cssd_stockflows set delete_flag='0'
+        where delete_flag='1' and app_code=#{appCode} and sflow_no in
+        <foreach item="no" collection="nos" open="(" separator="," close=")">
+            #{no}
+        </foreach>
+    </delete>
+
+    <delete id="SoftDeleteByCondition">
+        update cssd_stockflows set delete_flag='0'
+        where delete_flag='1' and app_code=#{appCode}
+        <if test="condition != null  and condition != ''">and ${condition}</if>
+    </delete>
+
+</mapper>

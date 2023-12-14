@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.benet.system.mapper.SysRoleinfoMapper">
+
+    <resultMap type="SysRoleinfo" id="SysRoleinfoResult">
+        <result property="id" column="id"/>
+        <result property="roleNo" column="role_no"/>
+        <result property="roleName" column="role_name"/>
+        <result property="roleCode" column="role_code"/>
+        <result property="orderNo" column="order_no"/>
+        <result property="dataScope" column="data_scope"/>
+        <result property="checkState" column="check_state"/>
+        <result property="branchNo" column="branch_no"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="deleteFlag" column="delete_flag"/>
+        <result property="comments" column="comments"/>
+        <result property="appCode" column="app_code"/>
+        <result property="version" column="version"/>
+    </resultMap>
+
+    <sql id="selectSysRoleinfoVo">
+        select id, role_no, role_name, role_code, order_no, data_scope, check_state, branch_no, create_by, create_time, update_by, update_time, delete_flag, comments, app_code, version from sys_roleinfo
+    </sql>
+
+    <sql id="selectRoleContactVo">
+        select distinct r.id,r.role_no, r.role_name, r.role_code, r.order_no, r.data_scope,
+            r.check_state, r.branch_no, r.create_by, r.create_time, r.update_by, r.update_time, r.delete_flag, r.comments, r.app_code, r.version
+        from sys_roleinfo r
+	        left join sys_suserrole ur on ur.role_no = r.role_no
+	        left join sys_suserinfo u on u.user_no = ur.user_no
+    </sql>
+
+    <select id="getAllRecords" resultMap="SysRoleinfoResult">
+        <include refid="selectSysRoleinfoVo"/>
+        where delete_flag='1' and app_code=#{appCode}
+    </select>
+
+    <select id="getRecordsByClassNo" resultMap="SysRoleinfoResult">
+        <include refid="selectSysRoleinfoVo"/>
+        where delete_flag='1' and app_code=#{appCode} and class_no=#{classNo}
+    </select>
+
+    <select id="getRecordsByPaging" resultMap="SysRoleinfoResult">
+        <include refid="selectSysRoleinfoVo"/>
+        where delete_flag='1' and app_code=${appCode}
+        <if test="model.condition != null  and model.condition != ''">and ${model.condition}</if>
+        order by ${model.orderField} ${model.orderType} limit ${model.pageIndex},${model.pageSize}
+    </select>
+
+    <select id="getRecordByNo" resultMap="SysRoleinfoResult">
+        <include refid="selectSysRoleinfoVo"/>
+        where delete_flag='1' and app_code=#{appCode} and role_no = #{no}
+    </select>
+
+    <select id="getRecordNameByNo" resultType="String">
+        select role_name from sys_roleinfo
+        where delete_flag='1' and app_code=#{appCode} and role_no = #{no}
+    </select>
+
+    <select id="getCountByCondition" resultType="Integer">
+        select count(*) from sys_roleinfo
+        where delete_flag='1' and app_code=#{appCode}
+        <if test="condition != null  and condition != ''">and ${condition}</if>
+    </select>
+
+    <insert id="AddNewRecord" parameterType="SysRoleinfo" useGeneratedKeys="true" keyProperty="id">
+        insert into sys_roleinfo (
+        <if test="info.roleNo != null  and info.roleNo != ''">role_no,</if>
+        <if test="info.roleName != null  and info.roleName != ''">role_name,</if>
+        <if test="info.roleCode != null  and info.roleCode != ''">role_code,</if>
+        <if test="info.orderNo != null ">order_no,</if>
+        <if test="info.dataScope != null  and info.dataScope != ''">data_scope,</if>
+        <if test="info.checkState != null  and info.checkState != ''">check_state,</if>
+        <if test="info.branchNo != null  and info.branchNo != ''">branch_no,</if>
+        <if test="info.createBy != null  and info.createBy != ''">create_by,</if>
+        <if test="info.createTime != null ">create_time,</if>
+        <if test="info.updateBy != null  and info.updateBy != ''">update_by,</if>
+        <if test="info.updateTime != null ">update_time,</if>
+        <if test="info.deleteFlag != null  and info.deleteFlag != ''">delete_flag,</if>
+        <if test="info.comments != null  and info.comments != ''">comments,</if>
+        <if test="info.appCode != null  and info.appCode != ''">app_code,</if>
+        <if test="info.version != null ">version</if>
+        )values(
+        <if test="info.roleNo != null  and info.roleNo != ''">#{info.roleNo},</if>
+        <if test="info.roleName != null  and info.roleName != ''">#{info.roleName},</if>
+        <if test="info.roleCode != null  and info.roleCode != ''">#{info.roleCode},</if>
+        <if test="info.orderNo != null ">#{info.orderNo},</if>
+        <if test="info.dataScope != null  and info.dataScope != ''">#{info.dataScope},</if>
+        <if test="info.checkState != null  and info.checkState != ''">#{info.checkState},</if>
+        <if test="info.branchNo != null  and info.branchNo != ''">#{info.branchNo},</if>
+        <if test="info.createBy != null  and info.createBy != ''">#{info.createBy},</if>
+        <if test="info.createTime != null ">#{info.createTime},</if>
+        <if test="info.updateBy != null  and info.updateBy != ''">#{info.updateBy},</if>
+        <if test="info.updateTime != null ">#{info.updateTime},</if>
+        <if test="info.deleteFlag != null  and info.deleteFlag != ''">#{info.deleteFlag},</if>
+        <if test="info.comments != null  and info.comments != ''">#{info.comments},</if>
+        <if test="info.appCode != null  and info.appCode != ''">#{info.appCode},</if>
+        <if test="info.version != null ">#{info.version}</if>
+        )
+    </insert>
+
+    <update id="UpdateRecord" parameterType="SysRoleinfo">
+        update sys_roleinfo
+        <set>
+            <if test="info.roleNo != null  and info.roleNo != ''">role_no = #{info.roleNo},</if>
+            <if test="info.roleName != null  and info.roleName != ''">role_name = #{info.roleName},</if>
+            <if test="info.roleCode != null  and info.roleCode != ''">role_code = #{info.roleCode},</if>
+            <if test="info.orderNo != null ">order_no = #{info.orderNo},</if>
+            <if test="info.dataScope != null  and info.dataScope != ''">data_scope = #{info.dataScope},</if>
+            <if test="info.checkState != null  and info.checkState != ''">check_state = #{info.checkState},</if>
+            <if test="info.branchNo != null  and info.branchNo != ''">branch_no = #{info.branchNo},</if>
+            <if test="info.createBy != null  and info.createBy != ''">create_by = #{info.createBy},</if>
+            <if test="info.createTime != null ">create_time = #{info.createTime},</if>
+            <if test="info.updateBy != null  and info.updateBy != ''">update_by = #{info.updateBy},</if>
+            <if test="info.updateTime != null ">update_time = #{info.updateTime},</if>
+            <if test="info.deleteFlag != null  and info.deleteFlag != ''">delete_flag = #{info.deleteFlag},</if>
+            <if test="info.comments != null  and info.comments != ''">comments = #{info.comments},</if>
+            <if test="info.appCode != null  and info.appCode != ''">app_code = #{info.appCode},</if>
+            <if test="info.version != null ">version = version+1</if>
+        </set>
+        where delete_flag='1' and app_code=#{info.appCode} and version=#{info.version} and role_no = #{info.roleNo}
+    </update>
+
+    <delete id="HardDeleteByNo">
+        delete from sys_roleinfo
+        where delete_flag='1' and app_code=#{appCode} and role_no = #{no}
+    </delete>
+
+    <delete id="HardDeleteByNos">
+        delete from sys_roleinfo
+        where delete_flag='1' and app_code=#{appCode} and role_no in
+        <foreach item="no" collection="nos" open="(" separator="," close=")">
+            #{no}
+        </foreach>
+    </delete>
+
+    <delete id="HardDeleteByCondition">
+        delete from sys_roleinfo
+        where delete_flag='1' and app_code=#{appCode}
+        <if test="condition != null  and condition != ''">and ${condition}</if>
+    </delete>
+
+    <delete id="SoftDeleteByNo">
+        update sys_roleinfo set delete_flag='0'
+        where delete_flag='1' and app_code=#{appCode} and role_no = #{no}
+    </delete>
+
+    <delete id="SoftDeleteByNos">
+        update sys_roleinfo set delete_flag='0'
+        where delete_flag='1' and app_code=#{appCode} and role_no in
+        <foreach item="no" collection="nos" open="(" separator="," close=")">
+            #{no}
+        </foreach>
+    </delete>
+
+    <delete id="SoftDeleteByCondition">
+        update sys_roleinfo set delete_flag='0'
+        where delete_flag='1' and app_code=#{appCode}
+        <if test="condition != null  and condition != ''">and ${condition}</if>
+    </delete>
+
+    <select id="getRecordsByUserNo" resultMap="SysRoleinfoResult">
+        <include refid="selectRoleContactVo"/>
+        where r.delete_flag='1' and r.app_code=#{appCode} and ur.user_no=#{userNo}
+    </select>
+
+    <select id="getRoleCodesByUserNo" resultType="String">
+		select distinct r.role_code
+		from sys_roleinfo r
+		left join sys_suserrole ur on r.role_no = ur.role_no
+		where r.delete_flag='1' and r.app_code=#{appCode} and ur.user_no = #{userNo}
+	</select>
+
+    <select id="getSuserNosByRoleNo" resultType="String">
+		select user_no from sys_suserrole
+		where delete_flag='1' and app_code=#{appCode} and role_no = #{roleNo}
+	</select>
+
+    <select id="getPermitNosByRoleNo" resultType="String">
+		select permit_no from sys_rolepermit
+		where delete_flag='1' and app_code=#{appCode} and role_no = #{roleNo}
+	</select>
+
+    <select id="checkRoleNameUnique" resultType="Integer">
+        select count(*) from sys_roleinfo
+        where delete_flag='1' and app_code=#{appCode} and  role_name=#{roleName}
+    </select>
+
+    <select id="checkRoleCodeUnique" resultType="Integer">
+        select count(*) from sys_roleinfo
+        where delete_flag='1' and app_code=#{appCode} and role_code=#{roleCode}
+    </select>
+</mapper>

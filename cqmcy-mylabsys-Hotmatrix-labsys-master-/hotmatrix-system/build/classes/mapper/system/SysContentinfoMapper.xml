@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.benet.system.mapper.SysContentinfoMapper">
+
+    <resultMap type="SysContentinfo" id="SysContentinfoResult">
+        <result property="id" column="id"/>
+        <result property="contzNo" column="contz_no"/>
+        <result property="classNo" column="class_no"/>
+        <result property="title" column="title"/>
+        <result property="author" column="author"/>
+        <result property="pubdate" column="pubdate"/>
+        <result property="poster" column="poster"/>
+        <result property="abstracts" column="abstracts"/>
+        <result property="ncontents" column="ncontents"/>
+        <result property="hitCount" column="hit_count"/>
+        <result property="checkState" column="check_state"/>
+        <result property="branchNo" column="branch_no"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="deleteFlag" column="delete_flag"/>
+        <result property="comments" column="comments"/>
+        <result property="appCode" column="app_code"/>
+        <result property="version" column="version"/>
+    </resultMap>
+
+    <sql id="selectSysContentinfoVo">
+        select id, contz_no, class_no, title, author, pubdate, poster, abstracts, ncontents, hit_count, check_state, branch_no, create_by, create_time, update_by, update_time, delete_flag, comments, app_code, version from sys_contentinfo
+    </sql>
+
+    <select id="getAllRecords" resultMap="SysContentinfoResult">
+        <include refid="selectSysContentinfoVo"/>
+        where delete_flag='1' and app_code=#{appCode}
+    </select>
+
+    <select id="getRecordsByClassNo" resultMap="SysContentinfoResult">
+        <include refid="selectSysContentinfoVo"/>
+        where delete_flag='1' and app_code=#{appCode} and class_no=#{classNo}
+    </select>
+
+    <select id="getRecordsByPaging" resultMap="SysContentinfoResult">
+        <include refid="selectSysContentinfoVo"/>
+        where delete_flag='1' and app_code=${appCode}
+        <if test="model.condition != null  and model.condition != ''">and ${model.condition}</if>
+        order by ${model.orderField} ${model.orderType} limit ${model.pageIndex},${model.pageSize}
+    </select>
+
+    <select id="getRecordByNo" resultMap="SysContentinfoResult">
+        <include refid="selectSysContentinfoVo"/>
+        where delete_flag='1' and app_code=#{appCode} and contz_no = #{no}
+    </select>
+
+    <select id="getRecordNameByNo" resultType="String">
+        select title from sys_contentinfo
+        where delete_flag='1' and app_code=#{appCode} and contz_no = #{no}
+    </select>
+
+    <select id="getCountByCondition" resultType="Integer">
+        select count(*) from sys_contentinfo
+        where delete_flag='1' and app_code=#{appCode}
+        <if test="condition != null  and condition != ''">and ${condition}</if>
+    </select>
+
+    <insert id="AddNewRecord" parameterType="SysContentinfo" useGeneratedKeys="true" keyProperty="id">
+        insert into sys_contentinfo (
+        <if test="info.contzNo != null  and info.contzNo != ''">contz_no,</if>
+        <if test="info.classNo != null  and info.classNo != ''">class_no,</if>
+        <if test="info.title != null  and info.title != ''">title,</if>
+        <if test="info.author != null  and info.author != ''">author,</if>
+        <if test="info.pubdate != null ">pubdate,</if>
+        <if test="info.poster != null  and info.poster != ''">poster,</if>
+        <if test="info.abstracts != null  and info.abstracts != ''">abstracts,</if>
+        <if test="info.ncontents != null  and info.ncontents != ''">ncontents,</if>
+        <if test="info.hitCount != null ">hit_count,</if>
+        <if test="info.checkState != null  and info.checkState != ''">check_state,</if>
+        <if test="info.branchNo != null  and info.branchNo != ''">branch_no,</if>
+        <if test="info.createBy != null  and info.createBy != ''">create_by,</if>
+        <if test="info.createTime != null ">create_time,</if>
+        <if test="info.updateBy != null  and info.updateBy != ''">update_by,</if>
+        <if test="info.updateTime != null ">update_time,</if>
+        <if test="info.deleteFlag != null  and info.deleteFlag != ''">delete_flag,</if>
+        <if test="info.comments != null  and info.comments != ''">comments,</if>
+        <if test="info.appCode != null  and info.appCode != ''">app_code,</if>
+        <if test="info.version != null ">version</if>
+        )values(
+        <if test="info.contzNo != null  and info.contzNo != ''">#{info.contzNo},</if>
+        <if test="info.classNo != null  and info.classNo != ''">#{info.classNo},</if>
+        <if test="info.title != null  and info.title != ''">#{info.title},</if>
+        <if test="info.author != null  and info.author != ''">#{info.author},</if>
+        <if test="info.pubdate != null ">#{info.pubdate},</if>
+        <if test="info.poster != null  and info.poster != ''">#{info.poster},</if>
+        <if test="info.abstracts != null  and info.abstracts != ''">#{info.abstracts},</if>
+        <if test="info.ncontents != null  and info.ncontents != ''">#{info.ncontents},</if>
+        <if test="info.hitCount != null ">#{info.hitCount},</if>
+        <if test="info.checkState != null  and info.checkState != ''">#{info.checkState},</if>
+        <if test="info.branchNo != null  and info.branchNo != ''">#{info.branchNo},</if>
+        <if test="info.createBy != null  and info.createBy != ''">#{info.createBy},</if>
+        <if test="info.createTime != null ">#{info.createTime},</if>
+        <if test="info.updateBy != null  and info.updateBy != ''">#{info.updateBy},</if>
+        <if test="info.updateTime != null ">#{info.updateTime},</if>
+        <if test="info.deleteFlag != null  and info.deleteFlag != ''">#{info.deleteFlag},</if>
+        <if test="info.comments != null  and info.comments != ''">#{info.comments},</if>
+        <if test="info.appCode != null  and info.appCode != ''">#{info.appCode},</if>
+        <if test="info.version != null ">#{info.version}</if>
+        )
+    </insert>
+
+    <update id="UpdateRecord" parameterType="SysContentinfo">
+        update sys_contentinfo
+        <set>
+            <if test="info.contzNo != null  and info.contzNo != ''">contz_no = #{info.contzNo},</if>
+            <if test="info.classNo != null  and info.classNo != ''">class_no = #{info.classNo},</if>
+            <if test="info.title != null  and info.title != ''">title = #{info.title},</if>
+            <if test="info.author != null  and info.author != ''">author = #{info.author},</if>
+            <if test="info.pubdate != null ">pubdate = #{info.pubdate},</if>
+            <if test="info.poster != null  and info.poster != ''">poster = #{info.poster},</if>
+            <if test="info.abstracts != null  and info.abstracts != ''">abstracts = #{info.abstracts},</if>
+            <if test="info.ncontents != null  and info.ncontents != ''">ncontents = #{info.ncontents},</if>
+            <if test="info.hitCount != null ">hit_count = #{info.hitCount},</if>
+            <if test="info.checkState != null  and info.checkState != ''">check_state = #{info.checkState},</if>
+            <if test="info.branchNo != null  and info.branchNo != ''">branch_no = #{info.branchNo},</if>
+            <if test="info.createBy != null  and info.createBy != ''">create_by = #{info.createBy},</if>
+            <if test="info.createTime != null ">create_time = #{info.createTime},</if>
+            <if test="info.updateBy != null  and info.updateBy != ''">update_by = #{info.updateBy},</if>
+            <if test="info.updateTime != null ">update_time = #{info.updateTime},</if>
+            <if test="info.deleteFlag != null  and info.deleteFlag != ''">delete_flag = #{info.deleteFlag},</if>
+            <if test="info.comments != null  and info.comments != ''">comments = #{info.comments},</if>
+            <if test="info.appCode != null  and info.appCode != ''">app_code = #{info.appCode},</if>
+            <if test="info.version != null ">version = version+1</if>
+        </set>
+        where delete_flag='1' and app_code=#{info.appCode} and version=#{info.version} and contz_no = #{info.contzNo}
+    </update>
+
+    <delete id="HardDeleteByNo">
+        delete from sys_contentinfo
+        where delete_flag='1' and app_code=#{appCode} and contz_no = #{no}
+    </delete>
+
+    <delete id="HardDeleteByNos">
+        delete from sys_contentinfo
+        where delete_flag='1' and app_code=#{appCode} and contz_no in
+        <foreach item="no" collection="nos" open="(" separator="," close=")">
+            #{no}
+        </foreach>
+    </delete>
+
+    <delete id="HardDeleteByCondition">
+        delete from sys_contentinfo
+        where delete_flag='1' and app_code=#{appCode}
+        <if test="condition != null  and condition != ''">and ${condition}</if>
+    </delete>
+
+    <delete id="SoftDeleteByNo">
+        update sys_contentinfo set delete_flag='0'
+        where delete_flag='1' and app_code=#{appCode} and contz_no = #{no}
+    </delete>
+
+    <delete id="SoftDeleteByNos">
+        update sys_contentinfo set delete_flag='0'
+        where delete_flag='1' and app_code=#{appCode} and contz_no in
+        <foreach item="no" collection="nos" open="(" separator="," close=")">
+            #{no}
+        </foreach>
+    </delete>
+
+    <delete id="SoftDeleteByCondition">
+        update sys_contentinfo set delete_flag='0'
+        where delete_flag='1' and app_code=#{appCode}
+        <if test="condition != null  and condition != ''">and ${condition}</if>
+    </delete>
+
+</mapper>

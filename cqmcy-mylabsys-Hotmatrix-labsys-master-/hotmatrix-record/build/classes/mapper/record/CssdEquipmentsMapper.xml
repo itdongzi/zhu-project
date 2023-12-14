@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.benet.record.mapper.CssdEquipmentsMapper">
+
+    <resultMap type="CssdEquipments" id="CssdEquipmentsResult">
+        <result property="id" column="id"/>
+        <result property="equipNo" column="equip_no"/>
+        <result property="equipCname" column="equip_cname"/>
+        <result property="equipEname" column="equip_ename"/>
+        <result property="equipImage" column="equip_image"/>
+        <result property="equipType" column="equip_type"/>
+        <result property="equipSpec" column="equip_spec"/>
+        <result property="equipModel" column="equip_model"/>
+        <result property="classNo" column="class_no"/>
+        <result property="prodNo" column="prod_no"/>
+        <result property="suppNo" column="supp_no"/>
+        <result property="termNo" column="term_no"/>
+        <result property="unitNo" column="unit_no"/>
+        <result property="unitPrice" column="unit_price"/>
+        <result property="safeStock" column="safe_stock"/>
+        <result property="workLoad" column="work_load"/>
+        <result property="orderNo" column="order_no"/>
+        <result property="checkState" column="check_state"/>
+        <result property="branchNo" column="branch_no"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="deleteFlag" column="delete_flag"/>
+        <result property="comments" column="comments"/>
+        <result property="appCode" column="app_code"/>
+        <result property="version" column="version"/>
+    </resultMap>
+
+    <sql id="selectCssdEquipmentsVo">
+        select id, equip_no, equip_cname, equip_ename, equip_image, equip_type, equip_spec, equip_model, class_no, prod_no, supp_no, term_no, unit_no, unit_price, safe_stock, work_load, order_no, check_state, branch_no, create_by, create_time, update_by, update_time, delete_flag, comments, app_code, version from cssd_equipments
+    </sql>
+
+    <select id="getAllRecords" resultMap="CssdEquipmentsResult">
+        <include refid="selectCssdEquipmentsVo"/>
+        where delete_flag='1' and app_code=#{appCode}
+    </select>
+
+    <select id="getRecordsByClassNo" resultMap="CssdEquipmentsResult">
+        <include refid="selectCssdEquipmentsVo"/>
+        where delete_flag='1' and app_code=#{appCode} and class_no=#{classNo}
+    </select>
+
+    <select id="getRecordsByPaging" resultMap="CssdEquipmentsResult">
+        <include refid="selectCssdEquipmentsVo"/>
+        where delete_flag='1' and app_code=${appCode}
+        <if test="model.condition != null  and model.condition != ''">and ${model.condition}</if>
+        order by ${model.orderField} ${model.orderType} limit ${model.pageIndex},${model.pageSize}
+    </select>
+
+    <select id="getRecordByNo" resultMap="CssdEquipmentsResult">
+        <include refid="selectCssdEquipmentsVo"/>
+        where delete_flag='1' and app_code=#{appCode} and equip_no = #{no}
+    </select>
+
+    <select id="getRecordNameByNo" resultType="String">
+        select equip_cname from cssd_equipments
+        where delete_flag='1' and app_code=#{appCode} and equip_no = #{no}
+    </select>
+
+    <select id="getCountByCondition" resultType="Integer">
+        select count(*) from cssd_equipments
+        where delete_flag='1' and app_code=#{appCode}
+        <if test="condition != null  and condition != ''">and ${condition}</if>
+    </select>
+
+    <insert id="AddNewRecord" parameterType="CssdEquipments" useGeneratedKeys="true" keyProperty="id">
+        insert into cssd_equipments (
+        <if test="info.equipNo != null  and info.equipNo != ''">equip_no,</if>
+        <if test="info.equipCname != null  and info.equipCname != ''">equip_cname,</if>
+        <if test="info.equipEname != null  and info.equipEname != ''">equip_ename,</if>
+        <if test="info.equipImage != null  and info.equipImage != ''">equip_image,</if>
+        <if test="info.equipType != null  and info.equipType != ''">equip_type,</if>
+        <if test="info.equipSpec != null  and info.equipSpec != ''">equip_spec,</if>
+        <if test="info.equipModel != null  and info.equipModel != ''">equip_model,</if>
+        <if test="info.classNo != null  and info.classNo != ''">class_no,</if>
+        <if test="info.prodNo != null  and info.prodNo != ''">prod_no,</if>
+        <if test="info.suppNo != null  and info.suppNo != ''">supp_no,</if>
+        <if test="info.termNo != null  and info.termNo != ''">term_no,</if>
+        <if test="info.unitNo != null  and info.unitNo != ''">unit_no,</if>
+        <if test="info.unitPrice != null ">unit_price,</if>
+        <if test="info.safeStock != null ">safe_stock,</if>
+        <if test="info.workLoad != null  and info.workLoad != ''">work_load,</if>
+        <if test="info.orderNo != null ">order_no,</if>
+        <if test="info.checkState != null  and info.checkState != ''">check_state,</if>
+        <if test="info.branchNo != null  and info.branchNo != ''">branch_no,</if>
+        <if test="info.createBy != null  and info.createBy != ''">create_by,</if>
+        <if test="info.createTime != null ">create_time,</if>
+        <if test="info.updateBy != null  and info.updateBy != ''">update_by,</if>
+        <if test="info.updateTime != null ">update_time,</if>
+        <if test="info.deleteFlag != null  and info.deleteFlag != ''">delete_flag,</if>
+        <if test="info.comments != null  and info.comments != ''">comments,</if>
+        <if test="info.appCode != null  and info.appCode != ''">app_code,</if>
+        <if test="info.version != null ">version</if>
+        )values(
+        <if test="info.equipNo != null  and info.equipNo != ''">#{info.equipNo},</if>
+        <if test="info.equipCname != null  and info.equipCname != ''">#{info.equipCname},</if>
+        <if test="info.equipEname != null  and info.equipEname != ''">#{info.equipEname},</if>
+        <if test="info.equipImage != null  and info.equipImage != ''">#{info.equipImage},</if>
+        <if test="info.equipType != null  and info.equipType != ''">#{info.equipType},</if>
+        <if test="info.equipSpec != null  and info.equipSpec != ''">#{info.equipSpec},</if>
+        <if test="info.equipModel != null  and info.equipModel != ''">#{info.equipModel},</if>
+        <if test="info.classNo != null  and info.classNo != ''">#{info.classNo},</if>
+        <if test="info.prodNo != null  and info.prodNo != ''">#{info.prodNo},</if>
+        <if test="info.suppNo != null  and info.suppNo != ''">#{info.suppNo},</if>
+        <if test="info.termNo != null  and info.termNo != ''">#{info.termNo},</if>
+        <if test="info.unitNo != null  and info.unitNo != ''">#{info.unitNo},</if>
+        <if test="info.unitPrice != null ">#{info.unitPrice},</if>
+        <if test="info.safeStock != null ">#{info.safeStock},</if>
+        <if test="info.workLoad != null  and info.workLoad != ''">#{info.workLoad},</if>
+        <if test="info.orderNo != null ">#{info.orderNo},</if>
+        <if test="info.checkState != null  and info.checkState != ''">#{info.checkState},</if>
+        <if test="info.branchNo != null  and info.branchNo != ''">#{info.branchNo},</if>
+        <if test="info.createBy != null  and info.createBy != ''">#{info.createBy},</if>
+        <if test="info.createTime != null ">#{info.createTime},</if>
+        <if test="info.updateBy != null  and info.updateBy != ''">#{info.updateBy},</if>
+        <if test="info.updateTime != null ">#{info.updateTime},</if>
+        <if test="info.deleteFlag != null  and info.deleteFlag != ''">#{info.deleteFlag},</if>
+        <if test="info.comments != null  and info.comments != ''">#{info.comments},</if>
+        <if test="info.appCode != null  and info.appCode != ''">#{info.appCode},</if>
+        <if test="info.version != null ">#{info.version}</if>
+        )
+    </insert>
+
+    <update id="UpdateRecord" parameterType="CssdEquipments">
+        update cssd_equipments
+        <set>
+            <if test="info.equipNo != null  and info.equipNo != ''">equip_no = #{info.equipNo},</if>
+            <if test="info.equipCname != null  and info.equipCname != ''">equip_cname = #{info.equipCname},</if>
+            <if test="info.equipEname != null  and info.equipEname != ''">equip_ename = #{info.equipEname},</if>
+            <if test="info.equipImage != null  and info.equipImage != ''">equip_image = #{info.equipImage},</if>
+            <if test="info.equipType != null  and info.equipType != ''">equip_type = #{info.equipType},</if>
+            <if test="info.equipSpec != null  and info.equipSpec != ''">equip_spec = #{info.equipSpec},</if>
+            <if test="info.equipModel != null  and info.equipModel != ''">equip_model = #{info.equipModel},</if>
+            <if test="info.classNo != null  and info.classNo != ''">class_no = #{info.classNo},</if>
+            <if test="info.prodNo != null  and info.prodNo != ''">prod_no = #{info.prodNo},</if>
+            <if test="info.suppNo != null  and info.suppNo != ''">supp_no = #{info.suppNo},</if>
+            <if test="info.termNo != null  and info.termNo != ''">term_no = #{info.termNo},</if>
+            <if test="info.unitNo != null  and info.unitNo != ''">unit_no = #{info.unitNo},</if>
+            <if test="info.unitPrice != null ">unit_price = #{info.unitPrice},</if>
+            <if test="info.safeStock != null ">safe_stock = #{info.safeStock},</if>
+            <if test="info.workLoad != null  and info.workLoad != ''">work_load = #{info.workLoad},</if>
+            <if test="info.orderNo != null ">order_no = #{info.orderNo},</if>
+            <if test="info.checkState != null  and info.checkState != ''">check_state = #{info.checkState},</if>
+            <if test="info.branchNo != null  and info.branchNo != ''">branch_no = #{info.branchNo},</if>
+            <if test="info.createBy != null  and info.createBy != ''">create_by = #{info.createBy},</if>
+            <if test="info.createTime != null ">create_time = #{info.createTime},</if>
+            <if test="info.updateBy != null  and info.updateBy != ''">update_by = #{info.updateBy},</if>
+            <if test="info.updateTime != null ">update_time = #{info.updateTime},</if>
+            <if test="info.deleteFlag != null  and info.deleteFlag != ''">delete_flag = #{info.deleteFlag},</if>
+            <if test="info.comments != null  and info.comments != ''">comments = #{info.comments},</if>
+            <if test="info.appCode != null  and info.appCode != ''">app_code = #{info.appCode},</if>
+            <if test="info.version != null ">version = #{info.version}</if>
+        </set>
+        where delete_flag='1' and app_code=#{info.appCode} and version=#{info.version} and equip_no = #{info.equipNo}
+    </update>
+
+    <delete id="HardDeleteByNo">
+        delete from cssd_equipments
+        where delete_flag='1' and app_code=#{appCode} and equip_no = #{no}
+    </delete>
+
+    <delete id="HardDeleteByNos">
+        delete from cssd_equipments
+        where delete_flag='1' and app_code=#{appCode} and equip_no in
+        <foreach item="no" collection="nos" open="(" separator="," close=")">
+            #{no}
+        </foreach>
+    </delete>
+
+    <delete id="HardDeleteByCondition">
+        delete from cssd_equipments
+        where delete_flag='1' and app_code=#{appCode}
+        <if test="condition != null  and condition != ''">and ${condition}</if>
+    </delete>
+
+    <delete id="SoftDeleteByNo">
+        update cssd_equipments set delete_flag='0'
+        where delete_flag='1' and app_code=#{appCode} and equip_no = #{no}
+    </delete>
+
+    <delete id="SoftDeleteByNos">
+        update cssd_equipments set delete_flag='0'
+        where delete_flag='1' and app_code=#{appCode} and equip_no in
+        <foreach item="no" collection="nos" open="(" separator="," close=")">
+            #{no}
+        </foreach>
+    </delete>
+
+    <delete id="SoftDeleteByCondition">
+        update cssd_equipments set delete_flag='0'
+        where delete_flag='1' and app_code=#{appCode}
+        <if test="condition != null  and condition != ''">and ${condition}</if>
+    </delete>
+
+</mapper>

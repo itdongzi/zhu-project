@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.benet.labsys.mapper.LabsRoomscheduleMapper">
+
+    <resultMap type="LabsRoomschedule" id="LabsRoomscheduleResult">
+        <result property="id" column="id"/>
+        <result property="schdNo" column="schd_no"/>
+        <result property="roomNo" column="room_no"/>
+        <result property="semeNo" column="seme_no"/>
+        <result property="schdType" column="schd_type"/>
+        <result property="schdValue" column="schd_value"/>
+        <result property="usesValue" column="uses_value"/>
+        <result property="xnxqbh" column="XNXQBH"/>
+        <result property="kkzc" column="KKZC"/>
+        <result property="dszbz" column="DSZBZ"/>
+        <result property="jxjcbh" column="JXJCBH"/>
+        <result property="dwmc" column="DWMC"/>
+        <result property="jzgh" column="JZGH"/>
+        <result property="xm" column="XM"/>
+        <result property="kcdm" column="KCDM"/>
+        <result property="kcmc" column="KCMC"/>
+        <result property="kkhbxxbh" column="KKHBXXBH"/>
+        <result property="hbmc" column="HBMC"/>
+        <result property="bjdm" column="BJDM"/>
+        <result property="bjmc" column="BJMC"/>
+        <result property="checkState" column="check_state"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="deleteFlag" column="delete_flag"/>
+        <result property="comments" column="comments"/>
+        <result property="appCode" column="app_code"/>
+        <result property="version" column="version"/>
+    </resultMap>
+
+    <sql id="selectLabsRoomscheduleVo">
+        select id,
+               schd_no,
+               room_no,
+               seme_no,
+               schd_type,
+               schd_value,
+               uses_value,
+               XNXQBH,
+               KKZC,
+               DSZBZ,
+               JXJCBH,
+               DWMC,
+               JZGH,
+               XM,
+               KCDM,
+               KCMC,
+               KKHBXXBH,
+               HBMC,
+               BJDM,
+               BJMC,
+               check_state,
+               create_by,
+               create_time,
+               update_by,
+               update_time,
+               delete_flag,
+               comments,
+               app_code,
+               version
+        from labs_roomschedule
+    </sql>
+
+    <select id="getAllRecords" resultMap="LabsRoomscheduleResult">
+        <include refid="selectLabsRoomscheduleVo"/>
+        where delete_flag='1' and app_code=#{appCode}
+    </select>
+
+    <select id="getRecordsByClassNo" resultMap="LabsRoomscheduleResult">
+        <include refid="selectLabsRoomscheduleVo"/>
+        where delete_flag='1' and app_code=#{appCode} and roomNo=#{classNo}
+    </select>
+
+    <select id="getRecordsByPaging" resultMap="LabsRoomscheduleResult">
+        <include refid="selectLabsRoomscheduleVo"/>
+        where delete_flag='1' and app_code=${appCode}
+        <if test="model.condition != null  and model.condition != ''">and ${model.condition}</if>
+        order by ${model.orderField} ${model.orderType} limit ${model.pageIndex},${model.pageSize}
+    </select>
+
+    <select id="getRecordByNo" resultMap="LabsRoomscheduleResult">
+        <include refid="selectLabsRoomscheduleVo"/>
+        where delete_flag='1' and app_code=#{appCode} and schd_no = #{no}
+    </select>
+
+    <select id="getRecordNameByNo" resultType="String">
+        select schd_no
+        from labs_roomschedule
+        where delete_flag = '1'
+          and app_code = #{appCode}
+          and schd_no = #{no}
+    </select>
+
+    <select id="getCountByCondition" resultType="Integer">
+        select count(*) from labs_roomschedule
+        where delete_flag='1' and app_code=#{appCode}
+        <if test="condition != null  and condition != ''">and ${condition}</if>
+    </select>
+
+    <insert id="AddNewRecord" parameterType="LabsRoomschedule" useGeneratedKeys="true" keyProperty="id">
+        insert into labs_roomschedule (
+        <if test="info.schdNo != null  and info.schdNo != ''">schd_no,</if>
+        <if test="info.roomNo != null  and info.roomNo != ''">room_no,</if>
+        <if test="info.semeNo != null  and info.semeNo != ''">seme_no,</if>
+        <if test="info.schdType != null  and info.schdType != ''">schd_type,</if>
+        <if test="info.schdValue != null  and info.schdValue != ''">schd_value,</if>
+        <if test="info.usesValue != null  and info.usesValue != ''">uses_value,</if>
+        <if test="info.xnxqbh != null  and info.xnxqbh != ''">XNXQBH,</if>
+        <if test="info.kkzc != null  and info.kkzc != ''">KKZC,</if>
+        <if test="info.dszbz != null  and info.dszbz != ''">DSZBZ,</if>
+        <if test="info.jxjcbh != null  and info.jxjcbh != ''">JXJCBH,</if>
+        <if test="info.dwmc != null  and info.dwmc != ''">DWMC,</if>
+        <if test="info.jzgh != null  and info.jzgh != ''">JZGH,</if>
+        <if test="info.xm != null  and info.xm != ''">XM,</if>
+        <if test="info.kcdm != null  and info.kcdm != ''">KCDM,</if>
+        <if test="info.kcmc != null  and info.kcmc != ''">KCMC,</if>
+        <if test="info.kkhbxxbh != null  and info.kkhbxxbh != ''">KKHBXXBH,</if>
+        <if test="info.hbmc != null  and info.hbmc != ''">HBMC,</if>
+        <if test="info.bjdm != null  and info.bjdm != ''">BJDM,</if>
+        <if test="info.bjmc != null  and info.bjmc != ''">BJMC,</if>
+        <if test="info.checkState != null  and info.checkState != ''">check_state,</if>
+        <if test="info.createBy != null  and info.createBy != ''">create_by,</if>
+        <if test="info.createTime != null ">create_time,</if>
+        <if test="info.updateBy != null  and info.updateBy != ''">update_by,</if>
+        <if test="info.updateTime != null ">update_time,</if>
+        <if test="info.deleteFlag != null  and info.deleteFlag != ''">delete_flag,</if>
+        <if test="info.comments != null  and info.comments != ''">comments,</if>
+        <if test="info.appCode != null  and info.appCode != ''">app_code,</if>
+        <if test="info.version != null ">version</if>
+        )values(
+        <if test="info.schdNo != null  and info.schdNo != ''">#{info.schdNo},</if>
+        <if test="info.roomNo != null  and info.roomNo != ''">#{info.roomNo},</if>
+        <if test="info.semeNo != null  and info.semeNo != ''">#{info.semeNo},</if>
+        <if test="info.schdType != null  and info.schdType != ''">#{info.schdType},</if>
+        <if test="info.schdValue != null  and info.schdValue != ''">#{info.schdValue},</if>
+        <if test="info.usesValue != null  and info.usesValue != ''">#{info.usesValue},</if>
+        <if test="info.xnxqbh != null  and info.xnxqbh != ''">#{info.xnxqbh},</if>
+        <if test="info.kkzc != null  and info.kkzc != ''">#{info.kkzc},</if>
+        <if test="info.dszbz != null  and info.dszbz != ''">#{info.dszbz},</if>
+        <if test="info.jxjcbh != null  and info.jxjcbh != ''">#{info.jxjcbh},</if>
+        <if test="info.dwmc != null  and info.dwmc != ''">#{info.dwmc},</if>
+        <if test="info.jzgh != null  and info.jzgh != ''">#{info.jzgh},</if>
+        <if test="info.xm != null  and info.xm != ''">#{info.xm},</if>
+        <if test="info.kcdm != null  and info.kcdm != ''">#{info.kcdm},</if>
+        <if test="info.kcmc != null  and info.kcmc != ''">#{info.kcmc},</if>
+        <if test="info.kkhbxxbh != null  and info.kkhbxxbh != ''">#{info.kkhbxxbh},</if>
+        <if test="info.hbmc != null  and info.hbmc != ''">#{info.hbmc},</if>
+        <if test="info.bjdm != null  and info.bjdm != ''">#{info.bjdm},</if>
+        <if test="info.bjmc != null  and info.bjmc != ''">#{info.bjmc},</if>
+        <if test="info.checkState != null  and info.checkState != ''">#{info.checkState},</if>
+        <if test="info.createBy != null  and info.createBy != ''">#{info.createBy},</if>
+        <if test="info.createTime != null ">#{info.createTime},</if>
+        <if test="info.updateBy != null  and info.updateBy != ''">#{info.updateBy},</if>
+        <if test="info.updateTime != null ">#{info.updateTime},</if>
+        <if test="info.deleteFlag != null  and info.deleteFlag != ''">#{info.deleteFlag},</if>
+        <if test="info.comments != null  and info.comments != ''">#{info.comments},</if>
+        <if test="info.appCode != null  and info.appCode != ''">#{info.appCode},</if>
+        <if test="info.version != null ">#{info.version}</if>
+        )
+    </insert>
+
+    <update id="UpdateRecord" parameterType="LabsRoomschedule">
+        update labs_roomschedule
+        <set>
+            <if test="info.schdNo != null  and info.schdNo != ''">schd_no = #{info.schdNo},</if>
+            <if test="info.roomNo != null  and info.roomNo != ''">room_no = #{info.roomNo},</if>
+            <if test="info.semeNo != null  and info.semeNo != ''">seme_no = #{info.semeNo},</if>
+            <if test="info.schdType != null  and info.schdType != ''">schd_type = #{info.schdType},</if>
+            <if test="info.schdValue != null  and info.schdValue != ''">schd_value = #{info.schdValue},</if>
+            <if test="info.usesValue != null  and info.usesValue != ''">uses_value = #{info.usesValue},</if>
+            <if test="info.xnxqbh != null  and info.xnxqbh != ''">XNXQBH = #{info.xnxqbh},</if>
+            <if test="info.kkzc != null  and info.kkzc != ''">KKZC = #{info.kkzc},</if>
+            <if test="info.dszbz != null  and info.dszbz != ''">DSZBZ = #{info.dszbz},</if>
+            <if test="info.jxjcbh != null  and info.jxjcbh != ''">JXJCBH = #{info.jxjcbh},</if>
+            <if test="info.dwmc != null  and info.dwmc != ''">DWMC = #{info.dwmc},</if>
+            <if test="info.jzgh != null  and info.jzgh != ''">JZGH = #{info.jzgh},</if>
+            <if test="info.xm != null  and info.xm != ''">XM = #{info.xm},</if>
+            <if test="info.kcdm != null  and info.kcdm != ''">KCDM = #{info.kcdm},</if>
+            <if test="info.kcmc != null  and info.kcmc != ''">KCMC = #{info.kcmc},</if>
+            <if test="info.kkhbxxbh != null  and info.kkhbxxbh != ''">KKHBXXBH = #{info.kkhbxxbh},</if>
+            <if test="info.hbmc != null  and info.hbmc != ''">HBMC = #{info.hbmc},</if>
+            <if test="info.bjdm != null  and info.bjdm != ''">BJDM = #{info.bjdm},</if>
+            <if test="info.bjmc != null  and info.bjmc != ''">BJMC = #{info.bjmc},</if>
+            <if test="info.checkState != null  and info.checkState != ''">check_state = #{info.checkState},</if>
+            <if test="info.createBy != null  and info.createBy != ''">create_by = #{info.createBy},</if>
+            <if test="info.createTime != null ">create_time = #{info.createTime},</if>
+            <if test="info.updateBy != null  and info.updateBy != ''">update_by = #{info.updateBy},</if>
+            <if test="info.updateTime != null ">update_time = #{info.updateTime},</if>
+            <if test="info.deleteFlag != null  and info.deleteFlag != ''">delete_flag = #{info.deleteFlag},</if>
+            <if test="info.comments != null  and info.comments != ''">comments = #{info.comments},</if>
+            <if test="info.appCode != null  and info.appCode != ''">app_code = #{info.appCode},</if>
+            <if test="info.version != null ">version = #{info.version}</if>
+        </set>
+        where delete_flag='1' and app_code=#{info.appCode} and version=#{info.version} and schd_no =   #{info.schdNo}
+    </update>
+
+    <delete id="HardDeleteByNo">
+        delete
+        from labs_roomschedule
+        where delete_flag = '1'
+          and app_code = #{appCode}
+          and schd_no = #{no}
+    </delete>
+
+    <delete id="HardDeleteByNos">
+        delete from labs_roomschedule
+        where delete_flag='1' and app_code=#{appCode} and schd_no in
+        <foreach item="no" collection="nos" open="(" separator="," close=")">
+            #{no}
+        </foreach>
+    </delete>
+
+    <delete id="HardDeleteByCondition">
+        delete from labs_roomschedule
+        where delete_flag='1' and app_code=#{appCode}
+        <if test="condition != null  and condition != ''">and ${condition}</if>
+    </delete>
+
+    <delete id="SoftDeleteByNo">
+        update labs_roomschedule
+        set delete_flag='0'
+        where delete_flag = '1'
+          and app_code = #{appCode}
+          and schd_no = #{no}
+    </delete>
+
+    <delete id="SoftDeleteByNos">
+        update labs_roomschedule set delete_flag='0'
+        where delete_flag='1' and app_code=#{appCode} and schd_no in
+        <foreach item="no" collection="nos" open="(" separator="," close=")">
+            #{no}
+        </foreach>
+    </delete>
+
+    <delete id="SoftDeleteByCondition">
+        update labs_roomschedule set delete_flag='0'
+        where delete_flag='1' and app_code=#{appCode}
+        <if test="condition != null  and condition != ''">and ${condition}</if>
+    </delete>
+
+</mapper>

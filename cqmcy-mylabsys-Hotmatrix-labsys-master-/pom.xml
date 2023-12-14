@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.benet</groupId>
+    <artifactId>Hotmatrix</artifactId>
+    <version>1.1.0</version>
+    <!-- 打包方式为 pom -->
+    <packaging>pom</packaging>
+    <name>hotmatrix</name>
+    <url>https://www.hotmatrix.com.cn</url>
+    <description>实训室管理平台</description>
+
+    <properties>
+        <hotmatrix.version>1.1.0</hotmatrix.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <spring.boot.version>2.5.8</spring.boot.version>
+        <security.version>2.2.5.RELEASE</security.version>
+        <java.version>1.8</java.version>
+        <druid.version>1.2.5</druid.version>
+        <kaptcha.version>2.3.2</kaptcha.version>
+        <bitwalker.version>1.21</bitwalker.version>
+        <oshi.version>5.8.0</oshi.version>
+        <jna.version>5.8.0</jna.version>
+        <velocity.version>1.7</velocity.version>
+        <swagger.version>3.0.0</swagger.version>
+        <lombok.version>1.18.24</lombok.version>
+        <fastjson.version>1.2.76</fastjson.version>
+        <qlexpress.version>3.3.0</qlexpress.version>
+        <javajwt.version>0.9.1</javajwt.version>
+        <commons.io.version>2.6</commons.io.version>
+        <commons.lang3.version>3.12.0</commons.lang3.version>
+        <pagehelper.version>1.2.13</pagehelper.version>
+        <fileupload.version>1.4</fileupload.version>
+        <poi.version>4.1.2</poi.version>
+        <pinyin4j.version>2.5.1</pinyin4j.version>
+    </properties>
+    <!-- 依赖声明 -->
+    <dependencyManagement>
+        <dependencies>
+            <!-- SpringBoot的依赖配置-->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${spring.boot.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <!--阿里数据库连接池 -->
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>druid-spring-boot-starter</artifactId>
+                <version>${druid.version}</version>
+            </dependency>
+            <!-- 阿里JSON解析器 -->
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>fastjson</artifactId>
+                <version>${fastjson.version}</version>
+            </dependency>
+            <!-- QLExpress表达式引擎 -->
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>QLExpress</artifactId>
+                <version>${qlexpress.version}</version>
+            </dependency>
+            <!--kaptcha验证码 -->
+            <dependency>
+                <groupId>com.github.penggle</groupId>
+                <artifactId>kaptcha</artifactId>
+                <version>${kaptcha.version}</version>
+            </dependency>
+            <!-- 解析客户端操作系统、浏览器等 -->
+            <dependency>
+                <groupId>eu.bitwalker</groupId>
+                <artifactId>UserAgentUtils</artifactId>
+                <version>${bitwalker.version}</version>
+            </dependency>
+            <!-- 获取系统信息 -->
+            <dependency>
+                <groupId>com.github.oshi</groupId>
+                <artifactId>oshi-core</artifactId>
+                <version>${oshi.version}</version>
+            </dependency>
+            <!-- Java调用dll动态链接库——JNA框架 -->
+            <dependency>
+                <groupId>net.java.dev.jna</groupId>
+                <artifactId>jna</artifactId>
+                <version>${jna.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>net.java.dev.jna</groupId>
+                <artifactId>jna-platform</artifactId>
+                <version>${jna.version}</version>
+            </dependency>
+            <!-- pagehelper 分页插件 -->
+            <dependency>
+                <groupId>com.github.pagehelper</groupId>
+                <artifactId>pagehelper-spring-boot-starter</artifactId>
+                <version>${pagehelper.version}</version>
+            </dependency>
+            <!--velocity代码生成使用模板 -->
+            <dependency>
+                <groupId>org.apache.velocity</groupId>
+                <artifactId>velocity</artifactId>
+                <version>${velocity.version}</version>
+            </dependency>
+            <!-- Swagger3依赖 -->
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-boot-starter</artifactId>
+                <version>${swagger.version}</version>
+            </dependency>
+            <!-- spring security -->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-security</artifactId>
+                <version>${security.version}</version>
+            </dependency>
+            <!-- java-jwt -->
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt</artifactId>
+                <version>${javajwt.version}</version>
+            </dependency>
+            <!--io常用工具类 -->
+            <dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>${commons.io.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>${commons.lang3.version}</version>
+            </dependency>
+            <!--文件上传工具类 -->
+            <dependency>
+                <groupId>commons-fileupload</groupId>
+                <artifactId>commons-fileupload</artifactId>
+                <version>${fileupload.version}</version>
+            </dependency>
+            <!-- excel工具 -->
+            <dependency>
+                <groupId>org.apache.poi</groupId>
+                <artifactId>poi-ooxml</artifactId>
+                <version>${poi.version}</version>
+            </dependency>
+            <!-- 通用工具-->
+            <dependency>
+                <groupId>com.benet</groupId>
+                <artifactId>hotmatrix-common</artifactId>
+                <version>${hotmatrix.version}</version>
+            </dependency>
+            <!-- 框架模块-->
+            <dependency>
+                <groupId>com.benet</groupId>
+                <artifactId>hotmatrix-framework</artifactId>
+                <version>${hotmatrix.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>com.benet</groupId>
+                        <artifactId>hotmatrix-common</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>com.benet</groupId>
+                        <artifactId>hotmatrix-system</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <!-- 心理测评模块-->
+            <dependency>
+                <groupId>com.benet</groupId>
+                <artifactId>hotmatrix-collect</artifactId>
+                <version>${hotmatrix.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>com.benet</groupId>
+                        <artifactId>hotmatrix-common</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <!-- 追溯模块-->
+            <dependency>
+                <groupId>com.benet</groupId>
+                <artifactId>hotmatrix-record</artifactId>
+                <version>${hotmatrix.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>com.benet</groupId>
+                        <artifactId>hotmatrix-common</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <!-- 实验室管理模块-->
+            <dependency>
+                <groupId>com.benet</groupId>
+                <artifactId>hotmatrix-labsys</artifactId>
+                <version>${hotmatrix.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>com.benet</groupId>
+                        <artifactId>hotmatrix-common</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <!-- 系统模块-->
+            <dependency>
+                <groupId>com.benet</groupId>
+                <artifactId>hotmatrix-system</artifactId>
+                <version>${hotmatrix.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>com.benet</groupId>
+                        <artifactId>hotmatrix-common</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+    <modules>
+        <module>hotmatrix-admin</module>
+        <module>hotmatrix-common</module>
+        <module>hotmatrix-framework</module>
+        <module>hotmatrix-system</module>
+        <module>hotmatrix-record</module>
+        <module>hotmatrix-console</module>
+        <module>hotmatrix-labsys</module>
+    </modules>
+    <dependencies>
+        <!-- lombok -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.1</version>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                    <encoding>${project.build.sourceEncoding}</encoding>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+    <repositories>
+        <repository>
+            <id>public</id>
+            <name>aliyun nexus</name>
+            <url>https://maven.aliyun.com/repository/public/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+        </repository>
+    </repositories>
+    <pluginRepositories>
+        <pluginRepository>
+            <id>public</id>
+            <name>aliyun nexus</name>
+            <url>https://maven.aliyun.com/repository/public/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </pluginRepository>
+    </pluginRepositories>
+</project>

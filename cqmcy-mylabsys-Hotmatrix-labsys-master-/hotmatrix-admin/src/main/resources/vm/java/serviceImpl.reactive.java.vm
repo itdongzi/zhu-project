@@ -1,0 +1,99 @@
+package ${packageName}.service.impl; 
+
+import ${packageName}.domain.${ClassName};
+import ${packageName}.mapper.${ClassName}Mapper;
+import ${packageName}.service.I${ClassName}Service;
+import lombok.RequiredArgsConstructor;
+import com.benet.common.core.pager.PagingModel;
+import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+
+/**
+ * ${functionName}Service业务层处理
+ * 
+ * @author ${author}
+ * @date ${datetime}
+ */
+@Service
+@RequiredArgsConstructor
+public class ${ClassName}ServiceImpl implements I${ClassName}Service {
+
+    private final ${ClassName}Mapper ${className}Mapper;
+
+    @Override
+    public Flux<${ClassName}> getAllRecords(String appCode) {
+        return ${className}Mapper.getAllRecords(appCode);
+    }
+
+    @Override
+    public Flux<${ClassName}> getRecordsByClassNo(String appCode, String classNo) {
+        return ${className}Mapper.getRecordsByClassNo(appCode,classNo);
+    }
+
+    @Override
+    public Flux<${ClassName}> getRecordsByPaging(String appCode, PagingModel model) {
+        return ${className}Mapper.getRecordsByPaging(appCode,model.getCondition(),model.getOrderField(),model.getOrderType(),model.getPageSize(),(model.getPageIndex()-1)*model.getPageSize());
+    }
+
+    @Override
+    public Flux<${ClassName}> getRecordsByPaging(String appCode, int pageIndex, int pageSize, String condition, String orderField, String orderType) {
+        return ${className}Mapper.getRecordsByPaging(appCode,condition,orderField,orderType,pageSize,(pageIndex-1)*pageSize);
+    }
+
+    @Override
+    public Mono<${ClassName}> getRecordByNo(String appCode, String no) {
+        return ${className}Mapper.getRecordByNo(appCode,no);
+    }
+
+    @Override
+    public Mono<String> getRecordNameByNo(String appCode, String no) {
+        return ${className}Mapper.getRecordNameByNo(appCode,no);
+    }
+
+    @Override
+    public Mono<Long> getCountByCondition(String appCode, String condition) {
+        return ${className}Mapper.getCountByCondition(appCode,condition);
+    }
+
+    @Override
+    public Mono<Integer> AddNewRecord(String appCode, ${ClassName} info) {
+        return ${className}Mapper.AddNewRecord(appCode,info);
+    }
+
+    @Override
+    public Mono<Integer> UpdateRecord(String appCode, ${ClassName} info) {
+        return ${className}Mapper.UpdateRecord(appCode,info);
+    }
+
+    @Override
+    public Mono<Integer> HardDeleteByNo(String appCode, String no) {
+        return ${className}Mapper.HardDeleteByNo(appCode,no);
+    }
+
+    @Override
+    public Mono<Integer> HardDeleteByNos(String appCode, String[] nos) {
+        return ${className}Mapper.HardDeleteByNos(appCode,nos);
+    }
+
+    @Override
+    public Mono<Integer> HardDeleteByCondition(String appCode, String condition) {
+        return ${className}Mapper.HardDeleteByCondition(appCode,condition);
+    }
+
+    @Override
+    public Mono<Integer> SoftDeleteByNo(String appCode, String no) {
+        return ${className}Mapper.SoftDeleteByNo(appCode,no);
+    }
+
+    @Override
+    public Mono<Integer> SoftDeleteByNos(String appCode, String[] nos) {
+        return ${className}Mapper.SoftDeleteByNos(appCode,nos);
+    }
+
+    @Override
+    public Mono<Integer> SoftDeleteByCondition(String appCode, String condition) {
+        return ${className}Mapper.SoftDeleteByCondition(appCode,condition);
+    }
+}
+

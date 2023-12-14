@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.benet.record.mapper.CssdStockitemsMapper">
+
+    <resultMap type="CssdStockitems" id="CssdStockitemsResult">
+        <result property="id" column="id"/>
+        <result property="sitemNo" column="sitem_no"/>
+        <result property="sflowNo" column="sflow_no"/>
+        <result property="equipNo" column="equip_no"/>
+        <result property="equipType" column="equip_type"/>
+        <result property="equipNum" column="equip_num"/>
+        <result property="unitPrice" column="unit_price"/>
+        <result property="taxPrice" column="tax_price"/>
+        <result property="allPrice" column="all_price"/>
+        <result property="produceNumber" column="produce_number"/>
+        <result property="produceDate" column="produce_date"/>
+        <result property="expireDate" column="expire_date"/>
+        <result property="otherField1" column="other_field1"/>
+        <result property="otherField2" column="other_field2"/>
+        <result property="otherField3" column="other_field3"/>
+        <result property="otherField4" column="other_field4"/>
+        <result property="otherField5" column="other_field5"/>
+        <result property="branchNo" column="branch_no"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="deleteFlag" column="delete_flag"/>
+        <result property="comments" column="comments"/>
+        <result property="appCode" column="app_code"/>
+        <result property="version" column="version"/>
+    </resultMap>
+
+    <sql id="selectCssdStockitemsVo">
+        select id, sitem_no, sflow_no, equip_no, equip_type, equip_num, unit_price, tax_price, all_price, produce_number, produce_date, expire_date, other_field1, other_field2, other_field3, other_field4, other_field5, branch_no, create_by, create_time, update_by, update_time, delete_flag, comments, app_code, version from cssd_stockitems
+    </sql>
+
+    <select id="getAllRecords" resultMap="CssdStockitemsResult">
+        <include refid="selectCssdStockitemsVo"/>
+        where delete_flag='1' and app_code=#{appCode}
+    </select>
+
+    <select id="getRecordsByClassNo" resultMap="CssdStockitemsResult">
+        <include refid="selectCssdStockitemsVo"/>
+        where delete_flag='1' and app_code=#{appCode} and sflow_no=#{classNo}
+    </select>
+
+    <select id="getRecordsByPaging" resultMap="CssdStockitemsResult">
+        <include refid="selectCssdStockitemsVo"/>
+        where delete_flag='1' and app_code=${appCode}
+        <if test="model.condition != null  and model.condition != ''">and ${model.condition}</if>
+        order by ${model.orderField} ${model.orderType} limit ${model.pageIndex},${model.pageSize}
+    </select>
+
+    <select id="getRecordByNo" resultMap="CssdStockitemsResult">
+        <include refid="selectCssdStockitemsVo"/>
+        where delete_flag='1' and app_code=#{appCode} and sitem_no = #{no}
+    </select>
+
+    <select id="getRecordNameByNo" resultType="String">
+        select sitem_no from cssd_stockitems
+        where delete_flag='1' and app_code=#{appCode} and sitem_no = #{no}
+    </select>
+
+    <select id="getCountByCondition" resultType="Integer">
+        select count(*) from cssd_stockitems
+        where delete_flag='1' and app_code=#{appCode}
+        <if test="condition != null  and condition != ''">and ${condition}</if>
+    </select>
+
+    <insert id="AddNewRecord" parameterType="CssdStockitems" useGeneratedKeys="true" keyProperty="id">
+        insert into cssd_stockitems (
+        <if test="info.sitemNo != null  and info.sitemNo != ''">sitem_no,</if>
+        <if test="info.sflowNo != null  and info.sflowNo != ''">sflow_no,</if>
+        <if test="info.equipNo != null  and info.equipNo != ''">equip_no,</if>
+        <if test="info.equipType != null  and info.equipType != ''">equip_type,</if>
+        <if test="info.equipNum != null ">equip_num,</if>
+        <if test="info.unitPrice != null ">unit_price,</if>
+        <if test="info.taxPrice != null ">tax_price,</if>
+        <if test="info.allPrice != null ">all_price,</if>
+        <if test="info.produceNumber != null  and info.produceNumber != ''">produce_number,</if>
+        <if test="info.produceDate != null  and info.produceDate != ''">produce_date,</if>
+        <if test="info.expireDate != null  and info.expireDate != ''">expire_date,</if>
+        <if test="info.otherField1 != null  and info.otherField1 != ''">other_field1,</if>
+        <if test="info.otherField2 != null  and info.otherField2 != ''">other_field2,</if>
+        <if test="info.otherField3 != null  and info.otherField3 != ''">other_field3,</if>
+        <if test="info.otherField4 != null  and info.otherField4 != ''">other_field4,</if>
+        <if test="info.otherField5 != null  and info.otherField5 != ''">other_field5,</if>
+        <if test="info.branchNo != null  and info.branchNo != ''">branch_no,</if>
+        <if test="info.createBy != null  and info.createBy != ''">create_by,</if>
+        <if test="info.createTime != null ">create_time,</if>
+        <if test="info.updateBy != null  and info.updateBy != ''">update_by,</if>
+        <if test="info.updateTime != null ">update_time,</if>
+        <if test="info.deleteFlag != null  and info.deleteFlag != ''">delete_flag,</if>
+        <if test="info.comments != null  and info.comments != ''">comments,</if>
+        <if test="info.appCode != null  and info.appCode != ''">app_code,</if>
+        <if test="info.version != null ">version</if>
+        )values(
+        <if test="info.sitemNo != null  and info.sitemNo != ''">#{info.sitemNo},</if>
+        <if test="info.sflowNo != null  and info.sflowNo != ''">#{info.sflowNo},</if>
+        <if test="info.equipNo != null  and info.equipNo != ''">#{info.equipNo},</if>
+        <if test="info.equipType != null  and info.equipType != ''">#{info.equipType},</if>
+        <if test="info.equipNum != null ">#{info.equipNum},</if>
+        <if test="info.unitPrice != null ">#{info.unitPrice},</if>
+        <if test="info.taxPrice != null ">#{info.taxPrice},</if>
+        <if test="info.allPrice != null ">#{info.allPrice},</if>
+        <if test="info.produceNumber != null  and info.produceNumber != ''">#{info.produceNumber},</if>
+        <if test="info.produceDate != null  and info.produceDate != ''">#{info.produceDate},</if>
+        <if test="info.expireDate != null  and info.expireDate != ''">#{info.expireDate},</if>
+        <if test="info.otherField1 != null  and info.otherField1 != ''">#{info.otherField1},</if>
+        <if test="info.otherField2 != null  and info.otherField2 != ''">#{info.otherField2},</if>
+        <if test="info.otherField3 != null  and info.otherField3 != ''">#{info.otherField3},</if>
+        <if test="info.otherField4 != null  and info.otherField4 != ''">#{info.otherField4},</if>
+        <if test="info.otherField5 != null  and info.otherField5 != ''">#{info.otherField5},</if>
+        <if test="info.branchNo != null  and info.branchNo != ''">#{info.branchNo},</if>
+        <if test="info.createBy != null  and info.createBy != ''">#{info.createBy},</if>
+        <if test="info.createTime != null ">#{info.createTime},</if>
+        <if test="info.updateBy != null  and info.updateBy != ''">#{info.updateBy},</if>
+        <if test="info.updateTime != null ">#{info.updateTime},</if>
+        <if test="info.deleteFlag != null  and info.deleteFlag != ''">#{info.deleteFlag},</if>
+        <if test="info.comments != null  and info.comments != ''">#{info.comments},</if>
+        <if test="info.appCode != null  and info.appCode != ''">#{info.appCode},</if>
+        <if test="info.version != null ">#{info.version}</if>
+        )
+    </insert>
+
+    <update id="UpdateRecord" parameterType="CssdStockitems">
+        update cssd_stockitems
+        <set>
+            <if test="info.sitemNo != null  and info.sitemNo != ''">sitem_no = #{info.sitemNo},</if>
+            <if test="info.sflowNo != null  and info.sflowNo != ''">sflow_no = #{info.sflowNo},</if>
+            <if test="info.equipNo != null  and info.equipNo != ''">equip_no = #{info.equipNo},</if>
+            <if test="info.equipType != null  and info.equipType != ''">equip_type = #{info.equipType},</if>
+            <if test="info.equipNum != null ">equip_num = #{info.equipNum},</if>
+            <if test="info.unitPrice != null ">unit_price = #{info.unitPrice},</if>
+            <if test="info.taxPrice != null ">tax_price = #{info.taxPrice},</if>
+            <if test="info.allPrice != null ">all_price = #{info.allPrice},</if>
+            <if test="info.produceNumber != null  and info.produceNumber != ''">produce_number =
+                #{info.produceNumber},
+            </if>
+            <if test="info.produceDate != null  and info.produceDate != ''">produce_date = #{info.produceDate},</if>
+            <if test="info.expireDate != null  and info.expireDate != ''">expire_date = #{info.expireDate},</if>
+            <if test="info.otherField1 != null  and info.otherField1 != ''">other_field1 = #{info.otherField1},</if>
+            <if test="info.otherField2 != null  and info.otherField2 != ''">other_field2 = #{info.otherField2},</if>
+            <if test="info.otherField3 != null  and info.otherField3 != ''">other_field3 = #{info.otherField3},</if>
+            <if test="info.otherField4 != null  and info.otherField4 != ''">other_field4 = #{info.otherField4},</if>
+            <if test="info.otherField5 != null  and info.otherField5 != ''">other_field5 = #{info.otherField5},</if>
+            <if test="info.branchNo != null  and info.branchNo != ''">branch_no = #{info.branchNo},</if>
+            <if test="info.createBy != null  and info.createBy != ''">create_by = #{info.createBy},</if>
+            <if test="info.createTime != null ">create_time = #{info.createTime},</if>
+            <if test="info.updateBy != null  and info.updateBy != ''">update_by = #{info.updateBy},</if>
+            <if test="info.updateTime != null ">update_time = #{info.updateTime},</if>
+            <if test="info.deleteFlag != null  and info.deleteFlag != ''">delete_flag = #{info.deleteFlag},</if>
+            <if test="info.comments != null  and info.comments != ''">comments = #{info.comments},</if>
+            <if test="info.appCode != null  and info.appCode != ''">app_code = #{info.appCode},</if>
+            <if test="info.version != null ">version = #{info.version}</if>
+        </set>
+        where delete_flag='1' and app_code=#{info.appCode} and version=#{info.version} and sitem_no =
+        #{info.sitemNo}
+    </update>
+
+    <delete id="HardDeleteByNo">
+        delete from cssd_stockitems
+        where delete_flag='1' and app_code=#{appCode} and sitem_no = #{no}
+    </delete>
+
+    <delete id="HardDeleteByNos">
+        delete from cssd_stockitems
+        where delete_flag='1' and app_code=#{appCode} and sitem_no in
+        <foreach item="no" collection="nos" open="(" separator="," close=")">
+            #{no}
+        </foreach>
+    </delete>
+
+    <delete id="HardDeleteByCondition">
+        delete from cssd_stockitems
+        where delete_flag='1' and app_code=#{appCode}
+        <if test="condition != null  and condition != ''">and ${condition}</if>
+    </delete>
+
+    <delete id="SoftDeleteByNo">
+        update cssd_stockitems set delete_flag='0'
+        where delete_flag='1' and app_code=#{appCode} and sitem_no = #{no}
+    </delete>
+
+    <delete id="SoftDeleteByNos">
+        update cssd_stockitems set delete_flag='0'
+        where delete_flag='1' and app_code=#{appCode} and sitem_no in
+        <foreach item="no" collection="nos" open="(" separator="," close=")">
+            #{no}
+        </foreach>
+    </delete>
+
+    <delete id="SoftDeleteByCondition">
+        update cssd_stockitems set delete_flag='0'
+        where delete_flag='1' and app_code=#{appCode}
+        <if test="condition != null  and condition != ''">and ${condition}</if>
+    </delete>
+
+</mapper>

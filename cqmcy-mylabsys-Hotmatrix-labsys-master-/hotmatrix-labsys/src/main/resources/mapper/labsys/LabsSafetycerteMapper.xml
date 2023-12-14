@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.benet.labsys.mapper.LabsSafetycerteMapper">
+
+    <resultMap type="LabsSafetycerte" id="LabsSafetycerteResult">
+        <result property="id" column="id"/>
+        <result property="certeNo" column="certe_no"/>
+        <result property="cuserName" column="cuser_name"/>
+        <result property="certeName" column="certe_name"/>
+        <result property="certeUrl" column="certe_url"/>
+        <result property="certeDesc" column="certe_desc"/>
+        <result property="certeDate" column="certe_date"/>
+        <result property="expireDate" column="expire_date"/>
+        <result property="certeState" column="certe_state"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="deleteFlag" column="delete_flag"/>
+        <result property="comments" column="comments"/>
+        <result property="appCode" column="app_code"/>
+        <result property="version" column="version"/>
+    </resultMap>
+
+    <sql id="selectLabsSafetycerteVo">
+        select id,
+               certe_no,
+               cuser_name,
+               certe_name,
+               certe_url,
+               certe_desc,
+               certe_date,
+               expire_date,
+               certe_state,
+               create_by,
+               create_time,
+               update_by,
+               update_time,
+               delete_flag,
+               comments,
+               app_code,
+               version
+        from labs_safetycerte
+    </sql>
+
+    <select id="getAllRecords" resultMap="LabsSafetycerteResult">
+        <include refid="selectLabsSafetycerteVo"/>
+        where delete_flag='1' and app_code=#{appCode}
+    </select>
+
+    <select id="getRecordsByClassNo" resultMap="LabsSafetycerteResult">
+        <include refid="selectLabsSafetycerteVo"/>
+        where delete_flag='1' and app_code=#{appCode} and cuser_name=#{classNo}
+    </select>
+
+    <select id="getRecordsByPaging" resultMap="LabsSafetycerteResult">
+        <include refid="selectLabsSafetycerteVo"/>
+        where delete_flag='1' and app_code=${appCode}
+        <if test="model.condition != null  and model.condition != ''">and ${model.condition}</if>
+        order by ${model.orderField} ${model.orderType} limit ${model.pageIndex},${model.pageSize}
+    </select>
+
+    <select id="getRecordByNo" resultMap="LabsSafetycerteResult">
+        <include refid="selectLabsSafetycerteVo"/>
+        where delete_flag='1' and app_code=#{appCode} and certe_no = #{no}
+    </select>
+
+    <select id="getRecordNameByNo" resultType="String">
+        select certe_name
+        from labs_safetycerte
+        where delete_flag = '1'
+          and app_code = #{appCode}
+          and certe_no = #{no}
+    </select>
+
+    <select id="getCountByCondition" resultType="Integer">
+        select count(*) from labs_safetycerte
+        where delete_flag='1' and app_code=#{appCode}
+        <if test="condition != null  and condition != ''">and ${condition}</if>
+    </select>
+
+    <insert id="AddNewRecord" parameterType="LabsSafetycerte" useGeneratedKeys="true" keyProperty="id">
+        insert into labs_safetycerte (
+        <if test="info.certeNo != null  and info.certeNo != ''">certe_no,</if>
+        <if test="info.cuserName != null  and info.cuserName != ''">cuser_name,</if>
+        <if test="info.certeName != null  and info.certeName != ''">certe_name,</if>
+        <if test="info.certeUrl != null  and info.certeUrl != ''">certe_url,</if>
+        <if test="info.certeDesc != null  and info.certeDesc != ''">certe_desc,</if>
+        <if test="info.certeDate != null ">certe_date,</if>
+        <if test="info.expireDate != null ">expire_date,</if>
+        <if test="info.certeState != null  and info.certeState != ''">certe_state,</if>
+        <if test="info.createBy != null  and info.createBy != ''">create_by,</if>
+        <if test="info.createTime != null ">create_time,</if>
+        <if test="info.updateBy != null  and info.updateBy != ''">update_by,</if>
+        <if test="info.updateTime != null ">update_time,</if>
+        <if test="info.deleteFlag != null  and info.deleteFlag != ''">delete_flag,</if>
+        <if test="info.comments != null  and info.comments != ''">comments,</if>
+        <if test="info.appCode != null  and info.appCode != ''">app_code,</if>
+        <if test="info.version != null ">version</if>
+        )values(
+        <if test="info.certeNo != null  and info.certeNo != ''">#{info.certeNo},</if>
+        <if test="info.cuserName != null  and info.cuserName != ''">#{info.cuserName},</if>
+        <if test="info.certeName != null  and info.certeName != ''">#{info.certeName},</if>
+        <if test="info.certeUrl != null  and info.certeUrl != ''">#{info.certeUrl},</if>
+        <if test="info.certeDesc != null  and info.certeDesc != ''">#{info.certeDesc},</if>
+        <if test="info.certeDate != null ">#{info.certeDate},</if>
+        <if test="info.expireDate != null ">#{info.expireDate},</if>
+        <if test="info.certeState != null  and info.certeState != ''">#{info.certeState},</if>
+        <if test="info.createBy != null  and info.createBy != ''">#{info.createBy},</if>
+        <if test="info.createTime != null ">#{info.createTime},</if>
+        <if test="info.updateBy != null  and info.updateBy != ''">#{info.updateBy},</if>
+        <if test="info.updateTime != null ">#{info.updateTime},</if>
+        <if test="info.deleteFlag != null  and info.deleteFlag != ''">#{info.deleteFlag},</if>
+        <if test="info.comments != null  and info.comments != ''">#{info.comments},</if>
+        <if test="info.appCode != null  and info.appCode != ''">#{info.appCode},</if>
+        <if test="info.version != null ">#{info.version}</if>
+        )
+    </insert>
+
+    <update id="UpdateRecord" parameterType="LabsSafetycerte">
+        update labs_safetycerte
+        <set>
+            <if test="info.certeNo != null  and info.certeNo != ''">certe_no = #{info.certeNo},</if>
+            <if test="info.cuserName != null  and info.cuserName != ''">cuser_name = #{info.cuserName},</if>
+            <if test="info.certeName != null  and info.certeName != ''">certe_name = #{info.certeName},</if>
+            <if test="info.certeUrl != null  and info.certeUrl != ''">certe_url = #{info.certeUrl},</if>
+            <if test="info.certeDesc != null  and info.certeDesc != ''">certe_desc = #{info.certeDesc},</if>
+            <if test="info.certeDate != null ">certe_date = #{info.certeDate},</if>
+            <if test="info.expireDate != null ">expire_date = #{info.expireDate},</if>
+            <if test="info.certeState != null  and info.certeState != ''">certe_state = #{info.certeState},</if>
+            <if test="info.createBy != null  and info.createBy != ''">create_by = #{info.createBy},</if>
+            <if test="info.createTime != null ">create_time = #{info.createTime},</if>
+            <if test="info.updateBy != null  and info.updateBy != ''">update_by = #{info.updateBy},</if>
+            <if test="info.updateTime != null ">update_time = #{info.updateTime},</if>
+            <if test="info.deleteFlag != null  and info.deleteFlag != ''">delete_flag = #{info.deleteFlag},</if>
+            <if test="info.comments != null  and info.comments != ''">comments = #{info.comments},</if>
+            <if test="info.appCode != null  and info.appCode != ''">app_code = #{info.appCode},</if>
+            <if test="info.version != null ">version = #{info.version},</if>
+        </set>
+        where delete_flag='1' and app_code=#{info.appCode} and version=#{info.version} and certe_no = #{info.certeNo}
+    </update>
+
+    <delete id="HardDeleteByNo">
+        delete
+        from labs_safetycerte
+        where delete_flag = '1'
+          and app_code = #{appCode}
+          and certe_no = #{no}
+    </delete>
+
+    <delete id="HardDeleteByNos">
+        delete from labs_safetycerte
+        where delete_flag='1' and app_code=#{appCode} and certe_no in
+        <foreach item="no" collection="nos" open="(" separator="," close=")">
+            #{no}
+        </foreach>
+    </delete>
+
+    <delete id="HardDeleteByCondition">
+        delete from labs_safetycerte
+        where delete_flag='1' and app_code=#{appCode}
+        <if test="condition != null  and condition != ''">and ${condition}</if>
+    </delete>
+
+    <delete id="SoftDeleteByNo">
+        update labs_safetycerte
+        set delete_flag='0'
+        where delete_flag = '1'
+          and app_code = #{appCode}
+          and certe_no = #{no}
+    </delete>
+
+    <delete id="SoftDeleteByNos">
+        update labs_safetycerte set delete_flag='0'
+        where delete_flag='1' and app_code=#{appCode} and certe_no in
+        <foreach item="no" collection="nos" open="(" separator="," close=")">
+            #{no}
+        </foreach>
+    </delete>
+
+    <delete id="SoftDeleteByCondition">
+        update labs_safetycerte set delete_flag='0'
+        where delete_flag='1' and app_code=#{appCode}
+        <if test="condition != null  and condition != ''">and ${condition}</if>
+    </delete>
+
+</mapper>

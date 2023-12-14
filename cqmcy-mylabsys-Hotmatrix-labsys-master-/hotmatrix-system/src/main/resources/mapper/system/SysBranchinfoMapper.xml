@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.benet.system.mapper.SysBranchinfoMapper">
+
+    <resultMap type="SysBranchinfo" id="SysBranchinfoResult">
+        <result property="id" column="id"/>
+        <result property="branchNo" column="branch_no"/>
+        <result property="branchName" column="branch_name"/>
+        <result property="branchCode" column="branch_code"/>
+        <result property="branchType" column="branch_type"/>
+        <result property="orderNo" column="order_no"/>
+        <result property="master" column="master"/>
+        <result property="telephone" column="telephone"/>
+        <result property="email" column="email"/>
+        <result property="summary" column="summary"/>
+        <result property="checkState" column="check_state"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="deleteFlag" column="delete_flag"/>
+        <result property="comments" column="comments"/>
+        <result property="appCode" column="app_code"/>
+        <result property="version" column="version"/>
+    </resultMap>
+
+    <sql id="selectSysBranchinfoVo">
+        select id, branch_no, branch_name, branch_code, branch_type, order_no, master, telephone, email, summary, check_state, create_by, create_time, update_by, update_time, delete_flag, comments, app_code, version from sys_branchinfo
+    </sql>
+
+    <select id="getAllRecords" resultMap="SysBranchinfoResult">
+        <include refid="selectSysBranchinfoVo"/>
+        where delete_flag='1' and app_code=#{appCode}
+    </select>
+
+    <select id="getRecordsByClassNo" resultMap="SysBranchinfoResult">
+        <include refid="selectSysBranchinfoVo"/>
+        where delete_flag='1' and app_code=#{appCode} and branch_type=#{classNo}
+    </select>
+
+    <select id="getRecordsByPaging" resultMap="SysBranchinfoResult">
+        <include refid="selectSysBranchinfoVo"/>
+        where delete_flag='1' and app_code=${appCode}
+        <if test="model.condition != null  and model.condition != ''">and ${model.condition}</if>
+        order by ${model.orderField} ${model.orderType} limit ${model.pageIndex},${model.pageSize}
+    </select>
+
+    <select id="getRecordByNo" resultMap="SysBranchinfoResult">
+        <include refid="selectSysBranchinfoVo"/>
+        where delete_flag='1' and app_code=#{appCode} and branch_no = #{no}
+    </select>
+
+    <select id="getRecordNameByNo" resultType="String">
+        select branch_name from sys_branchinfo
+        where delete_flag='1' and app_code=#{appCode} and branch_no = #{no}
+    </select>
+
+    <select id="getCountByCondition" resultType="Integer">
+        select count(*) from sys_branchinfo
+        where delete_flag='1' and app_code=#{appCode}
+        <if test="condition != null  and condition != ''">and ${condition}</if>
+    </select>
+
+    <insert id="AddNewRecord" parameterType="SysBranchinfo" useGeneratedKeys="true" keyProperty="id">
+        insert into sys_branchinfo (
+        <if test="info.branchNo != null  and info.branchNo != ''">branch_no,</if>
+        <if test="info.branchName != null  and info.branchName != ''">branch_name,</if>
+        <if test="info.branchCode != null  and info.branchCode != ''">branch_code,</if>
+        <if test="info.branchType != null  and info.branchType != ''">branch_type,</if>
+        <if test="info.orderNo != null ">order_no,</if>
+        <if test="info.master != null  and info.master != ''">master,</if>
+        <if test="info.telephone != null  and info.telephone != ''">telephone,</if>
+        <if test="info.email != null  and info.email != ''">email,</if>
+        <if test="info.summary != null  and info.summary != ''">summary,</if>
+        <if test="info.checkState != null  and info.checkState != ''">check_state,</if>
+        <if test="info.createBy != null  and info.createBy != ''">create_by,</if>
+        <if test="info.createTime != null ">create_time,</if>
+        <if test="info.updateBy != null  and info.updateBy != ''">update_by,</if>
+        <if test="info.updateTime != null ">update_time,</if>
+        <if test="info.deleteFlag != null  and info.deleteFlag != ''">delete_flag,</if>
+        <if test="info.comments != null  and info.comments != ''">comments,</if>
+        <if test="info.appCode != null  and info.appCode != ''">app_code,</if>
+        <if test="info.version != null ">version</if>
+        )values(
+        <if test="info.branchNo != null  and info.branchNo != ''">#{info.branchNo},</if>
+        <if test="info.branchName != null  and info.branchName != ''">#{info.branchName},</if>
+        <if test="info.branchCode != null  and info.branchCode != ''">#{info.branchCode},</if>
+        <if test="info.branchType != null  and info.branchType != ''">#{info.branchType},</if>
+        <if test="info.orderNo != null ">#{info.orderNo},</if>
+        <if test="info.master != null  and info.master != ''">#{info.master},</if>
+        <if test="info.telephone != null  and info.telephone != ''">#{info.telephone},</if>
+        <if test="info.email != null  and info.email != ''">#{info.email},</if>
+        <if test="info.summary != null  and info.summary != ''">#{info.summary},</if>
+        <if test="info.checkState != null  and info.checkState != ''">#{info.checkState},</if>
+        <if test="info.createBy != null  and info.createBy != ''">#{info.createBy},</if>
+        <if test="info.createTime != null ">#{info.createTime},</if>
+        <if test="info.updateBy != null  and info.updateBy != ''">#{info.updateBy},</if>
+        <if test="info.updateTime != null ">#{info.updateTime},</if>
+        <if test="info.deleteFlag != null  and info.deleteFlag != ''">#{info.deleteFlag},</if>
+        <if test="info.comments != null  and info.comments != ''">#{info.comments},</if>
+        <if test="info.appCode != null  and info.appCode != ''">#{info.appCode},</if>
+        <if test="info.version != null ">#{info.version}</if>
+        )
+    </insert>
+
+    <update id="UpdateRecord" parameterType="SysBranchinfo">
+        update sys_branchinfo
+        <set>
+            <if test="info.branchNo != null  and info.branchNo != ''">branch_no = #{info.branchNo},</if>
+            <if test="info.branchName != null  and info.branchName != ''">branch_name = #{info.branchName},</if>
+            <if test="info.branchCode != null  and info.branchCode != ''">branch_code = #{info.branchCode},</if>
+            <if test="info.branchType != null  and info.branchType != ''">branch_type = #{info.branchType},</if>
+            <if test="info.orderNo != null ">order_no = #{info.orderNo},</if>
+            <if test="info.master != null  and info.master != ''">master = #{info.master},</if>
+            <if test="info.telephone != null  and info.telephone != ''">telephone = #{info.telephone},</if>
+            <if test="info.email != null  and info.email != ''">email = #{info.email},</if>
+            <if test="info.summary != null  and info.summary != ''">summary = #{info.summary},</if>
+            <if test="info.checkState != null  and info.checkState != ''">check_state = #{info.checkState},</if>
+            <if test="info.createBy != null  and info.createBy != ''">create_by = #{info.createBy},</if>
+            <if test="info.createTime != null ">create_time = #{info.createTime},</if>
+            <if test="info.updateBy != null  and info.updateBy != ''">update_by = #{info.updateBy},</if>
+            <if test="info.updateTime != null ">update_time = #{info.updateTime},</if>
+            <if test="info.deleteFlag != null  and info.deleteFlag != ''">delete_flag = #{info.deleteFlag},</if>
+            <if test="info.comments != null  and info.comments != ''">comments = #{info.comments},</if>
+            <if test="info.appCode != null  and info.appCode != ''">app_code = #{info.appCode},</if>
+            <if test="info.version != null ">version = version+1</if>
+        </set>
+        where delete_flag='1' and app_code=#{info.appCode} and version=#{info.version} and branch_no = #{info.branchNo}
+    </update>
+
+    <delete id="HardDeleteByNo">
+        delete from sys_branchinfo
+        where delete_flag='1' and app_code=#{appCode} and branch_no = #{no}
+    </delete>
+
+    <delete id="HardDeleteByNos">
+        delete from sys_branchinfo
+        where delete_flag='1' and app_code=#{appCode} and branch_no in
+        <foreach item="no" collection="nos" open="(" separator="," close=")">
+            #{no}
+        </foreach>
+    </delete>
+
+    <delete id="HardDeleteByCondition">
+        delete from sys_branchinfo
+        where delete_flag='1' and app_code=#{appCode}
+        <if test="condition != null  and condition != ''">and ${condition}</if>
+    </delete>
+
+    <delete id="SoftDeleteByNo">
+        update sys_branchinfo set delete_flag='0'
+        where delete_flag='1' and app_code=#{appCode} and branch_no = #{no}
+    </delete>
+
+    <delete id="SoftDeleteByNos">
+        update sys_branchinfo set delete_flag='0'
+        where delete_flag='1' and app_code=#{appCode} and branch_no in
+        <foreach item="no" collection="nos" open="(" separator="," close=")">
+            #{no}
+        </foreach>
+    </delete>
+
+    <delete id="SoftDeleteByCondition">
+        update sys_branchinfo set delete_flag='0'
+        where delete_flag='1' and app_code=#{appCode}
+        <if test="condition != null  and condition != ''">and ${condition}</if>
+    </delete>
+</mapper>

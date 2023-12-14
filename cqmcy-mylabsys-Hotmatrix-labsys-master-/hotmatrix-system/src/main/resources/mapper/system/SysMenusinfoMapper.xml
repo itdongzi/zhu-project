@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.benet.system.mapper.SysMenusinfoMapper">
+
+    <resultMap type="SysMenusinfo" id="SysMenusinfoResult">
+        <result property="id" column="id"/>
+        <result property="menuNo" column="menu_no"/>
+        <result property="menuName" column="menu_name"/>
+        <result property="menuCode" column="menu_code"/>
+        <result property="menuType" column="menu_type"/>
+        <result property="menuIcon" column="menu_icon"/>
+        <result property="menuImage" column="menu_image"/>
+        <result property="parentNo" column="parent_no"/>
+        <result property="orderNo" column="order_no"/>
+        <result property="pathUrl" column="path_url"/>
+        <result property="component" column="component"/>
+        <result property="roleType" column="role_type"/>
+        <result property="userType" column="user_type"/>
+        <result property="pmtsData" column="pmts_data"/>
+        <result property="target" column="target"/>
+        <result property="visible" column="visible"/>
+        <result property="quickFlag" column="quick_flag"/>
+        <result property="checkState" column="check_state"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="deleteFlag" column="delete_flag"/>
+        <result property="comments" column="comments"/>
+        <result property="appCode" column="app_code"/>
+        <result property="version" column="version"/>
+    </resultMap>
+
+    <sql id="selectSysMenusinfoVo">
+        select id,
+               menu_no,
+               menu_name,
+               menu_code,
+               menu_type,
+               menu_icon,
+               menu_image,
+               parent_no,
+               order_no,
+               path_url,
+               component,
+               role_type,
+               user_type,
+               pmts_data,
+               target,
+               visible,
+               quick_flag,
+               check_state,
+               create_by,
+               create_time,
+               update_by,
+               update_time,
+               delete_flag,
+               comments,
+               app_code,
+               version
+        from sys_menusinfo
+    </sql>
+
+    <select id="getAllRecords" resultMap="SysMenusinfoResult">
+        <include refid="selectSysMenusinfoVo"/>
+        where delete_flag='1' and app_code=#{appCode}
+    </select>
+
+    <select id="getRecordsByClassNo" resultMap="SysMenusinfoResult">
+        <include refid="selectSysMenusinfoVo"/>
+        where delete_flag='1' and app_code=#{appCode} and parent_no=#{classNo}
+    </select>
+
+    <select id="getRecordsByUserType" resultMap="SysMenusinfoResult">
+        <include refid="selectSysMenusinfoVo"/>
+        where delete_flag='1' and app_code=#{appCode} and parent_no=#{parentNo} and user_type=#{userType}
+        order by order_no
+    </select>
+
+    <select id="getRecordsByPaging" resultMap="SysMenusinfoResult">
+        <include refid="selectSysMenusinfoVo"/>
+        where delete_flag='1' and app_code=${appCode}
+        <if test="model.condition != null  and model.condition != ''">and ${model.condition}</if>
+        order by ${model.orderField} ${model.orderType} limit ${model.pageIndex},${model.pageSize}
+    </select>
+
+    <select id="getRecordByNo" resultMap="SysMenusinfoResult">
+        <include refid="selectSysMenusinfoVo"/>
+        where delete_flag='1' and app_code=#{appCode} and menu_no = #{no}
+    </select>
+
+    <select id="getRecordByMenuCode" resultMap="SysMenusinfoResult">
+        <include refid="selectSysMenusinfoVo"/>
+        where delete_flag='1' and app_code=#{appCode} and menu_code = #{menuCode}
+    </select>
+
+    <select id="getRecordNameByNo" resultType="String">
+        select menu_name
+        from sys_menusinfo
+        where delete_flag = '1'
+          and app_code = #{appCode}
+          and menu_no = #{no}
+    </select>
+
+    <select id="getCountByCondition" resultType="Integer">
+        select count(*) from sys_menusinfo
+        where delete_flag='1' and app_code=#{appCode}
+        <if test="condition != null  and condition != ''">and ${condition}</if>
+    </select>
+
+    <insert id="AddNewRecord" parameterType="SysMenusinfo" useGeneratedKeys="true" keyProperty="id">
+        insert into sys_menusinfo (
+        <if test="info.menuNo != null  and info.menuNo != ''">menu_no,</if>
+        <if test="info.menuName != null  and info.menuName != ''">menu_name,</if>
+        <if test="info.menuCode != null  and info.menuCode != ''">menu_code,</if>
+        <if test="info.menuType != null  and info.menuType != ''">menu_type,</if>
+        <if test="info.menuIcon != null  and info.menuIcon != ''">menu_icon,</if>
+        <if test="info.menuImage != null  and info.menuImage != ''">menu_image,</if>
+        <if test="info.parentNo != null  and info.parentNo != ''">parent_no,</if>
+        <if test="info.orderNo != null ">order_no,</if>
+        <if test="info.pathUrl != null  and info.pathUrl != ''">path_url,</if>
+        <if test="info.component != null  and info.component != ''">component,</if>
+        <if test="info.roleType != null  and info.roleType != ''">role_type,</if>
+        <if test="info.userType != null  and info.userType != ''">user_type,</if>
+        <if test="info.pmtsData != null  and info.pmtsData != ''">pmts_data,</if>
+        <if test="info.target != null  and info.target != ''">target,</if>
+        <if test="info.visible != null  and info.visible != ''">visible,</if>
+        <if test="info.quickFlag != null  and info.quickFlag != ''">quick_flag,</if>
+        <if test="info.checkState != null  and info.checkState != ''">check_state,</if>
+        <if test="info.createBy != null  and info.createBy != ''">create_by,</if>
+        <if test="info.createTime != null ">create_time,</if>
+        <if test="info.updateBy != null  and info.updateBy != ''">update_by,</if>
+        <if test="info.updateTime != null ">update_time,</if>
+        <if test="info.deleteFlag != null  and info.deleteFlag != ''">delete_flag,</if>
+        <if test="info.comments != null  and info.comments != ''">comments,</if>
+        <if test="info.appCode != null  and info.appCode != ''">app_code,</if>
+        <if test="info.version != null ">version</if>
+        )values(
+        <if test="info.menuNo != null  and info.menuNo != ''">#{info.menuNo},</if>
+        <if test="info.menuName != null  and info.menuName != ''">#{info.menuName},</if>
+        <if test="info.menuCode != null  and info.menuCode != ''">#{info.menuCode},</if>
+        <if test="info.menuType != null  and info.menuType != ''">#{info.menuType},</if>
+        <if test="info.menuIcon != null  and info.menuIcon != ''">#{info.menuIcon},</if>
+        <if test="info.menuImage != null  and info.menuImage != ''">#{info.menuImage},</if>
+        <if test="info.parentNo != null  and info.parentNo != ''">#{info.parentNo},</if>
+        <if test="info.orderNo != null ">#{info.orderNo},</if>
+        <if test="info.pathUrl != null  and info.pathUrl != ''">#{info.pathUrl},</if>
+        <if test="info.component != null  and info.component != ''">#{info.component},</if>
+        <if test="info.roleType != null  and info.roleType != ''">#{info.roleType},</if>
+        <if test="info.userType != null  and info.userType != ''">#{info.userType},</if>
+        <if test="info.pmtsData != null  and info.pmtsData != ''">#{info.pmtsData},</if>
+        <if test="info.target != null  and info.target != ''">#{info.target},</if>
+        <if test="info.visible != null  and info.visible != ''">#{info.visible},</if>
+        <if test="info.quickFlag != null  and info.quickFlag != ''">#{info.quickFlag},</if>
+        <if test="info.checkState != null  and info.checkState != ''">#{info.checkState},</if>
+        <if test="info.createBy != null  and info.createBy != ''">#{info.createBy},</if>
+        <if test="info.createTime != null ">#{info.createTime},</if>
+        <if test="info.updateBy != null  and info.updateBy != ''">#{info.updateBy},</if>
+        <if test="info.updateTime != null ">#{info.updateTime},</if>
+        <if test="info.deleteFlag != null  and info.deleteFlag != ''">#{info.deleteFlag},</if>
+        <if test="info.comments != null  and info.comments != ''">#{info.comments},</if>
+        <if test="info.appCode != null  and info.appCode != ''">#{info.appCode},</if>
+        <if test="info.version != null ">#{info.version}</if>
+        )
+    </insert>
+
+    <update id="UpdateRecord" parameterType="SysMenusinfo">
+        update sys_menusinfo
+        <set>
+            <if test="info.menuNo != null  and info.menuNo != ''">menu_no = #{info.menuNo},</if>
+            <if test="info.menuName != null  and info.menuName != ''">menu_name = #{info.menuName},</if>
+            <if test="info.menuCode != null  and info.menuCode != ''">menu_code = #{info.menuCode},</if>
+            <if test="info.menuType != null  and info.menuType != ''">menu_type = #{info.menuType},</if>
+            <if test="info.menuIcon != null  and info.menuIcon != ''">menu_icon = #{info.menuIcon},</if>
+            <if test="info.menuImage != null  and info.menuImage != ''">menu_image = #{info.menuImage},</if>
+            <if test="info.parentNo != null  and info.parentNo != ''">parent_no = #{info.parentNo},</if>
+            <if test="info.orderNo != null ">order_no = #{info.orderNo},</if>
+            <if test="info.pathUrl != null  and info.pathUrl != ''">path_url = #{info.pathUrl},</if>
+            <if test="info.component != null  and info.component != ''">component = #{info.component},</if>
+            <if test="info.roleType != null  and info.roleType != ''">role_type = #{info.roleType},</if>
+            <if test="info.userType != null  and info.userType != ''">user_type = #{info.userType},</if>
+            <if test="info.pmtsData != null  and info.pmtsData != ''">pmts_data = #{info.pmtsData},</if>
+            <if test="info.target != null  and info.target != ''">target = #{info.target},</if>
+            <if test="info.visible != null  and info.visible != ''">visible = #{info.visible},</if>
+            <if test="info.quickFlag != null  and info.quickFlag != ''">quick_flag = #{info.quickFlag},</if>
+            <if test="info.checkState != null  and info.checkState != ''">check_state = #{info.checkState},</if>
+            <if test="info.createBy != null  and info.createBy != ''">create_by = #{info.createBy},</if>
+            <if test="info.createTime != null ">create_time = #{info.createTime},</if>
+            <if test="info.updateBy != null  and info.updateBy != ''">update_by = #{info.updateBy},</if>
+            <if test="info.updateTime != null ">update_time = #{info.updateTime},</if>
+            <if test="info.deleteFlag != null  and info.deleteFlag != ''">delete_flag = #{info.deleteFlag},</if>
+            <if test="info.comments != null  and info.comments != ''">comments = #{info.comments},</if>
+            <if test="info.appCode != null  and info.appCode != ''">app_code = #{info.appCode},</if>
+            <if test="info.version != null ">version = #{info.version}</if>
+        </set>
+        where delete_flag='1' and app_code=#{info.appCode} and version=#{info.version} and menu_no = #{info.menuNo}
+    </update>
+
+    <delete id="HardDeleteByNo">
+        delete
+        from sys_menusinfo
+        where delete_flag = '1'
+          and app_code = #{appCode}
+          and menu_no = #{no}
+    </delete>
+
+    <delete id="HardDeleteByNos">
+        delete from sys_menusinfo
+        where delete_flag='1' and app_code=#{appCode} and menu_no in
+        <foreach item="no" collection="nos" open="(" separator="," close=")">
+            #{no}
+        </foreach>
+    </delete>
+
+    <delete id="HardDeleteByCondition">
+        delete from sys_menusinfo
+        where delete_flag='1' and app_code=#{appCode}
+        <if test="condition != null  and condition != ''">and ${condition}</if>
+    </delete>
+
+    <delete id="SoftDeleteByNo">
+        update sys_menusinfo
+        set delete_flag='0'
+        where delete_flag = '1'
+          and app_code = #{appCode}
+          and menu_no = #{no}
+    </delete>
+
+    <delete id="SoftDeleteByNos">
+        update sys_menusinfo set delete_flag='0'
+        where delete_flag='1' and app_code=#{appCode} and menu_no in
+        <foreach item="no" collection="nos" open="(" separator="," close=")">
+            #{no}
+        </foreach>
+    </delete>
+
+    <delete id="SoftDeleteByCondition">
+        update sys_menusinfo set delete_flag='0'
+        where delete_flag='1' and app_code=#{appCode}
+        <if test="condition != null  and condition != ''">and ${condition}</if>
+    </delete>
+
+</mapper>

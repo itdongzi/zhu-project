@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.benet.record.mapper.CssdGoodsinfoMapper">
+
+    <resultMap type="CssdGoodsinfo" id="CssdGoodsinfoResult">
+        <result property="id" column="id"/>
+        <result property="goodsNo" column="goods_no"/>
+        <result property="goodsCname" column="goods_cname"/>
+        <result property="goodsEname" column="goods_ename"/>
+        <result property="goodsImage" column="goods_image"/>
+        <result property="goodsType" column="goods_type"/>
+        <result property="goodsClass" column="goods_class"/>
+        <result property="depteNo" column="depte_no"/>
+        <result property="packeClass" column="packe_class"/>
+        <result property="cleanType" column="clean_type"/>
+        <result property="cleanClass" column="clean_class"/>
+        <result property="steryType" column="stery_type"/>
+        <result property="steryClass" column="stery_class"/>
+        <result property="printNo" column="print_no"/>
+        <result property="printStyle" column="print_style"/>
+        <result property="equipTlist" column="equip_tlist"/>
+        <result property="equipTprice" column="equip_tprice"/>
+        <result property="equipTnum" column="equip_tnum"/>
+        <result property="expireDays" column="expire_days"/>
+        <result property="priority" column="priority"/>
+        <result property="hardflag" column="hardflag"/>
+        <result property="lendflag" column="lendflag"/>
+        <result property="goodsState" column="goods_state"/>
+        <result property="checkState" column="check_state"/>
+        <result property="branchNo" column="branch_no"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="deleteFlag" column="delete_flag"/>
+        <result property="comments" column="comments"/>
+        <result property="appCode" column="app_code"/>
+        <result property="version" column="version"/>
+    </resultMap>
+
+    <sql id="selectCssdGoodsinfoVo">
+        select id, goods_no, goods_cname, goods_ename, goods_image, goods_type, goods_class, depte_no, packe_class, clean_type, clean_class, stery_type, stery_class, print_no, print_style, equip_tlist, equip_tprice, equip_tnum, expire_days, priority, hardflag, lendflag, goods_state, check_state, branch_no, create_by, create_time, update_by, update_time, delete_flag, comments, app_code, version from cssd_goodsinfo
+    </sql>
+
+    <select id="getAllRecords" resultMap="CssdGoodsinfoResult">
+        <include refid="selectCssdGoodsinfoVo"/>
+        where delete_flag='1' and app_code=#{appCode}
+    </select>
+
+    <select id="getRecordsByClassNo" resultMap="CssdGoodsinfoResult">
+        <include refid="selectCssdGoodsinfoVo"/>
+        where delete_flag='1' and app_code=#{appCode} and goods_class=#{classNo}
+    </select>
+
+    <select id="getRecordsByPaging" resultMap="CssdGoodsinfoResult">
+        <include refid="selectCssdGoodsinfoVo"/>
+        where delete_flag='1' and app_code=${appCode}
+        <if test="model.condition != null  and model.condition != ''">and ${model.condition}</if>
+        order by ${model.orderField} ${model.orderType} limit ${model.pageIndex},${model.pageSize}
+    </select>
+
+    <select id="getRecordByNo" resultMap="CssdGoodsinfoResult">
+        <include refid="selectCssdGoodsinfoVo"/>
+        where delete_flag='1' and app_code=#{appCode} and goods_no = #{no}
+    </select>
+
+    <select id="getRecordNameByNo" resultType="String">
+        select goods_cname from cssd_goodsinfo
+        where delete_flag='1' and app_code=#{appCode} and goods_no = #{no}
+    </select>
+
+    <select id="getCountByCondition" resultType="Integer">
+        select count(*) from cssd_goodsinfo
+        where delete_flag='1' and app_code=#{appCode}
+        <if test="condition != null  and condition != ''">and ${condition}</if>
+    </select>
+
+    <insert id="AddNewRecord" parameterType="CssdGoodsinfo" useGeneratedKeys="true" keyProperty="id">
+        insert into cssd_goodsinfo (
+        <if test="info.goodsNo != null  and info.goodsNo != ''">goods_no,</if>
+        <if test="info.goodsCname != null  and info.goodsCname != ''">goods_cname,</if>
+        <if test="info.goodsEname != null  and info.goodsEname != ''">goods_ename,</if>
+        <if test="info.goodsImage != null  and info.goodsImage != ''">goods_image,</if>
+        <if test="info.goodsType != null  and info.goodsType != ''">goods_type,</if>
+        <if test="info.goodsClass != null  and info.goodsClass != ''">goods_class,</if>
+        <if test="info.depteNo != null  and info.depteNo != ''">depte_no,</if>
+        <if test="info.packeClass != null  and info.packeClass != ''">packe_class,</if>
+        <if test="info.cleanType != null  and info.cleanType != ''">clean_type,</if>
+        <if test="info.cleanClass != null  and info.cleanClass != ''">clean_class,</if>
+        <if test="info.steryType != null  and info.steryType != ''">stery_type,</if>
+        <if test="info.steryClass != null  and info.steryClass != ''">stery_class,</if>
+        <if test="info.printNo != null  and info.printNo != ''">print_no,</if>
+        <if test="info.printStyle != null  and info.printStyle != ''">print_style,</if>
+        <if test="info.equipTlist != null  and info.equipTlist != ''">equip_tlist,</if>
+        <if test="info.equipTprice != null ">equip_tprice,</if>
+        <if test="info.equipTnum != null ">equip_tnum,</if>
+        <if test="info.expireDays != null ">expire_days,</if>
+        <if test="info.priority != null ">priority,</if>
+        <if test="info.hardflag != null  and info.hardflag != ''">hardflag,</if>
+        <if test="info.lendflag != null  and info.lendflag != ''">lendflag,</if>
+        <if test="info.goodsState != null ">goods_state,</if>
+        <if test="info.checkState != null  and info.checkState != ''">check_state,</if>
+        <if test="info.branchNo != null  and info.branchNo != ''">branch_no,</if>
+        <if test="info.createBy != null  and info.createBy != ''">create_by,</if>
+        <if test="info.createTime != null ">create_time,</if>
+        <if test="info.updateBy != null  and info.updateBy != ''">update_by,</if>
+        <if test="info.updateTime != null ">update_time,</if>
+        <if test="info.deleteFlag != null  and info.deleteFlag != ''">delete_flag,</if>
+        <if test="info.comments != null  and info.comments != ''">comments,</if>
+        <if test="info.appCode != null  and info.appCode != ''">app_code,</if>
+        <if test="info.version != null ">version</if>
+        )values(
+        <if test="info.goodsNo != null  and info.goodsNo != ''">#{info.goodsNo},</if>
+        <if test="info.goodsCname != null  and info.goodsCname != ''">#{info.goodsCname},</if>
+        <if test="info.goodsEname != null  and info.goodsEname != ''">#{info.goodsEname},</if>
+        <if test="info.goodsImage != null  and info.goodsImage != ''">#{info.goodsImage},</if>
+        <if test="info.goodsType != null  and info.goodsType != ''">#{info.goodsType},</if>
+        <if test="info.goodsClass != null  and info.goodsClass != ''">#{info.goodsClass},</if>
+        <if test="info.depteNo != null  and info.depteNo != ''">#{info.depteNo},</if>
+        <if test="info.packeClass != null  and info.packeClass != ''">#{info.packeClass},</if>
+        <if test="info.cleanType != null  and info.cleanType != ''">#{info.cleanType},</if>
+        <if test="info.cleanClass != null  and info.cleanClass != ''">#{info.cleanClass},</if>
+        <if test="info.steryType != null  and info.steryType != ''">#{info.steryType},</if>
+        <if test="info.steryClass != null  and info.steryClass != ''">#{info.steryClass},</if>
+        <if test="info.printNo != null  and info.printNo != ''">#{info.printNo},</if>
+        <if test="info.printStyle != null  and info.printStyle != ''">#{info.printStyle},</if>
+        <if test="info.equipTlist != null  and info.equipTlist != ''">#{info.equipTlist},</if>
+        <if test="info.equipTprice != null ">#{info.equipTprice},</if>
+        <if test="info.equipTnum != null ">#{info.equipTnum},</if>
+        <if test="info.expireDays != null ">#{info.expireDays},</if>
+        <if test="info.priority != null ">#{info.priority},</if>
+        <if test="info.hardflag != null  and info.hardflag != ''">#{info.hardflag},</if>
+        <if test="info.lendflag != null  and info.lendflag != ''">#{info.lendflag},</if>
+        <if test="info.goodsState != null ">#{info.goodsState},</if>
+        <if test="info.checkState != null  and info.checkState != ''">#{info.checkState},</if>
+        <if test="info.branchNo != null  and info.branchNo != ''">#{info.branchNo},</if>
+        <if test="info.createBy != null  and info.createBy != ''">#{info.createBy},</if>
+        <if test="info.createTime != null ">#{info.createTime},</if>
+        <if test="info.updateBy != null  and info.updateBy != ''">#{info.updateBy},</if>
+        <if test="info.updateTime != null ">#{info.updateTime},</if>
+        <if test="info.deleteFlag != null  and info.deleteFlag != ''">#{info.deleteFlag},</if>
+        <if test="info.comments != null  and info.comments != ''">#{info.comments},</if>
+        <if test="info.appCode != null  and info.appCode != ''">#{info.appCode},</if>
+        <if test="info.version != null ">#{info.version}</if>
+        )
+    </insert>
+
+    <update id="UpdateRecord" parameterType="CssdGoodsinfo">
+        update cssd_goodsinfo
+        <set>
+            <if test="info.goodsNo != null  and info.goodsNo != ''">goods_no = #{info.goodsNo},</if>
+            <if test="info.goodsCname != null  and info.goodsCname != ''">goods_cname = #{info.goodsCname},</if>
+            <if test="info.goodsEname != null  and info.goodsEname != ''">goods_ename = #{info.goodsEname},</if>
+            <if test="info.goodsImage != null  and info.goodsImage != ''">goods_image = #{info.goodsImage},</if>
+            <if test="info.goodsType != null  and info.goodsType != ''">goods_type = #{info.goodsType},</if>
+            <if test="info.goodsClass != null  and info.goodsClass != ''">goods_class = #{info.goodsClass},</if>
+            <if test="info.depteNo != null  and info.depteNo != ''">depte_no = #{info.depteNo},</if>
+            <if test="info.packeClass != null  and info.packeClass != ''">packe_class = #{info.packeClass},</if>
+            <if test="info.cleanType != null  and info.cleanType != ''">clean_type = #{info.cleanType},</if>
+            <if test="info.cleanClass != null  and info.cleanClass != ''">clean_class = #{info.cleanClass},</if>
+            <if test="info.steryType != null  and info.steryType != ''">stery_type = #{info.steryType},</if>
+            <if test="info.steryClass != null  and info.steryClass != ''">stery_class = #{info.steryClass},</if>
+            <if test="info.printNo != null  and info.printNo != ''">print_no = #{info.printNo},</if>
+            <if test="info.printStyle != null  and info.printStyle != ''">print_style = #{info.printStyle},</if>
+            <if test="info.equipTlist != null  and info.equipTlist != ''">equip_tlist = #{info.equipTlist},</if>
+            <if test="info.equipTprice != null ">equip_tprice = #{info.equipTprice},</if>
+            <if test="info.equipTnum != null ">equip_tnum = #{info.equipTnum},</if>
+            <if test="info.expireDays != null ">expire_days = #{info.expireDays},</if>
+            <if test="info.priority != null ">priority = #{info.priority},</if>
+            <if test="info.hardflag != null  and info.hardflag != ''">hardflag = #{info.hardflag},</if>
+            <if test="info.lendflag != null  and info.lendflag != ''">lendflag = #{info.lendflag},</if>
+            <if test="info.goodsState != null ">goods_state = #{info.goodsState},</if>
+            <if test="info.checkState != null  and info.checkState != ''">check_state = #{info.checkState},</if>
+            <if test="info.branchNo != null  and info.branchNo != ''">branch_no = #{info.branchNo},</if>
+            <if test="info.createBy != null  and info.createBy != ''">create_by = #{info.createBy},</if>
+            <if test="info.createTime != null ">create_time = #{info.createTime},</if>
+            <if test="info.updateBy != null  and info.updateBy != ''">update_by = #{info.updateBy},</if>
+            <if test="info.updateTime != null ">update_time = #{info.updateTime},</if>
+            <if test="info.deleteFlag != null  and info.deleteFlag != ''">delete_flag = #{info.deleteFlag},</if>
+            <if test="info.comments != null  and info.comments != ''">comments = #{info.comments},</if>
+            <if test="info.appCode != null  and info.appCode != ''">app_code = #{info.appCode},</if>
+            <if test="info.version != null ">version = #{info.version}</if>
+        </set>
+        where delete_flag='1' and app_code=#{info.appCode} and version=#{info.version} and goods_no =
+        #{info.goodsNo}
+    </update>
+
+    <delete id="HardDeleteByNo">
+        delete from cssd_goodsinfo
+        where delete_flag='1' and app_code=#{appCode} and goods_no = #{no}
+    </delete>
+
+    <delete id="HardDeleteByNos">
+        delete from cssd_goodsinfo
+        where delete_flag='1' and app_code=#{appCode} and goods_no in
+        <foreach item="no" collection="nos" open="(" separator="," close=")">
+            #{no}
+        </foreach>
+    </delete>
+
+    <delete id="HardDeleteByCondition">
+        delete from cssd_goodsinfo
+        where delete_flag='1' and app_code=#{appCode}
+        <if test="condition != null  and condition != ''">and ${condition}</if>
+    </delete>
+
+    <delete id="SoftDeleteByNo">
+        update cssd_goodsinfo set delete_flag='0'
+        where delete_flag='1' and app_code=#{appCode} and goods_no = #{no}
+    </delete>
+
+    <delete id="SoftDeleteByNos">
+        update cssd_goodsinfo set delete_flag='0'
+        where delete_flag='1' and app_code=#{appCode} and goods_no in
+        <foreach item="no" collection="nos" open="(" separator="," close=")">
+            #{no}
+        </foreach>
+    </delete>
+
+    <delete id="SoftDeleteByCondition">
+        update cssd_goodsinfo set delete_flag='0'
+        where delete_flag='1' and app_code=#{appCode}
+        <if test="condition != null  and condition != ''">and ${condition}</if>
+    </delete>
+
+</mapper>

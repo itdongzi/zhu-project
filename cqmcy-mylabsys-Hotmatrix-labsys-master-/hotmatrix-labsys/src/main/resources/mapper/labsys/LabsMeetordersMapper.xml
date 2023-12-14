@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.benet.labsys.mapper.LabsMeetordersMapper">
+
+    <resultMap type="LabsMeetorders" id="LabsMeetordersResult">
+        <result property="id" column="id"/>
+        <result property="orderNo" column="order_no"/>
+        <result property="meetNo" column="meet_no"/>
+        <result property="userName" column="user_name"/>
+        <result property="userTel" column="user_tel"/>
+        <result property="startDate" column="start_date"/>
+        <result property="enditDate" column="endit_date"/>
+        <result property="orderTitle" column="order_title"/>
+        <result property="orderUsers" column="order_users"/>
+        <result property="orderDesc" column="order_desc"/>
+        <result property="notifyType" column="notify_type"/>
+        <result property="checkState" column="check_state"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="deleteFlag" column="delete_flag"/>
+        <result property="comments" column="comments"/>
+        <result property="appCode" column="app_code"/>
+        <result property="version" column="version"/>
+    </resultMap>
+
+    <sql id="selectLabsMeetordersVo">
+        select id,
+               order_no,
+               meet_no,
+               user_name,
+               user_tel,
+               start_date,
+               endit_date,
+               order_title,
+               order_users,
+               order_desc,
+               notify_type,
+               check_state,
+               create_by,
+               create_time,
+               update_by,
+               update_time,
+               delete_flag,
+               comments,
+               app_code,
+               version
+        from labs_meetorders
+    </sql>
+
+    <select id="getAllRecords" resultMap="LabsMeetordersResult">
+        <include refid="selectLabsMeetordersVo"/>
+        where delete_flag='1' and app_code=#{appCode}
+    </select>
+
+    <select id="getRecordsByClassNo" resultMap="LabsMeetordersResult">
+        <include refid="selectLabsMeetordersVo"/>
+        where delete_flag='1' and app_code=#{appCode} and meet_no=#{classNo}
+    </select>
+
+    <select id="getRecordsByPaging" resultMap="LabsMeetordersResult">
+        <include refid="selectLabsMeetordersVo"/>
+        where delete_flag='1' and app_code=${appCode}
+        <if test="model.condition != null  and model.condition != ''">and ${model.condition}</if>
+        order by ${model.orderField} ${model.orderType} limit ${model.pageIndex},${model.pageSize}
+    </select>
+
+    <select id="getRecordByNo" resultMap="LabsMeetordersResult">
+        <include refid="selectLabsMeetordersVo"/>
+        where delete_flag='1' and app_code=#{appCode} and order_no = #{no}
+    </select>
+
+    <select id="getRecordNameByNo" resultType="String">
+        select order_no
+        from labs_meetorders
+        where delete_flag = '1'
+          and app_code = #{appCode}
+          and order_no = #{no}
+    </select>
+
+    <select id="getCountByCondition" resultType="Integer">
+        select count(*) from labs_meetorders
+        where delete_flag='1' and app_code=#{appCode}
+        <if test="condition != null  and condition != ''">and ${condition}</if>
+    </select>
+
+    <insert id="AddNewRecord" parameterType="LabsMeetorders" useGeneratedKeys="true" keyProperty="id">
+        insert into labs_meetorders (
+        <if test="info.orderNo != null  and info.orderNo != ''">order_no,</if>
+        <if test="info.meetNo != null  and info.meetNo != ''">meet_no,</if>
+        <if test="info.userName != null  and info.userName != ''">user_name,</if>
+        <if test="info.userTel != null  and info.userTel != ''">user_tel,</if>
+        <if test="info.startDate != null ">start_date,</if>
+        <if test="info.enditDate != null ">endit_date,</if>
+        <if test="info.orderTitle != null  and info.orderTitle != ''">order_title,</if>
+        <if test="info.orderUsers != null  and info.orderUsers != ''">order_users,</if>
+        <if test="info.orderDesc != null  and info.orderDesc != ''">order_desc,</if>
+        <if test="info.notifyType != null  and info.notifyType != ''">notify_type,</if>
+        <if test="info.checkState != null  and info.checkState != ''">check_state,</if>
+        <if test="info.createBy != null  and info.createBy != ''">create_by,</if>
+        <if test="info.createTime != null ">create_time,</if>
+        <if test="info.updateBy != null  and info.updateBy != ''">update_by,</if>
+        <if test="info.updateTime != null ">update_time,</if>
+        <if test="info.deleteFlag != null  and info.deleteFlag != ''">delete_flag,</if>
+        <if test="info.comments != null  and info.comments != ''">comments,</if>
+        <if test="info.appCode != null  and info.appCode != ''">app_code,</if>
+        <if test="info.version != null ">version</if>
+        )values(
+        <if test="info.orderNo != null  and info.orderNo != ''">#{info.orderNo},</if>
+        <if test="info.meetNo != null  and info.meetNo != ''">#{info.meetNo},</if>
+        <if test="info.userName != null  and info.userName != ''">#{info.userName},</if>
+        <if test="info.userTel != null  and info.userTel != ''">#{info.userTel},</if>
+        <if test="info.startDate != null ">#{info.startDate},</if>
+        <if test="info.enditDate != null ">#{info.enditDate},</if>
+        <if test="info.orderTitle != null  and info.orderTitle != ''">#{info.orderTitle},</if>
+        <if test="info.orderUsers != null  and info.orderUsers != ''">#{info.orderUsers},</if>
+        <if test="info.orderDesc != null  and info.orderDesc != ''">#{info.orderDesc},</if>
+        <if test="info.notifyType != null  and info.notifyType != ''">#{info.notifyType},</if>
+        <if test="info.checkState != null  and info.checkState != ''">#{info.checkState},</if>
+        <if test="info.createBy != null  and info.createBy != ''">#{info.createBy},</if>
+        <if test="info.createTime != null ">#{info.createTime},</if>
+        <if test="info.updateBy != null  and info.updateBy != ''">#{info.updateBy},</if>
+        <if test="info.updateTime != null ">#{info.updateTime},</if>
+        <if test="info.deleteFlag != null  and info.deleteFlag != ''">#{info.deleteFlag},</if>
+        <if test="info.comments != null  and info.comments != ''">#{info.comments},</if>
+        <if test="info.appCode != null  and info.appCode != ''">#{info.appCode},</if>
+        <if test="info.version != null ">#{info.version}</if>
+        )
+    </insert>
+
+    <update id="UpdateRecord" parameterType="LabsMeetorders">
+        update labs_meetorders
+        <set>
+            <if test="info.orderNo != null  and info.orderNo != ''">order_no = #{info.orderNo},</if>
+            <if test="info.meetNo != null  and info.meetNo != ''">meet_no = #{info.meetNo},</if>
+            <if test="info.userName != null  and info.userName != ''">user_name = #{info.userName},</if>
+            <if test="info.userTel != null  and info.userTel != ''">user_tel = #{info.userTel},</if>
+            <if test="info.startDate != null ">start_date = #{info.startDate},</if>
+            <if test="info.enditDate != null ">endit_date = #{info.enditDate},</if>
+            <if test="info.orderTitle != null  and info.orderTitle != ''">order_title = #{info.orderTitle},</if>
+            <if test="info.orderUsers != null  and info.orderUsers != ''">order_users = #{info.orderUsers},</if>
+            <if test="info.orderDesc != null  and info.orderDesc != ''">order_desc = #{info.orderDesc},</if>
+            <if test="info.notifyType != null  and info.notifyType != ''">notify_type = #{info.notifyType},</if>
+            <if test="info.checkState != null  and info.checkState != ''">check_state = #{info.checkState},</if>
+            <if test="info.createBy != null  and info.createBy != ''">create_by = #{info.createBy},</if>
+            <if test="info.createTime != null ">create_time = #{info.createTime},</if>
+            <if test="info.updateBy != null  and info.updateBy != ''">update_by = #{info.updateBy},</if>
+            <if test="info.updateTime != null ">update_time = #{info.updateTime},</if>
+            <if test="info.deleteFlag != null  and info.deleteFlag != ''">delete_flag = #{info.deleteFlag},</if>
+            <if test="info.comments != null  and info.comments != ''">comments = #{info.comments},</if>
+            <if test="info.appCode != null  and info.appCode != ''">app_code = #{info.appCode},</if>
+            <if test="info.version != null ">version = #{info.version},</if>
+        </set>
+        where delete_flag='1' and app_code=#{info.appCode} and version=#{info.version} and order_no = #{info.orderNo}
+    </update>
+
+    <delete id="HardDeleteByNo">
+        delete
+        from labs_meetorders
+        where delete_flag = '1'
+          and app_code = #{appCode}
+          and order_no = #{no}
+    </delete>
+
+    <delete id="HardDeleteByNos">
+        delete from labs_meetorders
+        where delete_flag='1' and app_code=#{appCode} and order_no in
+        <foreach item="no" collection="nos" open="(" separator="," close=")">
+            #{no}
+        </foreach>
+    </delete>
+
+    <delete id="HardDeleteByCondition">
+        delete from labs_meetorders
+        where delete_flag='1' and app_code=#{appCode}
+        <if test="condition != null  and condition != ''">and ${condition}</if>
+    </delete>
+
+    <delete id="SoftDeleteByNo">
+        update labs_meetorders
+        set delete_flag='0'
+        where delete_flag = '1'
+          and app_code = #{appCode}
+          and order_no = #{no}
+    </delete>
+
+    <delete id="SoftDeleteByNos">
+        update labs_meetorders set delete_flag='0'
+        where delete_flag='1' and app_code=#{appCode} and order_no in
+        <foreach item="no" collection="nos" open="(" separator="," close=")">
+            #{no}
+        </foreach>
+    </delete>
+
+    <delete id="SoftDeleteByCondition">
+        update labs_meetorders set delete_flag='0'
+        where delete_flag='1' and app_code=#{appCode}
+        <if test="condition != null  and condition != ''">and ${condition}</if>
+    </delete>
+
+</mapper>

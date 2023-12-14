@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.benet.system.mapper.SysRolepermitMapper">
+
+    <select id="getCountByCondition" resultType="Integer">
+        select count(*) from sys_rolepermit
+        where delete_flag='1' and app_code=#{appCode}
+        <if test="condition != null  and condition != ''">and ${condition}</if>
+    </select>
+
+    <insert id="AddNewRecord" parameterType="SysRolepermit" useGeneratedKeys="true" keyProperty="id">
+        insert into sys_rolepermit (
+        <if test="info.roleNo != null  and info.roleNo != ''">role_no,</if>
+        <if test="info.permitNo != null  and info.permitNo != ''">permit_no,</if>
+        <if test="info.branchNo != null  and info.branchNo != ''">branch_no,</if>
+        <if test="info.createBy != null  and info.createBy != ''">create_by,</if>
+        <if test="info.createTime != null ">create_time,</if>
+        <if test="info.updateBy != null  and info.updateBy != ''">update_by,</if>
+        <if test="info.updateTime != null ">update_time,</if>
+        <if test="info.deleteFlag != null  and info.deleteFlag != ''">delete_flag,</if>
+        <if test="info.comments != null  and info.comments != ''">comments,</if>
+        <if test="info.appCode != null  and info.appCode != ''">app_code,</if>
+        <if test="info.version != null ">version</if>
+        )values(
+        <if test="info.roleNo != null  and info.roleNo != ''">#{info.roleNo},</if>
+        <if test="info.permitNo != null  and info.permitNo != ''">#{info.permitNo},</if>
+        <if test="info.branchNo != null  and info.branchNo != ''">#{info.branchNo},</if>
+        <if test="info.createBy != null  and info.createBy != ''">#{info.createBy},</if>
+        <if test="info.createTime != null ">#{info.createTime},</if>
+        <if test="info.updateBy != null  and info.updateBy != ''">#{info.updateBy},</if>
+        <if test="info.updateTime != null ">#{info.updateTime},</if>
+        <if test="info.deleteFlag != null  and info.deleteFlag != ''">#{info.deleteFlag},</if>
+        <if test="info.comments != null  and info.comments != ''">#{info.comments},</if>
+        <if test="info.appCode != null  and info.appCode != ''">#{info.appCode},</if>
+        <if test="info.version != null ">#{info.version}</if>
+        )
+    </insert>
+
+    <delete id="HardDeleteByRoleNo">
+        delete from sys_rolepermit
+        where delete_flag='1' and app_code=#{appCode} and role_no = #{roleNo}
+    </delete>
+
+    <delete id="HardDeleteByPermitNo">
+        delete from sys_rolepermit
+        where delete_flag='1' and app_code=#{appCode} and permit_no=#{permitNo}
+    </delete>
+
+</mapper>

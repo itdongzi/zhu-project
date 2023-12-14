@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.benet.system.mapper.SysLogininfoMapper">
+
+    <resultMap type="SysLogininfo" id="SysLogininfoResult">
+        <result property="id" column="id"/>
+        <result property="loginNo" column="login_no"/>
+        <result property="loginName" column="login_name"/>
+        <result property="loginTime" column="login_time"/>
+        <result property="ipAddress" column="ip_address"/>
+        <result property="location" column="location"/>
+        <result property="browser" column="browser"/>
+        <result property="os" column="os"/>
+        <result property="status" column="status"/>
+        <result property="message" column="message"/>
+        <result property="branchNo" column="branch_no"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="deleteFlag" column="delete_flag"/>
+        <result property="comments" column="comments"/>
+        <result property="appCode" column="app_code"/>
+        <result property="version" column="version"/>
+    </resultMap>
+
+    <sql id="selectSysLogininfoVo">
+        select id,
+               login_no,
+               login_name,
+               login_time,
+               ip_address,
+               location,
+               browser,
+               os,
+               status,
+               message,
+               branch_no,
+               create_by,
+               create_time,
+               update_by,
+               update_time,
+               delete_flag,
+               comments,
+               app_code,
+               version
+        from sys_logininfo
+    </sql>
+
+    <select id="getAllRecords" resultMap="SysLogininfoResult">
+        <include refid="selectSysLogininfoVo"/>
+        where delete_flag='1' and app_code=#{appCode}
+    </select>
+
+    <select id="getRecordsByClassNo" resultMap="SysLogininfoResult">
+        <include refid="selectSysLogininfoVo"/>
+        where delete_flag='1' and app_code=#{appCode} and branch_no=#{classNo}
+    </select>
+
+    <select id="getRecordsByPaging" resultMap="SysLogininfoResult">
+        <include refid="selectSysLogininfoVo"/>
+        where delete_flag='1' and app_code=${appCode}
+        <if test="model.condition != null  and model.condition != ''">and ${model.condition}</if>
+        order by ${model.orderField} ${model.orderType} limit ${model.pageIndex},${model.pageSize}
+    </select>
+
+    <select id="getRecordByNo" resultMap="SysLogininfoResult">
+        <include refid="selectSysLogininfoVo"/>
+        where delete_flag='1' and app_code=#{appCode} and login_no = #{no}
+    </select>
+
+    <select id="getRecordNameByNo" resultType="String">
+        select login_name
+        from sys_logininfo
+        where delete_flag = '1'
+          and app_code = #{appCode}
+          and login_no = #{no}
+    </select>
+
+    <select id="getCountByCondition" resultType="Integer">
+        select count(*) from sys_logininfo
+        where delete_flag='1' and app_code=#{appCode}
+        <if test="condition != null  and condition != ''">and ${condition}</if>
+    </select>
+
+    <insert id="AddNewRecord" parameterType="SysLogininfo" useGeneratedKeys="true" keyProperty="id">
+        insert into sys_logininfo (
+        <if test="info.loginNo != null  and info.loginNo != ''">login_no,</if>
+        <if test="info.loginName != null  and info.loginName != ''">login_name,</if>
+        <if test="info.loginTime != null ">login_time,</if>
+        <if test="info.ipAddress != null  and info.ipAddress != ''">ip_address,</if>
+        <if test="info.location != null  and info.location != ''">location,</if>
+        <if test="info.browser != null  and info.browser != ''">browser,</if>
+        <if test="info.os != null  and info.os != ''">os,</if>
+        <if test="info.status != null  and info.status != ''">status,</if>
+        <if test="info.message != null  and info.message != ''">message,</if>
+        <if test="info.branchNo != null  and info.branchNo != ''">branch_no,</if>
+        <if test="info.createBy != null  and info.createBy != ''">create_by,</if>
+        <if test="info.createTime != null ">create_time,</if>
+        <if test="info.updateBy != null  and info.updateBy != ''">update_by,</if>
+        <if test="info.updateTime != null ">update_time,</if>
+        <if test="info.deleteFlag != null  and info.deleteFlag != ''">delete_flag,</if>
+        <if test="info.comments != null  and info.comments != ''">comments,</if>
+        <if test="info.appCode != null  and info.appCode != ''">app_code,</if>
+        <if test="info.version != null ">version</if>
+        )values(
+        <if test="info.loginNo != null  and info.loginNo != ''">#{info.loginNo},</if>
+        <if test="info.loginName != null  and info.loginName != ''">#{info.loginName},</if>
+        <if test="info.loginTime != null ">#{info.loginTime},</if>
+        <if test="info.ipAddress != null  and info.ipAddress != ''">#{info.ipAddress},</if>
+        <if test="info.location != null  and info.location != ''">#{info.location},</if>
+        <if test="info.browser != null  and info.browser != ''">#{info.browser},</if>
+        <if test="info.os != null  and info.os != ''">#{info.os},</if>
+        <if test="info.status != null  and info.status != ''">#{info.status},</if>
+        <if test="info.message != null  and info.message != ''">#{info.message},</if>
+        <if test="info.branchNo != null  and info.branchNo != ''">#{info.branchNo},</if>
+        <if test="info.createBy != null  and info.createBy != ''">#{info.createBy},</if>
+        <if test="info.createTime != null ">#{info.createTime},</if>
+        <if test="info.updateBy != null  and info.updateBy != ''">#{info.updateBy},</if>
+        <if test="info.updateTime != null ">#{info.updateTime},</if>
+        <if test="info.deleteFlag != null  and info.deleteFlag != ''">#{info.deleteFlag},</if>
+        <if test="info.comments != null  and info.comments != ''">#{info.comments},</if>
+        <if test="info.appCode != null  and info.appCode != ''">#{info.appCode},</if>
+        <if test="info.version != null ">#{info.version}</if>
+        )
+    </insert>
+
+    <update id="UpdateRecord" parameterType="SysLogininfo">
+        update sys_logininfo
+        <set>
+            <if test="info.loginNo != null  and info.loginNo != ''">login_no = #{info.loginNo},</if>
+            <if test="info.loginName != null  and info.loginName != ''">login_name = #{info.loginName},</if>
+            <if test="info.loginTime != null ">login_time = #{info.loginTime},</if>
+            <if test="info.ipAddress != null  and info.ipAddress != ''">ip_address = #{info.ipAddress},</if>
+            <if test="info.location != null  and info.location != ''">location = #{info.location},</if>
+            <if test="info.browser != null  and info.browser != ''">browser = #{info.browser},</if>
+            <if test="info.os != null  and info.os != ''">os = #{info.os},</if>
+            <if test="info.status != null  and info.status != ''">status = #{info.status},</if>
+            <if test="info.message != null  and info.message != ''">message = #{info.message},</if>
+            <if test="info.branchNo != null  and info.branchNo != ''">branch_no = #{info.branchNo},</if>
+            <if test="info.createBy != null  and info.createBy != ''">create_by = #{info.createBy},</if>
+            <if test="info.createTime != null ">create_time = #{info.createTime},</if>
+            <if test="info.updateBy != null  and info.updateBy != ''">update_by = #{info.updateBy},</if>
+            <if test="info.updateTime != null ">update_time = #{info.updateTime},</if>
+            <if test="info.deleteFlag != null  and info.deleteFlag != ''">delete_flag = #{info.deleteFlag},</if>
+            <if test="info.comments != null  and info.comments != ''">comments = #{info.comments},</if>
+            <if test="info.appCode != null  and info.appCode != ''">app_code = #{info.appCode},</if>
+            <if test="info.version != null ">version = #{info.version}</if>
+        </set>
+        where delete_flag='1' and app_code=#{info.appCode} and version=#{info.version} and login_no =
+        #{loginNo}
+    </update>
+
+    <delete id="HardDeleteByNo">
+        delete
+        from sys_logininfo
+        where delete_flag = '1'
+          and app_code = #{appCode}
+          and login_no = #{no}
+    </delete>
+
+    <delete id="HardDeleteByNos">
+        delete from sys_logininfo
+        where delete_flag='1' and app_code=#{appCode} and login_no in
+        <foreach item="no" collection="nos" open="(" separator="," close=")">
+            #{no}
+        </foreach>
+    </delete>
+
+    <delete id="HardDeleteByCondition">
+        delete from sys_logininfo
+        where delete_flag='1' and app_code=#{appCode}
+        <if test="condition != null  and condition != ''">and ${condition}</if>
+    </delete>
+
+    <delete id="SoftDeleteByNo">
+        update sys_logininfo
+        set delete_flag='0'
+        where delete_flag = '1'
+          and app_code = #{appCode}
+          and login_no = #{no}
+    </delete>
+
+    <delete id="SoftDeleteByNos">
+        update sys_logininfo set delete_flag='0'
+        where delete_flag='1' and app_code=#{appCode} and login_no in
+        <foreach item="no" collection="nos" open="(" separator="," close=")">
+            #{no}
+        </foreach>
+    </delete>
+
+    <delete id="SoftDeleteByCondition">
+        update sys_logininfo set delete_flag='0'
+        where delete_flag='1' and app_code=#{appCode}
+        <if test="condition != null  and condition != ''">and ${condition}</if>
+    </delete>
+
+</mapper>

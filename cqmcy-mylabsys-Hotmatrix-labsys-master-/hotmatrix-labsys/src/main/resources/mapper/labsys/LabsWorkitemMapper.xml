@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.benet.labsys.mapper.LabsWorkitemMapper">
+
+    <resultMap type="LabsWorkitem" id="LabsWorkitemResult">
+        <result property="id" column="id"/>
+        <result property="itemNo" column="item_no"/>
+        <result property="workNo" column="work_no"/>
+        <result property="dataType" column="data_type"/>
+        <result property="itemTitle" column="item_title"/>
+        <result property="itemPoint" column="item_point"/>
+        <result property="itemDesc" column="item_desc"/>
+        <result property="itemResult" column="item_result"/>
+        <result property="itemDate" column="item_date"/>
+        <result property="itemScore" column="item_score"/>
+        <result property="itemState" column="item_state"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="deleteFlag" column="delete_flag"/>
+        <result property="comments" column="comments"/>
+        <result property="appCode" column="app_code"/>
+        <result property="version" column="version"/>
+    </resultMap>
+
+    <sql id="selectLabsWorkitemVo">
+        select id,
+               item_no,
+               work_no,
+               data_type,
+               item_title,
+               item_point,
+               item_desc,
+               item_result,
+               item_date,
+               item_score,
+               item_state,
+               create_by,
+               create_time,
+               update_by,
+               update_time,
+               delete_flag,
+               comments,
+               app_code,
+               version
+        from labs_workitem
+    </sql>
+
+    <select id="getAllRecords" resultMap="LabsWorkitemResult">
+        <include refid="selectLabsWorkitemVo"/>
+        where delete_flag='1' and app_code=#{appCode}
+    </select>
+
+    <select id="getRecordsByClassNo" resultMap="LabsWorkitemResult">
+        <include refid="selectLabsWorkitemVo"/>
+        where delete_flag='1' and app_code=#{appCode} and work_no=#{classNo}
+    </select>
+
+    <select id="getRecordsByPaging" resultMap="LabsWorkitemResult">
+        <include refid="selectLabsWorkitemVo"/>
+        where delete_flag='1' and app_code=${appCode}
+        <if test="model.condition != null  and model.condition != ''">and ${model.condition}</if>
+        order by ${model.orderField} ${model.orderType} limit ${model.pageIndex},${model.pageSize}
+    </select>
+
+    <select id="getRecordByNo" resultMap="LabsWorkitemResult">
+        <include refid="selectLabsWorkitemVo"/>
+        where delete_flag='1' and app_code=#{appCode} and item_no = #{no}
+    </select>
+
+    <select id="getRecordNameByNo" resultType="String">
+        select item_title
+        from labs_workitem
+        where delete_flag = '1'
+          and app_code = #{appCode}
+          and item_no = #{no}
+    </select>
+
+    <select id="getCountByCondition" resultType="Integer">
+        select count(*) from labs_workitem
+        where delete_flag='1' and app_code=#{appCode}
+        <if test="condition != null  and condition != ''">and ${condition}</if>
+    </select>
+
+    <insert id="AddNewRecord" parameterType="LabsWorkitem" useGeneratedKeys="true" keyProperty="id">
+        insert into labs_workitem (
+        <if test="info.itemNo != null  and info.itemNo != ''">item_no,</if>
+        <if test="info.workNo != null  and info.workNo != ''">work_no,</if>
+        <if test="info.dataType != null  and info.dataType != ''">data_type,</if>
+        <if test="info.itemTitle != null  and info.itemTitle != ''">item_title,</if>
+        <if test="info.itemPoint != null  and info.itemPoint != ''">item_point,</if>
+        <if test="info.itemDesc != null  and info.itemDesc != ''">item_desc,</if>
+        <if test="info.itemResult != null  and info.itemResult != ''">item_result,</if>
+        <if test="info.itemDate != null ">item_date,</if>
+        <if test="info.itemScore != null ">item_score,</if>
+        <if test="info.itemState != null  and info.itemState != ''">item_state,</if>
+        <if test="info.createBy != null  and info.createBy != ''">create_by,</if>
+        <if test="info.createTime != null ">create_time,</if>
+        <if test="info.updateBy != null  and info.updateBy != ''">update_by,</if>
+        <if test="info.updateTime != null ">update_time,</if>
+        <if test="info.deleteFlag != null  and info.deleteFlag != ''">delete_flag,</if>
+        <if test="info.comments != null  and info.comments != ''">comments,</if>
+        <if test="info.appCode != null  and info.appCode != ''">app_code,</if>
+        <if test="info.version != null ">version</if>
+        )values(
+        <if test="info.itemNo != null  and info.itemNo != ''">#{info.itemNo},</if>
+        <if test="info.workNo != null  and info.workNo != ''">#{info.workNo},</if>
+        <if test="info.dataType != null  and info.dataType != ''">#{info.dataType},</if>
+        <if test="info.itemTitle != null  and info.itemTitle != ''">#{info.itemTitle},</if>
+        <if test="info.itemPoint != null  and info.itemPoint != ''">#{info.itemPoint},</if>
+        <if test="info.itemDesc != null  and info.itemDesc != ''">#{info.itemDesc},</if>
+        <if test="info.itemResult != null  and info.itemResult != ''">#{info.itemResult},</if>
+        <if test="info.itemDate != null ">#{info.itemDate},</if>
+        <if test="info.itemScore != null ">#{info.itemScore},</if>
+        <if test="info.itemState != null  and info.itemState != ''">#{info.itemState},</if>
+        <if test="info.createBy != null  and info.createBy != ''">#{info.createBy},</if>
+        <if test="info.createTime != null ">#{info.createTime},</if>
+        <if test="info.updateBy != null  and info.updateBy != ''">#{info.updateBy},</if>
+        <if test="info.updateTime != null ">#{info.updateTime},</if>
+        <if test="info.deleteFlag != null  and info.deleteFlag != ''">#{info.deleteFlag},</if>
+        <if test="info.comments != null  and info.comments != ''">#{info.comments},</if>
+        <if test="info.appCode != null  and info.appCode != ''">#{info.appCode},</if>
+        <if test="info.version != null ">#{info.version}</if>
+        )
+    </insert>
+
+    <update id="UpdateRecord" parameterType="LabsWorkitem">
+        update labs_workitem
+        <set>
+            <if test="info.itemNo != null  and info.itemNo != ''">item_no = #{info.itemNo},</if>
+            <if test="info.workNo != null  and info.workNo != ''">work_no = #{info.workNo},</if>
+            <if test="info.dataType != null  and info.dataType != ''">data_type = #{info.dataType},</if>
+            <if test="info.itemTitle != null  and info.itemTitle != ''">item_title = #{info.itemTitle},</if>
+            <if test="info.itemPoint != null  and info.itemPoint != ''">item_point = #{info.itemPoint},</if>
+            <if test="info.itemDesc != null  and info.itemDesc != ''">item_desc = #{info.itemDesc},</if>
+            <if test="info.itemResult != null  and info.itemResult != ''">item_result = #{info.itemResult},</if>
+            <if test="info.itemDate != null ">item_date = #{info.itemDate},</if>
+            <if test="info.itemScore != null ">item_score = #{info.itemScore},</if>
+            <if test="info.itemState != null  and info.itemState != ''">item_state = #{info.itemState},</if>
+            <if test="info.createBy != null  and info.createBy != ''">create_by = #{info.createBy},</if>
+            <if test="info.createTime != null ">create_time = #{info.createTime},</if>
+            <if test="info.updateBy != null  and info.updateBy != ''">update_by = #{info.updateBy},</if>
+            <if test="info.updateTime != null ">update_time = #{info.updateTime},</if>
+            <if test="info.deleteFlag != null  and info.deleteFlag != ''">delete_flag = #{info.deleteFlag},</if>
+            <if test="info.comments != null  and info.comments != ''">comments = #{info.comments},</if>
+            <if test="info.appCode != null  and info.appCode != ''">app_code = #{info.appCode},</if>
+            <if test="info.version != null ">version = #{info.version},</if>
+        </set>
+        where delete_flag='1' and app_code=#{info.appCode} and version=#{info.version} and item_no = #{info.itemNo}
+    </update>
+
+    <delete id="HardDeleteByNo">
+        delete
+        from labs_workitem
+        where delete_flag = '1'
+          and app_code = #{appCode}
+          and item_no = #{no}
+    </delete>
+
+    <delete id="HardDeleteByNos">
+        delete from labs_workitem
+        where delete_flag='1' and app_code=#{appCode} and item_no in
+        <foreach item="no" collection="nos" open="(" separator="," close=")">
+            #{no}
+        </foreach>
+    </delete>
+
+    <delete id="HardDeleteByCondition">
+        delete from labs_workitem
+        where delete_flag='1' and app_code=#{appCode}
+        <if test="condition != null  and condition != ''">and ${condition}</if>
+    </delete>
+
+    <delete id="SoftDeleteByNo">
+        update labs_workitem
+        set delete_flag='0'
+        where delete_flag = '1'
+          and app_code = #{appCode}
+          and item_no = #{no}
+    </delete>
+
+    <delete id="SoftDeleteByNos">
+        update labs_workitem set delete_flag='0'
+        where delete_flag='1' and app_code=#{appCode} and item_no in
+        <foreach item="no" collection="nos" open="(" separator="," close=")">
+            #{no}
+        </foreach>
+    </delete>
+
+    <delete id="SoftDeleteByCondition">
+        update labs_workitem set delete_flag='0'
+        where delete_flag='1' and app_code=#{appCode}
+        <if test="condition != null  and condition != ''">and ${condition}</if>
+    </delete>
+
+</mapper>

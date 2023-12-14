@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.benet.system.mapper.SysRuserrotaMapper">
+
+    <resultMap type="SysRuserrota" id="SysRuserrotaResult">
+        <result property="id" column="id"/>
+        <result property="rotaNo" column="rota_no"/>
+        <result property="userNo" column="user_no"/>
+        <result property="rotaType" column="rota_type"/>
+        <result property="startTime" column="start_time"/>
+        <result property="enditTime" column="endit_time"/>
+        <result property="weekDay1" column="week_day1"/>
+        <result property="weekDay2" column="week_day2"/>
+        <result property="weekDay3" column="week_day3"/>
+        <result property="weekDay4" column="week_day4"/>
+        <result property="weekDay5" column="week_day5"/>
+        <result property="weekDay6" column="week_day6"/>
+        <result property="weekDay7" column="week_day7"/>
+        <result property="rotaFormat" column="rota_format"/>
+        <result property="checkState" column="check_state"/>
+        <result property="branchNo" column="branch_no"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="deleteFlag" column="delete_flag"/>
+        <result property="comments" column="comments"/>
+        <result property="appCode" column="app_code"/>
+        <result property="version" column="version"/>
+    </resultMap>
+
+    <sql id="selectSysRuserrotaVo">
+        select id, rota_no, user_no, rota_type, start_time, endit_time, week_day1, week_day2, week_day3, week_day4, week_day5, week_day6, week_day7, rota_format, check_state, branch_no, create_by, create_time, update_by, update_time, delete_flag, comments, app_code, version from sys_ruserrota
+    </sql>
+
+    <select id="getAllRecords" resultMap="SysRuserrotaResult">
+        <include refid="selectSysRuserrotaVo"/>
+        where delete_flag='1' and app_code=#{appCode}
+    </select>
+
+    <select id="getRecordsByClassNo" resultMap="SysRuserrotaResult">
+        <include refid="selectSysRuserrotaVo"/>
+        where delete_flag='1' and app_code=#{appCode} and user_no=#{classNo}
+    </select>
+
+    <select id="getRecordsByPaging" resultMap="SysRuserrotaResult">
+        <include refid="selectSysRuserrotaVo"/>
+        where delete_flag='1' and app_code=${appCode}
+        <if test="model.condition != null  and model.condition != ''">and ${model.condition}</if>
+        order by ${model.orderField} ${model.orderType} limit ${model.pageIndex},${model.pageSize}
+    </select>
+
+    <select id="getRecordByNo" resultMap="SysRuserrotaResult">
+        <include refid="selectSysRuserrotaVo"/>
+        where delete_flag='1' and app_code=#{appCode} and rota_no = #{no}
+    </select>
+
+    <select id="getRecordNameByNo" resultType="String">
+        select user_no from sys_ruserrota
+        where delete_flag='1' and app_code=#{appCode} and rota_no = #{no}
+    </select>
+
+    <select id="getCountByCondition" resultType="Integer">
+        select count(*) from sys_ruserrota
+        where delete_flag='1' and app_code=#{appCode}
+        <if test="condition != null  and condition != ''">and ${condition}</if>
+    </select>
+
+    <insert id="AddNewRecord" parameterType="SysRuserrota" useGeneratedKeys="true" keyProperty="id">
+        insert into sys_ruserrota (
+        <if test="info.rotaNo != null  and info.rotaNo != ''">rota_no,</if>
+        <if test="info.userNo != null  and info.userNo != ''">user_no,</if>
+        <if test="info.rotaType != null  and info.rotaType != ''">rota_type,</if>
+        <if test="info.startTime != null ">start_time,</if>
+        <if test="info.enditTime != null ">endit_time,</if>
+        <if test="info.weekDay1 != null  and info.weekDay1 != ''">week_day1,</if>
+        <if test="info.weekDay2 != null  and info.weekDay2 != ''">week_day2,</if>
+        <if test="info.weekDay3 != null  and info.weekDay3 != ''">week_day3,</if>
+        <if test="info.weekDay4 != null  and info.weekDay4 != ''">week_day4,</if>
+        <if test="info.weekDay5 != null  and info.weekDay5 != ''">week_day5,</if>
+        <if test="info.weekDay6 != null  and info.weekDay6 != ''">week_day6,</if>
+        <if test="info.weekDay7 != null  and info.weekDay7 != ''">week_day7,</if>
+        <if test="info.rotaFormat != null  and info.rotaFormat != ''">rota_format,</if>
+        <if test="info.checkState != null  and info.checkState != ''">check_state,</if>
+        <if test="info.branchNo != null  and info.branchNo != ''">branch_no,</if>
+        <if test="info.createBy != null  and info.createBy != ''">create_by,</if>
+        <if test="info.createTime != null ">create_time,</if>
+        <if test="info.updateBy != null  and info.updateBy != ''">update_by,</if>
+        <if test="info.updateTime != null ">update_time,</if>
+        <if test="info.deleteFlag != null  and info.deleteFlag != ''">delete_flag,</if>
+        <if test="info.comments != null  and info.comments != ''">comments,</if>
+        <if test="info.appCode != null  and info.appCode != ''">app_code,</if>
+        <if test="info.version != null ">version</if>
+        )values(
+        <if test="info.rotaNo != null  and info.rotaNo != ''">#{info.rotaNo},</if>
+        <if test="info.userNo != null  and info.userNo != ''">#{info.userNo},</if>
+        <if test="info.rotaType != null  and info.rotaType != ''">#{info.rotaType},</if>
+        <if test="info.startTime != null ">#{info.startTime},</if>
+        <if test="info.enditTime != null ">#{info.enditTime},</if>
+        <if test="info.weekDay1 != null  and info.weekDay1 != ''">#{info.weekDay1},</if>
+        <if test="info.weekDay2 != null  and info.weekDay2 != ''">#{info.weekDay2},</if>
+        <if test="info.weekDay3 != null  and info.weekDay3 != ''">#{info.weekDay3},</if>
+        <if test="info.weekDay4 != null  and info.weekDay4 != ''">#{info.weekDay4},</if>
+        <if test="info.weekDay5 != null  and info.weekDay5 != ''">#{info.weekDay5},</if>
+        <if test="info.weekDay6 != null  and info.weekDay6 != ''">#{info.weekDay6},</if>
+        <if test="info.weekDay7 != null  and info.weekDay7 != ''">#{info.weekDay7},</if>
+        <if test="info.rotaFormat != null  and info.rotaFormat != ''">#{info.rotaFormat},</if>
+        <if test="info.checkState != null  and info.checkState != ''">#{info.checkState},</if>
+        <if test="info.branchNo != null  and info.branchNo != ''">#{info.branchNo},</if>
+        <if test="info.createBy != null  and info.createBy != ''">#{info.createBy},</if>
+        <if test="info.createTime != null ">#{info.createTime},</if>
+        <if test="info.updateBy != null  and info.updateBy != ''">#{info.updateBy},</if>
+        <if test="info.updateTime != null ">#{info.updateTime},</if>
+        <if test="info.deleteFlag != null  and info.deleteFlag != ''">#{info.deleteFlag},</if>
+        <if test="info.comments != null  and info.comments != ''">#{info.comments},</if>
+        <if test="info.appCode != null  and info.appCode != ''">#{info.appCode},</if>
+        <if test="info.version != null ">#{info.version}</if>
+        )
+    </insert>
+
+    <update id="UpdateRecord" parameterType="SysRuserrota">
+        update sys_ruserrota
+        <set>
+            <if test="info.rotaNo != null  and info.rotaNo != ''">rota_no = #{info.rotaNo},</if>
+            <if test="info.userNo != null  and info.userNo != ''">user_no = #{info.userNo},</if>
+            <if test="info.rotaType != null  and info.rotaType != ''">rota_type = #{info.rotaType},</if>
+            <if test="info.startTime != null ">start_time = #{info.startTime},</if>
+            <if test="info.enditTime != null ">endit_time = #{info.enditTime},</if>
+            <if test="info.weekDay1 != null  and info.weekDay1 != ''">week_day1 = #{info.weekDay1},</if>
+            <if test="info.weekDay2 != null  and info.weekDay2 != ''">week_day2 = #{info.weekDay2},</if>
+            <if test="info.weekDay3 != null  and info.weekDay3 != ''">week_day3 = #{info.weekDay3},</if>
+            <if test="info.weekDay4 != null  and info.weekDay4 != ''">week_day4 = #{info.weekDay4},</if>
+            <if test="info.weekDay5 != null  and info.weekDay5 != ''">week_day5 = #{info.weekDay5},</if>
+            <if test="info.weekDay6 != null  and info.weekDay6 != ''">week_day6 = #{info.weekDay6},</if>
+            <if test="info.weekDay7 != null  and info.weekDay7 != ''">week_day7 = #{info.weekDay7},</if>
+            <if test="info.rotaFormat != null  and info.rotaFormat != ''">rota_format = #{info.rotaFormat},</if>
+            <if test="info.checkState != null  and info.checkState != ''">check_state = #{info.checkState},</if>
+            <if test="info.branchNo != null  and info.branchNo != ''">branch_no = #{info.branchNo},</if>
+            <if test="info.createBy != null  and info.createBy != ''">create_by = #{info.createBy},</if>
+            <if test="info.createTime != null ">create_time = #{info.createTime},</if>
+            <if test="info.updateBy != null  and info.updateBy != ''">update_by = #{info.updateBy},</if>
+            <if test="info.updateTime != null ">update_time = #{info.updateTime},</if>
+            <if test="info.deleteFlag != null  and info.deleteFlag != ''">delete_flag = #{info.deleteFlag},</if>
+            <if test="info.comments != null  and info.comments != ''">comments = #{info.comments},</if>
+            <if test="info.appCode != null  and info.appCode != ''">app_code = #{info.appCode},</if>
+            <if test="info.version != null ">version = #{info.version}</if>
+        </set>
+        where delete_flag='1' and app_code=#{info.appCode} and version=#{info.version} and rota_no = #{info.rotaNo}
+    </update>
+
+    <delete id="HardDeleteByNo">
+        delete from sys_ruserrota
+        where delete_flag='1' and app_code=#{appCode} and rota_no = #{no}
+    </delete>
+
+    <delete id="HardDeleteByNos">
+        delete from sys_ruserrota
+        where delete_flag='1' and app_code=#{appCode} and rota_no in
+        <foreach item="no" collection="nos" open="(" separator="," close=")">
+            #{no}
+        </foreach>
+    </delete>
+
+    <delete id="HardDeleteByCondition">
+        delete from sys_ruserrota
+        where delete_flag='1' and app_code=#{appCode}
+        <if test="condition != null  and condition != ''">and ${condition}</if>
+    </delete>
+
+    <delete id="SoftDeleteByNo">
+        update sys_ruserrota set delete_flag='0'
+        where delete_flag='1' and app_code=#{appCode} and rota_no = #{no}
+    </delete>
+
+    <delete id="SoftDeleteByNos">
+        update sys_ruserrota set delete_flag='0'
+        where delete_flag='1' and app_code=#{appCode} and rota_no in
+        <foreach item="no" collection="nos" open="(" separator="," close=")">
+            #{no}
+        </foreach>
+    </delete>
+
+    <delete id="SoftDeleteByCondition">
+        update sys_ruserrota set delete_flag='0'
+        where delete_flag='1' and app_code=#{appCode}
+        <if test="condition != null  and condition != ''">and ${condition}</if>
+    </delete>
+
+</mapper>
